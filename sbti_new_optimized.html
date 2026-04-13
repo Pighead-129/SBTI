@@ -433,217 +433,458 @@
   </div>
 
   <script>
-    // 完整的SBTI数据
-    const sbtiData = [
-      {
-        id: 'DEAD', 
-        name: 'DEAD 死者', 
-        group: '摆烂躺平组',
-        groupColor: '#B4B2A9',
-        groupTextColor: '#2C2C2A',
-        desc: '身心俱疲，灵魂已死，只剩躯壳',
-        color: '#B4B2A9', 
-        textColor: '#2C2C2A',
-        best: ['新西兰', '爱尔兰'],
-        good: ['澳大利亚', '德国'],
-        caution: ['英国'],
-        avoid: ['美国', '香港', '新加坡'],
-        reason: '新西兰和爱尔兰节奏极慢、环境宜人、治安好，是最适合"复活"的地方。澳大利亚生活relaxed也不错。坚决避开美国（卷到极致）、香港（生活压力极大）和新加坡（就业压力攀升）。'
-      },
-      {
-        id: 'MALO', 
-        name: 'MALO 吗喽', 
-        group: '摆烂躺平组',
-        groupColor: '#9FE1CB',
-        groupTextColor: '#085041',
-        desc: '底层小透明，拒绝内卷，佛系摆烂',
-        color: '#9FE1CB', 
-        textColor: '#085041',
-        best: ['新西兰', '爱尔兰', '德国'],
-        good: ['澳大利亚'],
-        caution: ['英国', '日本'],
-        avoid: ['美国', '香港', '新加坡'],
-        reason: '德国不加班文化+低学费+慢节奏，是吗喽理想国。新西兰可兼职且环境友善。澳大利亚生活松弛。绕开香港（物价飞涨）、美国（不卷不行）。'
-      },
-      {
-        id: 'ZZZZ', 
-        name: 'ZZZZ 装死者', 
-        group: '摆烂躺平组',
-        groupColor: '#B4B2A9',
-        groupTextColor: '#2C2C2A',
-        desc: '拖延症晚期，不到死线不动弹',
-        color: '#B4B2A9', 
-        textColor: '#2C2C2A',
-        best: ['爱尔兰', '新西兰'],
-        good: ['澳大利亚', '马来西亚'],
-        caution: ['英国'],
-        avoid: ['德国', '美国', '新加坡'],
-        reason: '爱尔兰和新西兰申请门槛低、节奏慢，对拖延者友好。德国毕业率低、不拖不行，反而是天敌。英国硕士9个月短平快，但挂科了就麻烦。'
-      },
-      {
-        id: 'IMFW', 
-        name: 'IMFW 废物', 
-        group: '摆烂躺平组',
-        groupColor: '#D3D1C7',
-        groupTextColor: '#444441',
-        desc: '彻底摆烂，拒绝努力',
-        color: '#D3D1C7', 
-        textColor: '#444441',
-        best: ['爱尔兰', '新西兰'],
-        good: ['澳大利亚'],
-        caution: ['马来西亚', '韩国'],
-        avoid: ['德国', '美国', '日本', '新加坡'],
-        reason: '爱尔兰申请容易、均分要求低；新西兰学制灵活、环境友善。德国毕业率低（真学渣容易挂）、日本申请难度高，这两个国家对废物不友好。'
-      },
-      {
-        id: 'OJBK', 
-        name: 'OJBK 无所谓人', 
-        group: '摆烂躺平组',
-        groupColor: '#9FE1CB',
-        groupTextColor: '#085041',
-        desc: '万事随便，不较真不纠结，佛系到极致',
-        color: '#9FE1CB', 
-        textColor: '#085041',
-        best: ['澳大利亚', '爱尔兰', '新西兰'],
-        good: ['德国', '英国'],
-        caution: ['韩国'],
-        avoid: ['美国', '香港'],
-        reason: '澳大利亚最匹配无所谓气质：relaxed氛围、不用太卷。爱尔兰申请无需中介、随缘申。坚决避开需要时刻保持警觉的美国（治安问题），以及节奏飞快的香港。'
-      },
-      {
-        id: 'IMSB', 
-        name: 'IMSB 自我攻击者', 
-        group: '情绪内耗组',
-        groupColor: '#F5C4B3',
-        groupTextColor: '#993C1D',
-        desc: '内耗之王，遇事先怪自己',
-        color: '#F5C4B3', 
-        textColor: '#993C1D',
-        best: ['新西兰', '爱尔兰'],
-        good: ['澳大利亚', '英国'],
-        caution: ['德国', '新加坡'],
-        avoid: ['美国', '香港', '韩国'],
-        reason: '新西兰当地人友善、环境治愈，适合愈合内耗。美国留学生抑郁比例最高，严重不推荐。韩国社会氛围mean且排外，会加重自我攻击倾向。香港压分最严重，更会加剧内耗。'
-      },
-      {
-        id: 'ATM', 
-        name: 'ATM-er 送钱者', 
-        group: '情绪内耗组',
-        groupColor: '#FAC775',
-        groupTextColor: '#633806',
-        desc: '人形提款机，总在为别人付出',
-        color: '#FAC775', 
-        textColor: '#633806',
-        best: ['英国', '澳大利亚'],
-        good: ['新加坡', '爱尔兰'],
-        caution: ['美国'],
-        avoid: ['韩国', '香港'],
-        reason: '英国教育资源丰富、专业宽容度高，ATM型人格在此可以选择适合自己的方向而非被迫迁就他人。韩国灰色产业陷阱多，送钱者容易被坑；香港物价飞涨，钱包承压更大。'
-      },
-      {
-        id: 'LOVER', 
-        name: 'LOVE-R 多情者', 
-        group: '情绪内耗组',
-        groupColor: '#F8BBD0',
-        groupTextColor: '#880E4F',
-        desc: '恋爱脑，情绪敏感，易被感情左右',
-        color: '#F8BBD0', 
-        textColor: '#880E4F',
-        best: ['法国', '意大利', '西班牙'],
-        good: ['英国', '澳大利亚'],
-        caution: ['德国', '日本'],
-        avoid: ['韩国', '香港', '新加坡'],
-        reason: '浪漫的法语/意语/西语国家最适配多情人格，艺术氛围浓厚能滋养情绪。德国过于理性、日本过于压抑，会让多情者感到窒息。韩国恋爱氛围虽浓但内卷严重，反而加重内耗。'
-      }
-    ];
+    // 完整的SBTI数据（拓展版）
+const sbtiData = [
+  // 一、摆烂躺平组（原有5个+新增2个）
+  {
+    id: 'DEAD', 
+    name: 'DEAD 死者', 
+    group: '摆烂躺平组',
+    groupColor: '#B4B2A9',
+    groupTextColor: '#2C2C2A',
+    desc: '身心俱疲，灵魂已死，只剩躯壳',
+    color: '#B4B2A9', 
+    textColor: '#2C2C2A',
+    best: ['新西兰', '爱尔兰'],
+    good: ['澳大利亚', '德国'],
+    caution: ['英国'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '新西兰和爱尔兰节奏极慢、环境宜人、治安好，是最适合"复活"的地方。澳大利亚生活relaxed也不错。坚决避开美国（卷到极致）、香港（生活压力极大）和新加坡（就业压力攀升）。'
+  },
+  {
+    id: 'MALO', 
+    name: 'MALO 吗喽', 
+    group: '摆烂躺平组',
+    groupColor: '#9FE1CB',
+    groupTextColor: '#085041',
+    desc: '底层小透明，拒绝内卷，佛系摆烂',
+    color: '#9FE1CB', 
+    textColor: '#085041',
+    best: ['新西兰', '爱尔兰', '德国'],
+    good: ['澳大利亚'],
+    caution: ['英国', '日本'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '德国不加班文化+低学费+慢节奏，是吗喽理想国。新西兰可兼职且环境友善。澳大利亚生活松弛。绕开香港（物价飞涨）、美国（不卷不行）。'
+  },
+  {
+    id: 'ZZZZ', 
+    name: 'ZZZZ 装死者', 
+    group: '摆烂躺平组',
+    groupColor: '#B4B2A9',
+    groupTextColor: '#2C2C2A',
+    desc: '拖延症晚期，不到死线不动弹',
+    color: '#B4B2A9', 
+    textColor: '#2C2C2A',
+    best: ['爱尔兰', '新西兰'],
+    good: ['澳大利亚', '马来西亚'],
+    caution: ['英国'],
+    avoid: ['德国', '美国', '新加坡'],
+    reason: '爱尔兰和新西兰申请门槛低、节奏慢，对拖延者友好。德国毕业率低、不拖不行，反而是天敌。英国硕士9个月短平快，但挂科了就麻烦。'
+  },
+  {
+    id: 'IMFW', 
+    name: 'IMFW 废物', 
+    group: '摆烂躺平组',
+    groupColor: '#D3D1C7',
+    groupTextColor: '#444441',
+    desc: '彻底摆烂，拒绝努力',
+    color: '#D3D1C7', 
+    textColor: '#444441',
+    best: ['爱尔兰', '新西兰'],
+    good: ['澳大利亚'],
+    caution: ['马来西亚', '韩国'],
+    avoid: ['德国', '美国', '日本', '新加坡'],
+    reason: '爱尔兰申请容易、均分要求低；新西兰学制灵活、环境友善。德国毕业率低（真学渣容易挂）、日本申请难度高，这两个国家对废物不友好。'
+  },
+  {
+    id: 'OJBK', 
+    name: 'OJBK 无所谓人', 
+    group: '摆烂躺平组',
+    groupColor: '#9FE1CB',
+    groupTextColor: '#085041',
+    desc: '万事随便，不较真不纠结，佛系到极致',
+    color: '#9FE1CB', 
+    textColor: '#085041',
+    best: ['澳大利亚', '爱尔兰', '新西兰'],
+    good: ['德国', '英国'],
+    caution: ['韩国'],
+    avoid: ['美国', '香港'],
+    reason: '澳大利亚最匹配无所谓气质：relaxed氛围、不用太卷。爱尔兰申请无需中介、随缘申。坚决避开需要时刻保持警觉的美国（治安问题），以及节奏飞快的香港。'
+  },
+  {
+    id: '摸鱼侠', 
+    name: 'MOYU 摸鱼侠', 
+    group: '摆烂躺平组',
+    groupColor: '#82C3EC',
+    groupTextColor: '#0A4DA2',
+    desc: '上班/上学只为摸鱼，主打一个带薪发呆',
+    color: '#82C3EC', 
+    textColor: '#0A4DA2',
+    best: ['新西兰', '澳大利亚', '爱尔兰'],
+    good: ['马来西亚', '泰国'],
+    caution: ['英国'],
+    avoid: ['德国', '美国', '新加坡'],
+    reason: '新西兰工作/学习强度低，摸鱼空间大；澳大利亚带薪假期多，摸鱼不内卷。德国考勤严格、美国加班文化重，完全挤压摸鱼空间，坚决避开。'
+  },
+  {
+    id: '躺平怪', 
+    name: 'TPGU 躺平怪', 
+    group: '摆烂躺平组',
+    groupColor: '#C8B6E2',
+    groupTextColor: '#4A2678',
+    desc: '能躺不坐，能坐不站，拒绝任何多余消耗',
+    color: '#C8B6E2', 
+    textColor: '#4A2678',
+    best: ['爱尔兰', '新西兰', '泰国'],
+    good: ['澳大利亚', '马来西亚'],
+    caution: ['英国', '加拿大'],
+    avoid: ['美国', '香港', '日本'],
+    reason: '爱尔兰生活配套完善，出门少也能躺平；新西兰自然环境好，躺平还能看风景。日本通勤耗时久、香港住房逼仄，连躺平的空间都没有，直接避雷。'
+  },
 
-    // 国家反向查询数据
-    const countryData = {
-      "美国": {
-        level: "avoid",
-        reason: "竞争极端激烈，学习和就业压力大，治安问题突出，仅适合抗压能力极强的人群",
-        suitable: ["无"],
-        unsuitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB"]
-      },
-      "英国": {
-        level: "caution",
-        reason: "学制短节奏快，硕士仅9个月，挂科风险高，但教育资源优质，适合有一定自律性的人群",
-        suitable: ["ATM", "LOVER"],
-        unsuitable: ["ZZZZ", "IMFW"]
-      },
-      "澳大利亚": {
-        level: "best",
-        reason: "生活节奏松弛，氛围友好，移民政策相对宽松，兼职机会多，适合大部分摆烂/内耗型人格",
-        suitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB", "ATM", "LOVER"],
-        unsuitable: ["无"]
-      },
-      "新西兰": {
-        level: "best",
-        reason: "节奏极慢，环境宜人，治安好，申请门槛低，是治愈内耗、摆烂躺平的最佳选择",
-        suitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB"],
-        unsuitable: ["无"]
-      },
-      "爱尔兰": {
-        level: "best",
-        reason: "节奏慢，申请容易，均分要求低，英语环境友好，适合摆烂、拖延、内耗型人格",
-        suitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB", "ATM"],
-        unsuitable: ["无"]
-      },
-      "德国": {
-        level: "good",
-        reason: "不加班文化，低学费，慢节奏，但毕业率低，适合有基础自律性的摆烂人格",
-        suitable: ["MALO", "OJBK"],
-        unsuitable: ["ZZZZ", "IMFW"]
-      },
-      "法国": {
-        level: "best",
-        reason: "浪漫的艺术氛围浓厚，生活节奏慢，适合情绪敏感、多情的人格类型",
-        suitable: ["LOVER"],
-        unsuitable: ["无"]
-      },
-      "意大利": {
-        level: "best",
-        reason: "艺术氛围浓厚，生活节奏悠闲，适合情绪丰富、热爱生活的人格类型",
-        suitable: ["LOVER"],
-        unsuitable: ["无"]
-      },
-      "西班牙": {
-        level: "best",
-        reason: "热情奔放的文化氛围，生活节奏慢，能治愈情绪内耗，适合多情型人格",
-        suitable: ["LOVER"],
-        unsuitable: ["无"]
-      },
-      "香港": {
-        level: "avoid",
-        reason: "生活压力极大，物价飞涨，压分严重，节奏飞快，会加重内耗和摆烂型人格的负面情绪",
-        suitable: ["无"],
-        unsuitable: ["DEAD", "MALO", "OJBK", "IMSB", "LOVER"]
-      },
-      "新加坡": {
-        level: "avoid",
-        reason: "就业压力攀升，竞争激烈，生活成本高，仅适合极度自律的人群",
-        suitable: ["无"],
-        unsuitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "IMSB"]
-      },
-      "日本": {
-        level: "caution",
-        reason: "申请难度高，文化压抑，过于注重规则，会加重情绪内耗，仅适合高度自律的人群",
-        suitable: ["无"],
-        unsuitable: ["MALO", "IMFW", "LOVER"]
-      },
-      "韩国": {
-        level: "avoid",
-        reason: "社会氛围排外且内卷严重，灰色产业多，会加重自我攻击和情绪内耗",
-        suitable: ["无"],
-        unsuitable: ["IMSB", "ATM", "LOVER"]
-      },
-      "马来西亚": {
-        level: "caution",
-        reason: "学费低，申请容易，但教育资源一般，适合预算有限的摆烂型人格",
-        suitable: ["ZZZZ", "IMFW"],
-        unsuitable: ["无"]
-      }
-    };
+  // 二、情绪内耗组（原有3个+新增4个）
+  {
+    id: 'IMSB', 
+    name: 'IMSB 自我攻击者', 
+    group: '情绪内耗组',
+    groupColor: '#F5C4B3',
+    groupTextColor: '#993C1D',
+    desc: '内耗之王，遇事先怪自己',
+    color: '#F5C4B3', 
+    textColor: '#993C1D',
+    best: ['新西兰', '爱尔兰'],
+    good: ['澳大利亚', '英国'],
+    caution: ['德国', '新加坡'],
+    avoid: ['美国', '香港', '韩国'],
+    reason: '新西兰当地人友善、环境治愈，适合愈合内耗。美国留学生抑郁比例最高，严重不推荐。韩国社会氛围mean且排外，会加重自我攻击倾向。香港压分最严重，更会加剧内耗。'
+  },
+  {
+    id: 'ATM', 
+    name: 'ATM-er 送钱者', 
+    group: '情绪内耗组',
+    groupColor: '#FAC775',
+    groupTextColor: '#633806',
+    desc: '人形提款机，总在为别人付出',
+    color: '#FAC775', 
+    textColor: '#633806',
+    best: ['英国', '澳大利亚'],
+    good: ['新加坡', '爱尔兰'],
+    caution: ['美国'],
+    avoid: ['韩国', '香港'],
+    reason: '英国教育资源丰富、专业宽容度高，ATM型人格在此可以选择适合自己的方向而非被迫迁就他人。韩国灰色产业陷阱多，送钱者容易被坑；香港物价飞涨，钱包承压更大。'
+  },
+  {
+    id: 'LOVER', 
+    name: 'LOVE-R 多情者', 
+    group: '情绪内耗组',
+    groupColor: '#F8BBD0',
+    groupTextColor: '#880E4F',
+    desc: '恋爱脑，情绪敏感，易被感情左右',
+    color: '#F8BBD0', 
+    textColor: '#880E4F',
+    best: ['法国', '意大利', '西班牙'],
+    good: ['英国', '澳大利亚'],
+    caution: ['德国', '日本'],
+    avoid: ['韩国', '香港', '新加坡'],
+    reason: '浪漫的法语/意语/西语国家最适配多情人格，艺术氛围浓厚能滋养情绪。德国过于理性、日本过于压抑，会让多情者感到窒息。韩国恋爱氛围虽浓但内卷严重，反而加重内耗。'
+  },
+  {
+    id: '焦虑怪', 
+    name: 'JLGU 焦虑怪', 
+    group: '情绪内耗组',
+    groupColor: '#FF9E9E',
+    groupTextColor: '#8A1A1A',
+    desc: '过度焦虑未来，小事放大，自我内耗',
+    color: '#FF9E9E', 
+    textColor: '#8A1A1A',
+    best: ['新西兰', '爱尔兰', '瑞士'],
+    good: ['澳大利亚', '加拿大'],
+    caution: ['英国', '德国'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '瑞士心理医疗体系完善，新西兰节奏慢，能缓解焦虑；爱尔兰社区氛围友好，减少孤独感。美国内卷+治安问题、香港高压环境，会让焦虑指数翻倍。'
+  },
+  {
+    id: '讨好型', 
+    name: 'THXING 讨好型', 
+    group: '情绪内耗组',
+    groupColor: '#FFD6A5',
+    groupTextColor: '#7A4000',
+    desc: '总想取悦他人，忽略自身感受',
+    color: '#FFD6A5', 
+    textColor: '#7A4000',
+    best: ['加拿大', '澳大利亚', '新西兰'],
+    good: ['爱尔兰', '英国'],
+    caution: ['德国'],
+    avoid: ['韩国', '日本', '香港'],
+    reason: '加拿大文化强调尊重边界，澳大利亚人直爽不绕弯，不用刻意讨好。日本/韩国等级文化重，讨好型人格易被PUA；香港职场/校园内卷，讨好也难合群。'
+  },
+  {
+    id: '敏感精', 
+    name: 'MGJN 敏感精', 
+    group: '情绪内耗组',
+    groupColor: '#C77DFF',
+    groupTextColor: '#5A189A',
+    desc: '玻璃心，易被他人言行影响，情绪波动大',
+    color: '#C77DFF', 
+    textColor: '#5A189A',
+    best: ['法国', '新西兰', '爱尔兰'],
+    good: ['意大利', '西班牙'],
+    caution: ['英国', '加拿大'],
+    avoid: ['美国', '韩国', '香港'],
+    reason: '法国/意大利注重情绪表达，包容度高；新西兰人口密度低，人际压力小。美国直言文化易戳玻璃心，韩国排外+攀比严重，敏感精极易受伤。'
+  },
+  {
+    id: '完美控', 
+    name: 'WMK 完美控', 
+    group: '情绪内耗组',
+    groupColor: '#9381FF',
+    groupTextColor: '#2B1988',
+    desc: '事事追求完美，一点瑕疵就自我否定',
+    color: '#9381FF', 
+    textColor: '#2B1988',
+    best: ['德国', '瑞士', '英国'],
+    good: ['新加坡', '澳大利亚'],
+    caution: ['加拿大'],
+    avoid: ['美国', '香港', '马来西亚'],
+    reason: '德国/瑞士严谨的体系适配完美控，英国教育评分体系透明，可控性高。美国竞争无边界、香港容错率低，一点不完美就容易陷入自我否定的内耗。'
+  },
+
+  // 三、人间清醒组（原有1个+新增3个）
+  {
+    id: 'BOSS', 
+    name: 'BOSS 掌控者', 
+    group: '人间清醒组',
+    groupColor: '#6C63FF',
+    groupTextColor: '#FFFFFF',
+    desc: '目标明确，掌控欲强，追求成功',
+    color: '#6C63FF', 
+    textColor: '#FFFFFF',
+    best: ['美国', '新加坡', '香港'],
+    good: ['英国', '德国'],
+    caution: ['澳大利亚'],
+    avoid: ['新西兰', '爱尔兰'],
+    reason: '美国/新加坡/香港竞争激烈但机会多，能满足掌控者的成功欲。德国严谨的体系适合规划清晰的BOSS。新西兰/爱尔兰节奏过慢，会让掌控者感到"英雄无用武之地"。'
+  },
+  {
+    id: '搞钱咖', 
+    name: 'GQKA 搞钱咖', 
+    group: '人间清醒组',
+    groupColor: '#FFD166',
+    groupTextColor: '#783F04',
+    desc: '一切以搞钱为目标，功利且务实',
+    color: '#FFD166', 
+    textColor: '#783F04',
+    best: ['美国', '新加坡', '香港'],
+    good: ['英国', '澳大利亚'],
+    caution: ['德国', '加拿大'],
+    avoid: ['新西兰', '爱尔兰', '泰国'],
+    reason: '美国金融/科技行业薪资高，新加坡税率低，香港投行机会多，完美适配搞钱需求。新西兰/爱尔兰产业单一、薪资涨幅慢，搞钱咖会觉得"没奔头"。'
+  },
+  {
+    id: '规划师', 
+    name: 'GHSHI 规划师', 
+    group: '人间清醒组',
+    groupColor: '#06D6A0',
+    groupTextColor: '#003F2F',
+    desc: '人生步步规划，拒绝意外，极度自律',
+    color: '#06D6A0', 
+    textColor: '#003F2F',
+    best: ['德国', '瑞士', '新加坡'],
+    good: ['美国', '英国'],
+    caution: ['加拿大'],
+    avoid: ['新西兰', '爱尔兰', '马来西亚'],
+    reason: '德国学制/移民政策清晰，瑞士规则明确，新加坡发展路径可控，适配规划师的严谨。新西兰/爱尔兰节奏随机，马来西亚政策变动大，打破规划易焦虑。'
+  },
+  {
+    id: '野心家', 
+    name: 'YXJ 野心家', 
+    group: '人间清醒组',
+    groupColor: '#E63946',
+    groupTextColor: '#FFFFFF',
+    desc: '渴望阶层跃升，野心勃勃，敢拼敢闯',
+    color: '#E63946', 
+    textColor: '#FFFFFF',
+    best: ['美国', '英国', '新加坡'],
+    good: ['香港', '澳大利亚'],
+    caution: ['德国'],
+    avoid: ['新西兰', '爱尔兰', '泰国'],
+    reason: '美国阶级流动空间大，英国名校背书强，新加坡精英体系明确，能满足野心。新西兰/爱尔兰阶层固化，节奏慢，野心家会觉得"英雄无用武之地"。'
+  },
+
+  // 四、社交个性组（原有1个+新增3个）
+  {
+    id: 'STAR', 
+    name: 'STAR 社交达人', 
+    group: '社交个性组',
+    groupColor: '#FFC107',
+    groupTextColor: '#FFFFFF',
+    desc: '外向开朗，喜欢社交，热爱新鲜事物',
+    color: '#FFC107', 
+    textColor: '#FFFFFF',
+    best: ['美国', '英国', '澳大利亚'],
+    good: ['加拿大', '法国'],
+    caution: ['德国', '日本'],
+    avoid: ['新西兰', '爱尔兰'],
+    reason: '美国/英国社交活动丰富，多元文化能满足社交达人的需求。澳大利亚户外活动多，适合拓展社交圈。德国/日本社交氛围内敛，新西兰/爱尔兰社交场景少，会让社交达人感到无聊。'
+  },
+  {
+    id: '社牛症', 
+    name: 'SNZH 社牛症', 
+    group: '社交个性组',
+    groupColor: '#FB5607',
+    groupTextColor: '#FFFFFF',
+    desc: '社牛天花板，能和任何人聊到一起，社恐克星',
+    color: '#FB5607', 
+    textColor: '#FFFFFF',
+    best: ['美国', '巴西', '澳大利亚'],
+    good: ['英国', '法国', '西班牙'],
+    caution: ['日本', '德国'],
+    avoid: ['新西兰', '爱尔兰', '瑞士'],
+    reason: '美国/巴西多元文化包容度高，社牛能快速融入；澳大利亚人热情直爽，社交无压力。瑞士/新西兰人口少、社交圈固定，社牛的"社交欲"无处释放。'
+  },
+  {
+    id: '社杂人', 
+    name: 'SZR 社杂人', 
+    group: '社交个性组',
+    groupColor: '#80FFDB',
+    groupTextColor: '#004B40',
+    desc: '时而社牛时而社恐，社交状态随机切换',
+    color: '#80FFDB', 
+    textColor: '#004B40',
+    best: ['加拿大', '澳大利亚', '加拿大'],
+    good: ['英国', '爱尔兰'],
+    caution: ['美国', '日本'],
+    avoid: ['韩国', '香港', '新加坡'],
+    reason: '加拿大社交节奏适中，澳大利亚可社交可独处，适配社杂的随机状态。韩国/香港社交压力大（酒局/团建多），社杂易陷入"被迫社交"的疲惫。'
+  },
+  {
+    id: '新鲜感', 
+    name: 'XGG 新鲜感', 
+    group: '社交个性组',
+    groupColor: '#FF758F',
+    groupTextColor: '#770F05',
+    desc: '追求新鲜感，讨厌一成不变，喜欢认识新朋友',
+    color: '#FF758F', 
+    textColor: '#770F05',
+    best: ['美国', '英国', '法国'],
+    good: ['西班牙', '意大利'],
+    caution: ['德国', '瑞士'],
+    avoid: ['新西兰', '爱尔兰', '马来西亚'],
+    reason: '美国/英国城市多元、活动丰富，能持续提供新鲜感；法国艺术/文化活动多，满足探索欲。新西兰/爱尔兰生活模式固定，新鲜感很快耗尽。'
+  }
+];
+
+    // 国家反向查询数据（拓展版）
+const countryData = {
+  "美国": {
+    level: "avoid",
+    reason: "竞争极端激烈，学习和就业压力大，治安问题突出，仅适合抗压能力极强的人群",
+    suitable: ["BOSS", "GQKA", "YXJ", "STAR", "SNZH", "XGG"],
+    unsuitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB", "MOYU", "TPGU", "JLGU", "THXING", "MGJN"]
+  },
+  "英国": {
+    level: "caution",
+    reason: "学制短节奏快，硕士仅9个月，挂科风险高，但教育资源优质，适合有一定自律性的人群",
+    suitable: ["ATM", "LOVER", "WMK", "BOSS", "GQKA", "YXJ", "STAR", "XGG"],
+    unsuitable: ["ZZZZ", "IMFW", "TPGU"]
+  },
+  "澳大利亚": {
+    level: "best",
+    reason: "生活节奏松弛，氛围友好，移民政策相对宽松，兼职机会多，适合大部分摆烂/内耗型人格",
+    suitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB", "ATM", "LOVER", "MOYU", "TPGU", "JLGU", "THXING", "STAR", "SNZH", "SZR"],
+    unsuitable: ["无"]
+  },
+  "新西兰": {
+    level: "best",
+    reason: "节奏极慢，环境宜人，治安好，申请门槛低，是治愈内耗、摆烂躺平的最佳选择",
+    suitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB", "MOYU", "TPGU", "JLGU", "MGJN"],
+    unsuitable: ["BOSS", "GQKA", "YXJ", "SNZH", "XGG"]
+  },
+  "爱尔兰": {
+    level: "best",
+    reason: "节奏慢，申请容易，均分要求低，英语环境友好，适合摆烂、拖延、内耗型人格",
+    suitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB", "ATM", "MOYU", "TPGU", "JLGU", "MGJN", "SZR"],
+    unsuitable: ["BOSS", "GQKA", "YXJ", "SNZH"]
+  },
+  "德国": {
+    level: "good",
+    reason: "不加班文化，低学费，慢节奏，但毕业率低，适合有基础自律性的摆烂人格",
+    suitable: ["MALO", "OJBK", "WMK", "GHSHI", "BOSS"],
+    unsuitable: ["ZZZZ", "IMFW", "TPGU", "SNZH", "XGG"]
+  },
+  "法国": {
+    level: "best",
+    reason: "浪漫的艺术氛围浓厚，生活节奏慢，适合情绪敏感、多情的人格类型",
+    suitable: ["LOVER", "MGJN", "STAR", "SNZH", "XGG"],
+    unsuitable: ["无"]
+  },
+  "意大利": {
+    level: "best",
+    reason: "艺术氛围浓厚，生活节奏悠闲，适合情绪丰富、热爱生活的人格类型",
+    suitable: ["LOVER", "MGJN", "XGG"],
+    unsuitable: ["无"]
+  },
+  "西班牙": {
+    level: "best",
+    reason: "热情奔放的文化氛围，生活节奏慢，能治愈情绪内耗，适合多情型人格",
+    suitable: ["LOVER", "MGJN", "STAR", "SNZH", "XGG"],
+    unsuitable: ["无"]
+  },
+  "香港": {
+    level: "avoid",
+    reason: "生活压力极大，物价飞涨，压分严重，节奏飞快，会加重内耗和摆烂型人格的负面情绪",
+    suitable: ["BOSS", "GQKA", "YXJ"],
+    unsuitable: ["DEAD", "MALO", "OJBK", "IMSB", "LOVER", "MOYU", "TPGU", "JLGU", "THXING", "MGJN", "SZR"]
+  },
+  "新加坡": {
+    level: "avoid",
+    reason: "就业压力攀升，竞争激烈，生活成本高，仅适合极度自律的人群",
+    suitable: ["BOSS", "GQKA", "YXJ", "GHSHI"],
+    unsuitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "IMSB", "MOYU", "TPGU", "JLGU", "THXING", "MGJN"]
+  },
+  "日本": {
+    level: "caution",
+    reason: "申请难度高，文化压抑，过于注重规则，会加重情绪内耗，仅适合高度自律的人群",
+    suitable: ["GHSHI", "WMK"],
+    unsuitable: ["MALO", "IMFW", "LOVER", "TPGU", "JLGU", "THXING", "MGJN", "SNZH"]
+  },
+  "韩国": {
+    level: "avoid",
+    reason: "社会氛围排外且内卷严重，灰色产业多，会加重自我攻击和情绪内耗",
+    suitable: ["无"],
+    unsuitable: ["IMSB", "ATM", "LOVER", "JLGU", "THXING", "MGJN", "SZR"]
+  },
+  "马来西亚": {
+    level: "caution",
+    reason: "学费低，申请容易，但教育资源一般，适合预算有限的摆烂型人格",
+    suitable: ["ZZZZ", "IMFW", "MOYU", "TPGU"],
+    unsuitable: ["BOSS", "GQKA", "YXJ", "XGG"]
+  },
+  "加拿大": {
+    level: "good",
+    reason: "社交节奏适中，福利完善，移民友好，适合情绪内耗/社交杂糅型人格",
+    suitable: ["IMSB", "JLGU", "THXING", "SZR", "STAR"],
+    unsuitable: ["YXJ", "XGG"]
+  },
+  "瑞士": {
+    level: "caution",
+    reason: "福利好/环境优，但生活成本极高，社交圈封闭，适合完美控/焦虑怪但需谨慎",
+    suitable: ["WMK", "JLGU"],
+    unsuitable: ["SNZH", "XGG", "MOYU", "TPGU"]
+  },
+  "泰国": {
+    level: "good",
+    reason: "生活成本低，节奏慢，氛围佛系，适合摆烂型人格但教育资源一般",
+    suitable: ["MOYU", "TPGU", "DEAD"],
+    unsuitable: ["BOSS", "GQKA", "YXJ", "WMK"]
+  },
+  "巴西": {
+    level: "best",
+    reason: "文化热情开放，社交氛围浓厚，适配社牛/社交达人的性格",
+    suitable: ["STAR", "SNZH", "XGG"],
+    unsuitable: ["JLGU", "MGJN", "TPGU"]
+  }
+};
 
     // 切换标签页
     function switchTab(tabName) {
