@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
+<title>留学目的地推荐 - SBTI人格匹配</title>
+<style>
+  /* 全局样式重置与基础变量 */
+  * { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  :root {
+    --primary: #FF6B6B;
+    --primary-light: #FF8E8E;
+    --primary-dark: #E74C3C;
+    --secondary: #4ECDC4;
+    --accent: #FFE66D;
+    --dark: #2C3E50;
+    --light: #FAFAFA;
+    --gray: #95A5A6;
+    --gray-light: #E0E0E0;
+    --gray-dark: #666;
+    --success: #2E7D32;
+    --info: #1565C0;
+    --warning: #E65100;
+    --danger: #C62828;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.16);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #FFF5F5 0%, #FFF9E6 100%);
+    min-height: 100vh;
+    color: var(--dark);
+    line-height: 1.6;
+    padding: 16px;
+  }
+  /* 容器样式 */
+  .container {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #FFFFFF;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+  }
+  @media (min-width: 768px) {
+    .container {
+      max-width: 800px;
+      padding: 24px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container {
+      max-width: 900px;
+    }
+  }
+  /* 头部样式 */
+  .header {
+    text-align: center;
+    padding: 8px 0 20px;
+    border-bottom: 2px solid #FFE5E5;
+    margin-bottom: 20px;
+  }
+  .brand {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    padding: 6px 16px;
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+  }
+  .header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .header p {
+    font-size: 13px;
+    color: var(--gray);
+  }
+  /* 图例样式 */
+  .legend { 
+    display: flex; 
+    gap: 10px; 
+    flex-wrap: wrap; 
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  .legend-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 5px; 
+    font-size: 12px; 
+    color: var(--gray-dark);
+    background: var(--light);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+  }
+  .legend-dot { 
+    width: 10px; 
+    height: 10px; 
+    border-radius: 50%; 
+  }
+  /* 筛选栏样式 */
+  .filter-bar { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 8px; 
+    margin-bottom: 24px;
+    justify-content: center;
+  }
+  .filter-btn { 
+    background: var(--light); 
+    border: 1px solid var(--gray-light); 
+    border-radius: var(--radius-md); 
+    padding: 8px 16px; 
+    font-size: 13px; 
+    cursor: pointer; 
+    color: var(--gray-dark);
+    font-weight: 500;
+  }
+  .filter-btn.active { 
+    background: var(--primary-dark); 
+    border-color: var(--primary-dark); 
+    color: #FFF; 
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.2);
+  }
+  .filter-btn:hover:not(.active) { 
+    background: #FFF5F5;
+    border-color: #FFCCCB;
+  }
+  /* 卡片容器样式 */
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  @media (min-width: 768px) {
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  }
+  /* 卡片样式 */
+  .card { 
+    background: #FFFFFF; 
+    border: 1px solid var(--gray-light); 
+    border-radius: var(--radius-lg); 
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+  .card-header { 
+    display: flex; 
+    align-items: center; 
+    gap: 16px; 
+    margin-bottom: 16px; 
+  }
+  .avatar { 
+    width: 56px; 
+    height: 56px; 
+    border-radius: var(--radius-md); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 12px; 
+    font-weight: 700; 
+    flex-shrink: 0; 
+    text-align: center; 
+    line-height: 1.3;
+    box-shadow: var(--shadow-sm);
+  }
+  .card-meta { 
+    flex: 1; 
+    min-width: 0;
+  }
+  .card-name { 
+    font-size: 18px; 
+    font-weight: 700; 
+    color: var(--dark);
+    margin-bottom: 4px;
+  }
+  .card-desc { 
+    font-size: 13px; 
+    color: var(--gray);
+    margin-bottom: 8px;
+  }
+  .group-badge { 
+    font-size: 11px; 
+    padding: 3px 10px; 
+    border-radius: var(--radius-sm); 
+    font-weight: 600; 
+    display: inline-block;
+  }
+  /* 目的地标签样式 */
+  .destinations { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 8px; 
+    margin-bottom: 16px;
+  }
+  .dest-tag { 
+    font-size: 12px; 
+    padding: 5px 12px; 
+    border-radius: var(--radius-sm); 
+    font-weight: 500;
+  }
+  .best { background: #E8F5E9; color: var(--success); }
+  .good { background: #E3F2FD; color: var(--info); }
+  .caution { background: #FFF3E0; color: var(--warning); }
+  .avoid { background: #FFEBEE; color: var(--danger); }
+  /* 理由说明样式 */
+  .reason { 
+    font-size: 14px; 
+    color: var(--gray-dark); 
+    line-height: 1.8; 
+    background: var(--light);
+    padding: 14px;
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--primary-light);
+  }
+  /* 空状态样式 */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray);
+  }
+  .empty-state p {
+    font-size: 15px;
+    margin-top: 12px;
+  }
+  /* 页脚样式 */
+  .footer {
+    text-align: center;
+    padding: 30px 0 10px;
+    font-size: 12px;
+    color: var(--gray);
+    grid-column: 1 / -1; /* 适配多列布局 */
+  }
+  /* 动画效果 */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card {
+    animation: fadeIn 0.3s ease;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="brand">小鱼碎碎念原创</div>
+    <h1>🌍 留学目的地推荐</h1>
+    <p>根据你的人格类型，找到最适合的留学国家</p>
+  </div>
+  
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--success);"></div>强烈推荐</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--info);"></div>适合</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--warning);"></div>谨慎考虑</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--danger);"></div>不建议</div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filter('all')">全部人格</button>
+    <button class="filter-btn" onclick="filter('摆烂躺平组')">摆烂躺平组</button>
+    <button class="filter-btn" onclick="filter('情绪内耗组')">情绪内耗组</button>
+    <button class="filter-btn" onclick="filter('人间清醒组')">人间清醒组</button>
+    <button class="filter-btn" onclick="filter('社交个性组')">社交个性组</button>
+  </div>
+
+  <div class="cards" id="cards-container"></div>
+  
+  <div class="footer">
+    <div class="brand">小鱼碎碎念原创</div>
+    <p>SBTI 人格留学指南 © 2026</p>
+  </div>
+</div>
+
+<script>
+// 完整的人格数据
+const personalityData = [
+  {
+    id: 'DEAD', 
+    name: 'DEAD 死者', 
+    group: '摆烂躺平组',
+    groupColor: '#B4B2A9',
+    groupTextColor: '#2C2C2A',
+    desc: '身心俱疲，灵魂已死，只剩躯壳',
+    color: '#B4B2A9', 
+    textColor: '#2C2C2A',
+    best: ['新西兰', '爱尔兰'],
+    good: ['澳大利亚', '德国'],
+    caution: ['英国'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '新西兰和爱尔兰节奏极慢、环境宜人、治安好，是最适合"复活"的地方。澳大利亚生活relaxed也不错。坚决避开美国（卷到极致）、香港（生活压力极大）和新加坡（就业压力攀升）。'
+  },
+  {
+    id: 'MALO', 
+    name: 'MALO 吗喽', 
+    group: '摆烂躺平组',
+    groupColor: '#9FE1CB',
+    groupTextColor: '#085041',
+    desc: '底层小透明，拒绝内卷，佛系摆烂',
+    color: '#9FE1CB', 
+    textColor: '#085041',
+    best: ['新西兰', '爱尔兰', '德国'],
+    good: ['澳大利亚'],
+    caution: ['英国', '日本'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '德国不加班文化+低学费+慢节奏，是吗喽理想国。新西兰可兼职且环境友善。澳大利亚生活松弛。绕开香港（物价飞涨）、美国（不卷不行）。'
+  },
+  {
+    id: 'ZZZZ', 
+    name: 'ZZZZ 装死者', 
+    group: '摆烂躺平组',
+    groupColor: '#B4B2A9',
+    groupTextColor: '#2C2C2A',
+    desc: '拖延症晚期，不到死线不动弹',
+    color: '#B4B2A9', 
+    textColor: '#2C2C2A',
+    best: ['爱尔兰', '新西兰'],
+    good: ['澳大利亚', '马来西亚'],
+    caution: ['英国'],
+    avoid: ['德国', '美国', '新加坡'],
+    reason: '爱尔兰和新西兰申请门槛低、节奏慢，对拖延者友好。德国毕业率低、不拖不行，反而是天敌。英国硕士9个月短平快，但挂科了就麻烦。'
+  },
+  {
+    id: 'IMFW', 
+    name: 'IMFW 废物', 
+    group: '摆烂躺平组',
+    groupColor: '#D3D1C7',
+    groupTextColor: '#444441',
+    desc: '彻底摆烂，拒绝努力',
+    color: '#D3D1C7', 
+    textColor: '#444441',
+    best: ['爱尔兰', '新西兰'],
+    good: ['澳大利亚'],
+    caution: ['马来西亚', '韩国'],
+    avoid: ['德国', '美国', '日本', '新加坡'],
+    reason: '爱尔兰申请容易、均分要求低；新西兰学制灵活、环境友善。德国毕业率低（真学渣容易挂）、日本申请难度高，这两个国家对废物不友好。'
+  },
+  {
+    id: 'OJBK', 
+    name: 'OJBK 无所谓人', 
+    group: '摆烂躺平组',
+    groupColor: '#9FE1CB',
+    groupTextColor: '#085041',
+    desc: '万事随便，不较真不纠结，佛系到极致',
+    color: '#9FE1CB', 
+    textColor: '#085041',
+    best: ['澳大利亚', '爱尔兰', '新西兰'],
+    good: ['德国', '英国'],
+    caution: ['韩国'],
+    avoid: ['美国', '香港'],
+    reason: '澳大利亚最匹配无所谓气质：relaxed氛围、不用太卷。爱尔兰申请无需中介、随缘申。坚决避开需要时刻保持警觉的美国（治安问题），以及节奏飞快的香港。'
+  },
+  {
+    id: 'IMSB', 
+    name: 'IMSB 自我攻击者', 
+    group: '情绪内耗组',
+    groupColor: '#F5C4B3',
+    groupTextColor: '#993C1D',
+    desc: '内耗之王，遇事先怪自己',
+    color: '#F5C4B3', 
+    textColor: '#993C1D',
+    best: ['新西兰', '爱尔兰'],
+    good: ['澳大利亚', '英国'],
+    caution: ['德国', '新加坡'],
+    avoid: ['美国', '香港', '韩国'],
+    reason: '新西兰当地人友善、环境治愈，适合愈合内耗。美国留学生抑郁比例最高，严重不推荐。韩国社会氛围mean且排外，会加重自我攻击倾向。香港压分最严重，更会加剧内耗。'
+  },
+  {
+    id: 'ATM', 
+    name: 'ATM-er 送钱者', 
+    group: '情绪内耗组',
+    groupColor: '#FAC775',
+    groupTextColor: '#633806',
+    desc: '人形提款机，总在为别人付出',
+    color: '#FAC775', 
+    textColor: '#633806',
+    best: ['英国', '澳大利亚'],
+    good: ['新加坡', '爱尔兰'],
+    caution: ['美国'],
+    avoid: ['韩国', '香港'],
+    reason: '英国教育资源丰富、专业宽容度高，ATM型人格在此可以选择适合自己的方向而非被迫迁就他人。韩国灰色产业陷阱多，送钱者容易被坑；香港物价飞涨，钱包承压更大。'
+  },
+  {
+    id: 'LOVER', 
+    name: 'LOVE-R 多情者', 
+    group: '情绪内耗组',
+    groupColor: '#F8BBD0',
+    groupTextColor: '#880E4F',
+    desc: '恋爱脑，情绪敏感，易被感情左右',
+    color: '#F8BBD0', 
+    textColor: '#880E4F',
+    best: ['法国', '意大利', '西班牙'],
+    good: ['英国', '澳大利亚'],
+    caution: ['德国', '日本'],
+    avoid: ['韩国', '香港', '新加坡'],
+    reason: '浪漫的法语/意语/西语国家最适配多情人格，艺术氛围浓厚能滋养情绪。德国过于理性、日本过于压抑，会让多情者感到窒息。韩国恋爱氛围虽浓但内卷严重，反而加重内耗。'
+  },
+  {
+    id: 'BOSS', 
+    name: 'BOSS 掌控者', 
+    group: '人间清醒组',
+    groupColor: '#6C63FF',
+    groupTextColor: '#FFFFFF',
+    desc: '目标明确，掌控欲强，追求成功',
+    color: '#6C63FF', 
+    textColor: '#FFFFFF',
+    best: ['美国', '新加坡', '香港'],
+    good: ['英国', '德国'],
+    caution: ['澳大利亚'],
+    avoid: ['新西兰', '爱尔兰'],
+    reason: '美国/新加坡/香港竞争激烈但机会多，能满足掌控者的成功欲。德国严谨的体系适合规划清晰的BOSS。新西兰/爱尔兰节奏过慢，会让掌控者感到"英雄无用武之地"。'
+  },
+  {
+    id: 'STAR', 
+    name: 'STAR 社交达人', 
+    group: '社交个性组',
+    groupColor: '#FFC107',
+    groupTextColor: '#FFFFFF',
+    desc: '外向开朗，喜欢社交，热爱新鲜事物',
+    color: '#FFC107', 
+    textColor: '#FFFFFF',
+    best: ['美国', '英国', '澳大利亚'],
+    good: ['加拿大', '法国'],
+    caution: ['德国', '日本'],
+    avoid: ['新西兰', '爱尔兰'],
+    reason: '美国/英国社交活动丰富，多元文化能满足社交达人的需求。澳大利亚户外活动多，适合拓展社交圈。德国/日本社交氛围内敛，新西兰/爱尔兰社交场景少，会让社交达人感到无聊。'
+  }
+];
+
+// 初始化页面
+document.addEventListener('DOMContentLoaded', function() {
+  renderCards('all');
+});
+
+// 渲染卡片
+function renderCards(filterGroup) {
+  const container = document.getElementById('cards-container');
+  container.innerHTML = '';
+  
+  // 筛选数据
+  let filteredData = personalityData;
+  if (filterGroup !== 'all') {
+    filteredData = personalityData.filter(item => item.group === filterGroup);
+  }
+  
+  // 处理空数据
+  if (filteredData.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <p>暂无「${filterGroup}」相关的人格数据</p>
+        <p style="margin-top:8px; font-size:13px;">可切换至「全部人格」查看更多内容</p>
+      </div>
+    `;
+    return;
+  }
+  
+  // 渲染卡片
+  filteredData.forEach(item => {
+    // 构建目的地标签
+    let tagsHtml = '';
+    // 强烈推荐
+    item.best.forEach(tag => {
+      tagsHtml += `<span class="dest-tag best">${tag}</span>`;
+    });
+    // 适合
+    item.good.forEach(tag => {
+      tagsHtml += `<span class="dest-tag good">${tag}</span>`;
+    });
+    // 谨慎考虑
+    item.caution.forEach(tag => {
+      tagsHtml += `<span class="dest-tag caution">${tag}</span>`;
+    });
+    // 不建议
+    item.avoid.forEach(tag => {
+      tagsHtml += `<span class="dest-tag avoid">${tag}</span>`;
+    });
+    
+    // 构建分组徽章样式
+    const groupBadgeStyle = `background: ${item.groupColor}; color: ${item.groupTextColor};`;
+    
+    // 创建卡片元素
+    const cardHtml = `
+      <div class="card">
+        <div class="card-header">
+          <div class="avatar" style="background: ${item.color}; color: ${item.textColor};">${item.id}</div>
+          <div class="card-meta">
+            <div class="card-name">${item.name}</div>
+            <div class="card-desc">${item.desc}</div>
+            <span class="group-badge" style="${groupBadgeStyle}">${item.group}</span>
+          </div>
+        </div>
+        <div class="destinations">
+          ${tagsHtml}
+        </div>
+        <div class="reason">${item.reason}</div>
+      </div>
+    `;
+    
+    container.innerHTML += cardHtml;
+  });
+}
+
+// 筛选函数
+function filter(group) {
+  // 重置筛选按钮状态
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.textContent.includes(group)) {
+      btn.classList.add('active');
+    }
+  });
+  
+  // 渲染筛选后的卡片
+  renderCards(group);
+}
+</script>
+</body>
+</html>

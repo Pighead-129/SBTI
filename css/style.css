@@ -1,0 +1,133 @@
+/* 全局重置+基础样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Microsoft Yahei", sans-serif;
+}
+
+body {
+  background-color: #f8f9fa; /* 柔和背景，避免空白单调 */
+}
+
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  position: relative; /* 为气泡动画做定位 */
+  min-height: 80vh; /* 避免内容过少导致底部空白 */
+}
+
+/* 1. 空白填充：装饰卡片样式+hover动画 */
+.blank-fill-area {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 40px 0; /* 与其他内容拉开间距，填充空白 */
+}
+
+.decor-card {
+  flex: 1;
+  min-width: 280px;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #fff 0%, #f0f8ff 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: all 0.3s ease; /* 动画过渡 */
+  cursor: pointer;
+}
+
+.decor-card:hover {
+  transform: translateY(-8px); /* 悬浮上移 */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); /* 加深阴影 */
+}
+
+.card-icon {
+  font-size: 36px;
+  margin-bottom: 15px;
+  color: #409eff; /* 主题色 */
+}
+
+.decor-card h3 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.decor-card p {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 2. 动画装饰：浮动气泡（空白区域动态点缀） */
+.animation-bubbles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* 不遮挡点击 */
+  z-index: 0;
+}
+
+.bubble {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: rgba(64, 158, 255, 0.2);
+  border-radius: 50%;
+  animation: float 8s infinite ease-in-out;
+}
+
+/* 不同气泡不同动画参数，避免重复 */
+.bubble:nth-child(1) {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+  width: 25px;
+  height: 25px;
+}
+
+.bubble:nth-child(2) {
+  top: 60%;
+  left: 80%;
+  animation-delay: 2s;
+  width: 18px;
+  height: 18px;
+}
+
+.bubble:nth-child(3) {
+  top: 80%;
+  left: 30%;
+  animation-delay: 4s;
+  width: 30px;
+  height: 30px;
+}
+
+/* 气泡浮动动画 */
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-30px) translateX(20px);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.8;
+  }
+}
+
+/* 3. 原有内容美化：添加间距和阴影 */
+.business-content {
+  position: relative;
+  z-index: 1; /* 盖在气泡上层 */
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
