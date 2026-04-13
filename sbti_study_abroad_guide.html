@@ -1,0 +1,588 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
+<title>留学目的地推荐 - SBTI人格匹配</title>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --primary: #FF6B6B;
+  --secondary: #4ECDC4;
+  --accent: #FFE66D;
+  --dark: #2C3E50;
+  --light: #FAFAFA;
+  --gray: #95A5A6;
+  --bg-gradient: linear-gradient(135deg, #FFF5F5 0%, #FFF9E6 100%);
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  color: var(--dark);
+  line-height: 1.6;
+}
+.container {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 16px;
+  background: #FFFFFF;
+  min-height: 100vh;
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: 800px;
+    margin: 20px auto;
+    min-height: auto;
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    max-width: 900px;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+.header {
+  text-align: center;
+  padding: 16px 0 20px;
+  border-bottom: 2px solid #FFE5E5;
+  margin-bottom: 16px;
+}
+@media (min-width: 768px) {
+  .header {
+    padding: 24px 0;
+  }
+  .header h1 {
+    font-size: 26px;
+  }
+  .header p {
+    font-size: 14px;
+  }
+}
+.header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #E74C3C;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+.header p {
+  font-size: 13px;
+  color: #95A5A6;
+}
+.legend { 
+  display: flex; 
+  gap: 10px; 
+  flex-wrap: wrap; 
+  margin-bottom: 16px;
+  justify-content: center;
+}
+.legend-item { 
+  display: flex; 
+  align-items: center; 
+  gap: 4px; 
+  font-size: 11px; 
+  color: #666;
+  background: #F8F8F8;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+.legend-dot { 
+  width: 8px; 
+  height: 8px; 
+  border-radius: 50%; 
+}
+.filter-bar { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 6px; 
+  margin-bottom: 20px;
+  justify-content: center;
+}
+.filter-btn { 
+  background: #F8F8F8; 
+  border: 1px solid #E0E0E0; 
+  border-radius: 16px; 
+  padding: 6px 12px; 
+  font-size: 12px; 
+  cursor: pointer; 
+  color: #666;
+  transition: all 0.2s;
+}
+.filter-btn.active { 
+  background: #E74C3C; 
+  border-color: #E74C3C; 
+  color: #FFF; 
+  font-weight: 600;
+}
+.filter-btn:hover { 
+  background: #FFE5E5;
+  border-color: #FFB3B3;
+}
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+@media (min-width: 768px) {
+  .cards {
+    gap: 16px;
+  }
+}
+.card { 
+  background: #FFFFFF; 
+  border: 1px solid #F0F0F0; 
+  border-radius: 16px; 
+  padding: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: transform 0.2s;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+.card-header { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  margin-bottom: 12px; 
+}
+.avatar { 
+  width: 52px; 
+  height: 52px; 
+  border-radius: 12px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-size: 11px; 
+  font-weight: 700; 
+  flex-shrink: 0; 
+  text-align: center; 
+  line-height: 1.2;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.card-meta { 
+  flex: 1; 
+  min-width: 0;
+}
+.card-name { 
+  font-size: 16px; 
+  font-weight: 700; 
+  color: var(--dark);
+  margin-bottom: 2px;
+}
+.card-desc { 
+  font-size: 12px; 
+  color: #888;
+  margin-bottom: 6px;
+}
+.group-badge { 
+  font-size: 10px; 
+  padding: 2px 8px; 
+  border-radius: 8px; 
+  font-weight: 600; 
+  display: inline-block;
+}
+.destinations { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 6px; 
+  margin-bottom: 12px;
+}
+.dest-tag { 
+  font-size: 12px; 
+  padding: 4px 10px; 
+  border-radius: 10px; 
+  font-weight: 500;
+}
+.best { background: #E8F5E9; color: #2E7D32; }
+.good { background: #E3F2FD; color: #1565C0; }
+.caution { background: #FFF3E0; color: #E65100; }
+.avoid { background: #FFEBEE; color: #C62828; }
+.reason { 
+  font-size: 13px; 
+  color: #555; 
+  line-height: 1.7; 
+  background: #FAFAFA;
+  padding: 12px;
+  border-radius: 10px;
+  border-left: 3px solid #FFB3B3;
+}
+.section-title { 
+  font-size: 12px; 
+  font-weight: 600; 
+  color: #999; 
+  margin-bottom: 8px; 
+  text-transform: uppercase; 
+  letter-spacing: 0.5px; 
+}
+.brand {
+  display: inline-block;
+  background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.footer {
+  text-align: center;
+  padding: 24px 0 12px;
+  font-size: 11px;
+  color: #BBB;
+}
+</style>
+
+<div class="container">
+  <div class="header">
+    <div class="brand">小鱼碎碎念原创</div>
+    <h1>🌍 留学目的地推荐</h1>
+    <p>根据你的人格类型，找到最适合的留学国家</p>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#2E7D32;"></div>强烈推荐</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1565C0;"></div>适合</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#E65100;"></div>谨慎考虑</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#C62828;"></div>不建议</div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filter('all')">全部人格</button>
+    <button class="filter-btn" onclick="filter('摆烂躺平组')">摆烂躺平组</button>
+    <button class="filter-btn" onclick="filter('情绪内耗组')">情绪内耗组</button>
+    <button class="filter-btn" onclick="filter('人间清醒组')">人间清醒组</button>
+    <button class="filter-btn" onclick="filter('社交个性组')">社交个性组</button>
+  </div>
+
+  <div class="cards" id="cards-container"></div>
+  
+  <div class="footer">
+    <div class="brand">小鱼碎碎念原创</div>
+    <p>SBTI 人格留学指南</p>
+  </div>
+</div>
+
+<script>
+const data = [
+  {
+    id: 'DEAD', name: 'DEAD 死者', group: '摆烂躺平组',
+    desc: '身心俱疲，灵魂已死，只剩躯壳',
+    color: '#B4B2A9', textColor: '#2C2C2A',
+    best: ['新西兰', '爱尔兰'],
+    good: ['澳大利亚', '德国'],
+    caution: ['英国'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '新西兰和爱尔兰节奏极慢、环境宜人、治安好，是最适合"复活"的地方。澳大利亚生活relaxed也不错。坚决避开美国（卷到极致）、香港（生活压力极大）和新加坡（就业压力攀升）。'
+  },
+  {
+    id: 'MALO', name: 'MALO 吗喽', group: '摆烂躺平组',
+    desc: '底层小透明，拒绝内卷，佛系摆烂',
+    color: '#9FE1CB', textColor: '#085041',
+    best: ['新西兰', '爱尔兰', '德国'],
+    good: ['澳大利亚'],
+    caution: ['英国', '日本'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '德国不加班文化+低学费+慢节奏，是吗喽理想国。新西兰可兼职且环境友善。澳大利亚生活松弛。绕开香港（物价飞涨）、美国（不卷不行）。'
+  },
+  {
+    id: 'ZZZZ', name: 'ZZZZ 装死者', group: '摆烂躺平组',
+    desc: '拖延症晚期，不到死线不动弹',
+    color: '#B4B2A9', textColor: '#2C2C2A',
+    best: ['爱尔兰', '新西兰'],
+    good: ['澳大利亚', '马来西亚'],
+    caution: ['英国'],
+    avoid: ['德国', '美国', '新加坡'],
+    reason: '爱尔兰和新西兰申请门槛低、节奏慢，对拖延者友好。德国毕业率低、不拖不行，反而是天敌。英国硕士9个月短平快，但挂科了就麻烦。'
+  },
+  {
+    id: 'IMFW', name: 'IMFW 废物', group: '摆烂躺平组',
+    desc: '彻底摆烂，拒绝努力',
+    color: '#D3D1C7', textColor: '#444441',
+    best: ['爱尔兰', '新西兰'],
+    good: ['澳大利亚'],
+    caution: ['马来西亚', '韩国'],
+    avoid: ['德国', '美国', '日本', '新加坡'],
+    reason: '爱尔兰申请容易、均分要求低；新西兰学制灵活、环境友善。德国毕业率低（真学渣容易挂）、日本申请难度高，这两个国家对废物不友好。'
+  },
+  {
+    id: 'OJBK', name: 'OJBK 无所谓人', group: '摆烂躺平组',
+    desc: '万事随便，不较真不纠结，佛系到极致',
+    color: '#9FE1CB', textColor: '#085041',
+    best: ['澳大利亚', '爱尔兰', '新西兰'],
+    good: ['德国', '英国'],
+    caution: ['韩国'],
+    avoid: ['美国', '香港'],
+    reason: '澳大利亚最匹配无所谓气质：relaxed氛围、不用太卷。爱尔兰申请无需中介、随缘申。坚决避开需要时刻保持警觉的美国（治安问题），以及节奏飞快的香港。'
+  },
+  {
+    id: 'IMSB', name: 'IMSB 自我攻击者', group: '情绪内耗组',
+    desc: '内耗之王，遇事先怪自己',
+    color: '#F5C4B3', textColor: '#993C1D',
+    best: ['新西兰', '爱尔兰'],
+    good: ['澳大利亚', '英国'],
+    caution: ['德国', '新加坡'],
+    avoid: ['美国', '香港', '韩国'],
+    reason: '新西兰当地人友善、环境治愈，适合愈合内耗。美国留学生抑郁比例最高，严重不推荐。韩国社会氛围mean且排外，会加重自我攻击倾向。香港压分最严重，更会加剧内耗。'
+  },
+  {
+    id: 'ATM', name: 'ATM-er 送钱者', group: '情绪内耗组',
+    desc: '人形提款机，总在为别人付出',
+    color: '#FAC775', textColor: '#633806',
+    best: ['英国', '澳大利亚'],
+    good: ['新加坡', '爱尔兰'],
+    caution: ['美国'],
+    avoid: ['韩国', '香港'],
+    reason: '英国教育资源丰富、专业宽容度高，ATM型人格在此可以选择适合自己的方向而非被迫迁就他人。韩国灰色产业陷阱多，送钱者容易被坑；香港物价飞涨，钱包承压更大。'
+  },
+  {
+    id: 'LOVER', name: 'LOVE-R 多情者', group: '情绪内耗组',
+    desc: '恋爱脑，容易为情所困',
+    color: '#F4C0D1', textColor: '#72243E',
+    best: ['英国', '澳大利亚'],
+    good: ['爱尔兰', '新西兰'],
+    caution: ['日本', '韩国'],
+    avoid: ['美国', '德国'],
+    reason: '英国和澳大利亚国际化程度高、社交圈多元，但同时节奏不会压垮情绪。德国人普遍冷漠，多情者在此容易碰壁。日韩虽有文化吸引力，但排外情绪会伤害敏感的多情者。'
+  },
+  {
+    id: 'THANK', name: 'THAN-K 感恩者', group: '情绪内耗组',
+    desc: '过度感恩，习惯迁就，总怕辜负别人',
+    color: '#C0DD97', textColor: '#27500A',
+    best: ['新西兰', '爱尔兰'],
+    good: ['澳大利亚', '英国'],
+    caution: ['新加坡'],
+    avoid: ['德国', '韩国', '美国'],
+    reason: '新西兰当地人友善度最高，不会让感恩者感到"欠债"。德国人冷漠甚至不友好，会让感恩者陷入讨好无回应的困境。韩国排外会让感恩者持续委屈自己。'
+  },
+  {
+    id: 'JOKER', name: 'JOKE-R 小丑', group: '情绪内耗组',
+    desc: '用搞笑掩盖难过的社交气氛组',
+    color: '#FAC775', textColor: '#633806',
+    best: ['澳大利亚', '英国'],
+    good: ['爱尔兰', '美国'],
+    caution: ['新加坡', '日本'],
+    avoid: ['德国', '韩国'],
+    reason: '英国幽默文化和澳大利亚轻松氛围是小丑的舞台，可以在这里真正被接受。德国人严肃且形式主义，笑话讲不进去；日本文化对情绪表达压抑，会让小丑更难放下面具。'
+  },
+  {
+    id: 'OHNO', name: 'OH-NO 哦不人', group: '情绪内耗组',
+    desc: '遇事悲观，总往最坏想，焦虑拉满',
+    color: '#B5D4F4', textColor: '#185FA5',
+    best: ['新西兰', '新加坡'],
+    good: ['爱尔兰', '澳大利亚'],
+    caution: ['英国'],
+    avoid: ['美国', '德国', '香港'],
+    reason: '新西兰和新加坡治安极好，让焦虑者减少现实威胁感。美国治安差，焦虑者去了会天天觉得"完了要被抢了"。香港生活压力大会持续触发焦虑。德国的高税+存款少，经济焦虑同样严重。'
+  },
+  {
+    id: 'HHHH', name: 'HHHH 傻乐者', group: '情绪内耗组',
+    desc: '没心没肺，快乐至上，情绪超稳定',
+    color: '#FAC775', textColor: '#633806',
+    best: ['澳大利亚', '美国', '英国'],
+    good: ['新加坡', '爱尔兰', '新西兰'],
+    caution: ['日本'],
+    avoid: [],
+    reason: '傻乐者适应力强，去哪都快乐。美国丰富的娱乐资源+多元文化是天堂；澳大利亚轻松氛围加分；英国也很合适。日本文化对"过度表达快乐"有些不适应，但也不是不能去。'
+  },
+  {
+    id: 'BOSS', name: 'BOSS 领导者', group: '人间清醒组',
+    desc: '天生领袖，爱掌控全局',
+    color: '#AFA9EC', textColor: '#3C3489',
+    best: ['美国', '英国'],
+    good: ['新加坡', '香港'],
+    caution: ['德国', '日本'],
+    avoid: ['新西兰', '马来西亚'],
+    reason: '美国私企文化为领导者提供最大的施展空间，咨询/金融/科技行业顶尖机会在此。英国同样有广阔舞台。德国形式主义重，外国人上升空间受限。新西兰太无聊，没有领导者需要的"战场"。'
+  },
+  {
+    id: 'CTRL', name: 'CTRL 拿捏者', group: '人间清醒组',
+    desc: '理性冷静，擅长规划，一切尽在掌握',
+    color: '#AFA9EC', textColor: '#3C3489',
+    best: ['新加坡', '英国', '美国'],
+    good: ['澳大利亚', '德国'],
+    caution: ['韩国'],
+    avoid: ['新西兰'],
+    reason: '新加坡规则清晰、规划感强，QS排名稳定，是拿捏者的理想地。英国选课宽容度高，便于精准规划路径。新西兰太随意，无法满足拿捏者对"一切有序"的需求。'
+  },
+  {
+    id: 'THINK', name: 'THIN-K 思考者', group: '人间清醒组',
+    desc: '遇事不冲动，深度分析，人间清醒',
+    color: '#85B7EB', textColor: '#0C447C',
+    best: ['英国', '德国'],
+    good: ['美国', '新加坡'],
+    caution: ['韩国', '香港'],
+    avoid: ['马来西亚'],
+    reason: '英国学术互评水平高、研究型专业强，是思考者的学术天堂。德国严谨的学术传统也适合深度思考者。香港课程水平一般，思考者会觉得不过瘾。'
+  },
+  {
+    id: 'SHIT', name: 'SHIT 狗屎人', group: '人间清醒组',
+    desc: '嘴上骂世界，手上默默收拾烂摊子',
+    color: '#888780', textColor: '#2C2C2A',
+    best: ['英国', '美国'],
+    good: ['澳大利亚', '新加坡'],
+    caution: ['德国'],
+    avoid: ['新西兰', '马来西亚'],
+    reason: '英国"烂摊子"最多（天气烂、治安一般、吃的不好），狗屎人在抱怨中默默解决问题，反而活得有劲。美国挑战多，收拾起来也更有成就感。新西兰太无聊，狗屎人找不到需要收拾的摊子。'
+  },
+  {
+    id: 'GOGO', name: 'GOGO 行者', group: '人间清醒组',
+    desc: '超强执行力，说干就干，绝不拖沓',
+    color: '#5DCAA5', textColor: '#085041',
+    best: ['美国', '新加坡'],
+    good: ['英国', '澳大利亚', '香港'],
+    caution: ['德国'],
+    avoid: ['新西兰', '马来西亚'],
+    reason: '美国是行者的主场——技术、咨询等行业提供最高薪酬和最多机会，卷得起才值得去。新加坡秩序清晰、执行效率高。德国节奏慢+不加班文化会让行者憋屈。'
+  },
+  {
+    id: 'MONK', name: 'MONK 僧人', group: '人间清醒组',
+    desc: '偏爱独处，边界感强，与世无争',
+    color: '#D3D1C7', textColor: '#444441',
+    best: ['新西兰', '德国', '爱尔兰'],
+    good: ['澳大利亚', '日本'],
+    caution: ['英国'],
+    avoid: ['美国', '香港', '韩国'],
+    reason: '新西兰自然环境出色、节奏缓慢，是僧人修行的理想地。德国边界感文化和僧人高度契合——大家都不爱主动社交。美国社交文化强、香港人声鼎沸，让僧人耗能极大。'
+  },
+  {
+    id: 'SOLO', name: 'SOLO 孤儿', group: '社交个性组',
+    desc: '独行侠，社恐，享受孤独',
+    color: '#B5D4F4', textColor: '#185FA5',
+    best: ['新西兰', '德国'],
+    good: ['爱尔兰', '澳大利亚'],
+    caution: ['英国'],
+    avoid: ['美国', '香港', '韩国'],
+    reason: '德国人本身边界感强，不会强迫你社交，对社恐友好。新西兰地广人稀+人民友善但不侵扰。美国的社交文化和Networking文化对社恐是折磨；韩国排外，孤独感会加剧。'
+  },
+  {
+    id: 'MUM', name: 'MUM 妈妈', group: '社交个性组',
+    desc: '母爱泛滥，爱操心爱照顾人',
+    color: '#F4C0D1', textColor: '#72243E',
+    best: ['澳大利亚', '英国'],
+    good: ['新加坡', '爱尔兰'],
+    caution: ['德国'],
+    avoid: ['美国', '韩国'],
+    reason: '澳大利亚和英国国际学生多，妈妈型人格能找到很多需要照顾的对象，融入感强。德国人冷漠，妈妈的热情会"打在棉花上"。韩国排外，妈妈的好意未必被接受。'
+  },
+  {
+    id: 'SEXY', name: 'SEXY 尤物', group: '社交个性组',
+    desc: '自信耀眼，自带气场，走到哪都是焦点',
+    color: '#F0997B', textColor: '#712B13',
+    best: ['美国', '英国'],
+    good: ['澳大利亚', '新加坡'],
+    caution: ['日本'],
+    avoid: ['德国', '新西兰'],
+    reason: '美国文化崇尚个人魅力和自我表达，尤物在此如鱼得水。英国多元文化也提供大舞台。德国人对"炫耀自己"接受度低；日本文化强调含蓄，尤物的光芒容易让人不适。'
+  },
+  {
+    id: 'FAKE', name: 'FAKE 伪人', group: '社交个性组',
+    desc: '人前一套人后一套，社交面具人',
+    color: '#D3D1C7', textColor: '#444441',
+    best: ['英国', '新加坡'],
+    good: ['美国', '澳大利亚'],
+    caution: ['新西兰', '爱尔兰'],
+    avoid: ['德国'],
+    reason: '英国和新加坡的多元商业文化，让"场合感"变成一种职业技能，伪人如鱼得水。德国文化崇尚直接和透明，严格的法律秩序下，戴面具反而容易出问题。'
+  },
+  {
+    id: 'FUCK', name: 'FUCK 草者', group: '社交个性组',
+    desc: '反骨叛逆，不喜束缚，情绪直接',
+    color: '#97C459', textColor: '#173404',
+    best: ['澳大利亚', '美国'],
+    good: ['英国', '爱尔兰'],
+    caution: ['新加坡'],
+    avoid: ['德国', '日本', '韩国'],
+    reason: '澳大利亚文化本身就崇尚不拘束、说话直接，草者在这里最自在。新加坡有严格的法律秩序，直接的情绪表达可能触碰规则。德日韩对行为规范要求极高，叛逆者会处处碰壁。'
+  },
+  {
+    id: 'WOC', name: 'WOC! 握草人', group: '社交个性组',
+    desc: '直爽坦率，遇事第一反应就是吐槽',
+    color: '#FAC775', textColor: '#633806',
+    best: ['澳大利亚', '英国'],
+    good: ['美国', '爱尔兰'],
+    caution: ['新加坡', '日本'],
+    avoid: ['德国', '韩国'],
+    reason: '澳大利亚人本身就是全球出了名的"毒舌"，握草人在此遇到同类。英国人嘲讽文化发达，直爽吐槽很被接受。日本强调情绪内敛，握草人的坦率会让周围人如坐针毡。'
+  },
+  {
+    id: 'DRUNK', name: 'DRUN-K 酒鬼', group: '社交个性组',
+    desc: '爱小酌，微醺才快乐',
+    color: '#AFA9EC', textColor: '#3C3489',
+    best: ['英国', '爱尔兰'],
+    good: ['澳大利亚', '德国'],
+    caution: ['韩国'],
+    avoid: ['新加坡', '日本'],
+    reason: '爱尔兰是世界级的饮酒文化圣地（酒吧是社交中心），英国pub文化同样发达，酒鬼在此找到灵魂归宿。新加坡酒价极贵（高税）；韩国灰色产业环境复杂，酒鬼容易出问题。'
+  },
+  {
+    id: 'POOR', name: 'POOR 贫穷者', group: '社交个性组',
+    desc: '稳定贫穷，精打细算，对钱极度敏感',
+    color: '#C0DD97', textColor: '#27500A',
+    best: ['德国', '马来西亚'],
+    good: ['爱尔兰', '日本'],
+    caution: ['韩国', '澳大利亚'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '德国公立大学免学费，是穷人的留学天堂。马来西亚生活成本极低，穷而快乐。美国一年50万+且每年涨价，香港和新加坡学费生活费涨幅均超10%/年，贫穷者请绕行。'
+  }
+];
+
+let current = 'all';
+
+function filter(group) {
+  current = group;
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent === (group === 'all' ? '全部人格' : group));
+  });
+  render();
+}
+
+function render() {
+  const filtered = current === 'all' ? data : data.filter(d => d.group === current);
+  const container = document.getElementById('cards-container');
+  container.innerHTML = filtered.map(d => {
+    const allDest = [
+      ...d.best.map(x => `<span class="dest-tag best">${x} ★</span>`),
+      ...d.good.map(x => `<span class="dest-tag good">${x}</span>`),
+      ...d.caution.map(x => `<span class="dest-tag caution">${x} ⚠</span>`),
+      ...d.avoid.map(x => `<span class="dest-tag avoid">${x} ✕</span>`)
+    ].join('');
+    const groupColors = {
+      '摆烂躺平组': 'background:#D3D1C7;color:#444441',
+      '情绪内耗组': 'background:#F5C4B3;color:#993C1D',
+      '人间清醒组': 'background:#CED9F6;color:#3C3489',
+      '社交个性组': 'background:#C0DD97;color:#27500A'
+    };
+    return `
+    <div class="card">
+      <div class="card-header">
+        <div class="avatar" style="background:${d.color};color:${d.textColor}">${d.id}</div>
+        <div class="card-meta">
+          <div class="card-name">${d.name}</div>
+          <div class="card-desc">${d.desc}</div>
+          <span class="group-badge" style="${groupColors[d.group]}">${d.group}</span>
+        </div>
+      </div>
+      <p class="section-title">推荐留学目的地</p>
+      <div class="destinations">${allDest}</div>
+      <div class="reason">${d.reason}</div>
+    </div>`;
+  }).join('');
+}
+
+render();
+</script>
+</body>
+</html>

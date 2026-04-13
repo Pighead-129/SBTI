@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/sbti_study_abroad_guide.html" },
+    { "src": "/sbti_new", "dest": "/sbti_new.html" }
+  ]
+}
