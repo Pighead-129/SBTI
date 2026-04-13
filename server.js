@@ -129,7 +129,7 @@ async function getHtmlWithPopup(pagePath) {
   }
 </style>
 
-<!-- 弹窗逻辑脚本 -->
+<!-- 弹窗逻辑脚本（移除localStorage逻辑，每次打开都显示） -->
 <script>
   (function() {
     // 避免重复执行
@@ -140,18 +140,14 @@ async function getHtmlWithPopup(pagePath) {
     const qrcodeMask = document.getElementById('qrcodeMask');
     const closeBtn = document.getElementById('closeBtn');
 
-    // 关闭弹窗（带本地存储）
+    // 关闭弹窗（仅隐藏，不记录本地存储）
     function closePopup() {
       qrcodeMask.classList.add('hidden');
-      localStorage.setItem('qrcodeClosed', 'true');
     }
 
     // 初始化
     window.addEventListener('DOMContentLoaded', () => {
-      // 检查是否已关闭
-      if (localStorage.getItem('qrcodeClosed')) {
-        qrcodeMask.classList.add('hidden');
-      }
+      // 移除：检查本地存储是否关闭的逻辑，确保每次都显示弹窗
 
       // 关闭按钮事件
       closeBtn.addEventListener('click', closePopup);
