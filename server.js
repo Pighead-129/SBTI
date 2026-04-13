@@ -28,25 +28,78 @@ function getMimeType(ext) {
 function injectPopup(html) {
   const popup = `
   <style>
-    .qrcode-modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:99999;font-family:system-ui;}
-    .qrcode-box{background:#fff;border-radius:20px;padding:36px 30px;max-width:330px;text-align:center;box-shadow:0 25px 50px rgba(0,0,0,0.25);position:relative;animation:popupScale 0.3s ease;}
-    @keyframes popupScale{from{opacity:0; transform:scale(0.9);}to{opacity:1; transform:scale(1);}}
-    .qrcode-img{width:230px;height:230px;object-fit:contain;border-radius:12px;margin-bottom:20px;}
-    .close-btn{position:absolute;top:-14px;right:-14px;width:40px;height:40px;background:#ff5c5c;color:#fff;border:none;border-radius:50%;font-size:22px;cursor-pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.15);transition:0.2s;}
+    .qrcode-modal{
+      position:fixed;inset:0;background:rgba(0,0,0,0.7);
+      display:flex;align-items:center;justify-content:center;z-index:99999;
+      font-family:system-ui,"Microsoft Yahei",sans-serif;
+    }
+    .qrcode-box{
+      background:#fff;border-radius:20px;padding:36px 30px;
+      max-width:330px;text-align:center;
+      box-shadow:0 25px 50px rgba(0,0,0,0.25);
+      position:relative;animation:popupScale 0.3s ease;
+    }
+    @keyframes popupScale{
+      from{opacity:0;transform:scale(0.9);}
+      to{opacity:1;transform:scale(1);}
+    }
+    .qrcode-img{
+      width:230px;height:230px;object-fit:contain;
+      border-radius:12px;margin-bottom:20px;
+    }
+    .close-btn{
+      position:absolute;top:-14px;right:-14px;
+      width:40px;height:40px;background:#ff5c5c;color:#fff;
+      border:none;border-radius:50%;font-size:22px;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 4px 12px rgba(0,0,0,0.15);transition:0.2s;
+    }
     .close-btn:hover{background:#ff4444;}
     .qrcode-title{font-size:17px;color:#222;margin-bottom:8px;font-weight:600;}
     .qrcode-desc{font-size:14px;color:#666;line-height:1.5;}
 
-    .follow-modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:100000;}
-    .follow-box{background:#fff;border-radius:20px;padding:30px;max-width:340px;text-align:center;box-shadow:0 25px 50px rgba(0,0,0,0.25);position:relative;animation:popupScale 0.3s ease;}
-    .emoji{width:80px;height:80px;margin-bottom:10px;}
-    .follow-text{font-size:15px;color:#333;line-height:1.6;margin-bottom:15px;}
-    .corner-qr{position:absolute;bottom:18px;right:18px;width:100px;height:100px;}
-    .know-btn{padding:10px 24px;background:#409eff;color:#fff;border:none;border-radius:10px;font-size:15px;cursor-pointer;}
+    /* 👇 这里修复重叠：加大间距、排版重新整理 */
+    .follow-modal{
+      position:fixed;inset:0;background:rgba(0,0,0,0.7);
+      display:none;align-items:center;justify-content:center;z-index:100000;
+    }
+    .follow-box{
+      background:#fff;border-radius:20px;padding:35px 25px;
+      max-width:360px;text-align:center;
+      box-shadow:0 25px 50px rgba(0,0,0,0.25);
+      position:relative;animation:popupScale 0.3s ease;
+    }
+    .emoji{
+      width:80px;height:80px;
+      margin-bottom:20px; /* 增加间距，避免重叠 */
+    }
+    .follow-text{
+      font-size:15px;color:#333;line-height:1.7;
+      margin-bottom:50px; /* 给角落二维码留出空间 */
+      padding:0 10px;
+    }
+    .corner-qr{
+      position:absolute;
+      bottom:22px;right:22px;
+      width:90px;height:90px;
+      border-radius:6px;
+    }
+    .know-btn{
+      padding:11px 26px;background:#409eff;color:#fff;
+      border:none;border-radius:10px;font-size:15px;cursor:pointer;
+    }
 
-    .detail-page{display:none;position:fixed;inset:0;background:#fff;z-index:9999;padding:40px 20px;overflow-y:auto;}
-    .detail-container{max-width:600px;margin:0 auto;}
-    .back-btn{padding:12px 24px;background:#409eff;color:#fff;border:none;border-radius:10px;cursor-button;margin-top:20px;}
+    .detail-page{
+      display:none;position:fixed;inset:0;background:#fff;
+      z-index:9999;padding:40px 20px;overflow-y:auto;
+    }
+    .detail-container{
+      max-width:600px;margin:0 auto;
+    }
+    .back-btn{
+      padding:12px 24px;background:#409eff;color:#fff;
+      border:none;border-radius:10px;cursor:pointer;margin-top:20px;
+    }
   </style>
 
   <div class="qrcode-modal" id="qrcodeModal">
@@ -54,14 +107,17 @@ function injectPopup(html) {
       <button class="close-btn" onclick="closeQrcode()">×</button>
       <img src="/static/qrcode.png" class="qrcode-img">
       <div class="qrcode-title">关注公众号获取完整资料</div>
-      <div class="qrcode-desc"> SBTI 留学干货 | 回复【资料】领取</div>
+      <div class="qrcode-desc">每日更新 SBTI 留学干货 | 回复【资料】领取</div>
     </div>
   </div>
 
   <div class="follow-modal" id="followModal">
     <div class="follow-box">
       <img src="/static/cute-emoji.png" class="emoji">
-      <div class="follow-text">真的不关注一下嘛 😜<br>后续我们会持续更新更多好玩、实用的新创意！</div>
+      <div class="follow-text">
+        真的不关注一下嘛 😜<br>
+        后续我们会持续更新更多好玩、实用的新创意！
+      </div>
       <img src="/static/qrcode.png" class="corner-qr">
       <button class="know-btn" onclick="closeFollow()">知道啦</button>
     </div>
@@ -86,7 +142,6 @@ function injectPopup(html) {
     function goBack(){
       document.getElementById('detailPage').style.display = 'none';
     }
-
     function checkInput(input) {
       const val = input.value.trim().toUpperCase();
       if (val === 'ATM') {
