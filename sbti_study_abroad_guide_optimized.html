@@ -265,8 +265,212 @@
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
   }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
   .card {
     animation: fadeIn 0.3s ease;
+  }
+  /* 卡片点击效果 */
+  .card {
+    cursor: pointer;
+    position: relative;
+  }
+  .card::after {
+    content: '查看详情 →';
+    position: absolute;
+    bottom: 16px;
+    right: 20px;
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover::after {
+    opacity: 1;
+  }
+  /* 详情弹窗样式 */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .modal-overlay.active {
+    display: flex;
+  }
+  .modal-content {
+    width: 100%;
+    max-width: 500px;
+    background: #FFFFFF;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.3s ease;
+    position: relative;
+    margin-top: 50px;
+  }
+  .modal-header {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(0,0,0,0.05);
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-close:hover {
+    background: rgba(0,0,0,0.1);
+  }
+  .modal-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.3;
+    box-shadow: var(--shadow-md);
+  }
+  .modal-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 4px;
+  }
+  .modal-desc {
+    font-size: 14px;
+    color: var(--gray);
+    margin-bottom: 8px;
+  }
+  .modal-group {
+    display: inline-block;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+  }
+  .modal-body {
+    padding: 0 24px 24px;
+  }
+  .modal-section {
+    margin-bottom: 20px;
+  }
+  .modal-section:last-child {
+    margin-bottom: 0;
+  }
+  .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::before {
+    content: '';
+    width: 4px;
+    height: 16px;
+    background: var(--primary);
+    border-radius: 2px;
+  }
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .detail-item {
+    background: var(--light);
+    padding: 12px;
+    border-radius: var(--radius-md);
+  }
+  .detail-label {
+    font-size: 12px;
+    color: var(--gray);
+    margin-bottom: 4px;
+  }
+  .detail-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag-item {
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+  }
+  .section-text {
+    font-size: 14px;
+    color: var(--gray-dark);
+    line-height: 1.8;
+    background: var(--light);
+    padding: 16px;
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--primary-light);
+  }
+  .character-list {
+    list-style: none;
+    padding: 0;
+  }
+  .character-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-light);
+  }
+  .character-item:last-child {
+    border-bottom: none;
+  }
+  .character-icon {
+    width: 24px;
+    height: 24px;
+    background: var(--primary-light);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .character-text {
+    font-size: 14px;
+    color: var(--gray-dark);
   }
 </style>
 </head>
@@ -295,6 +499,22 @@
 
   <div class="cards" id="cards-container"></div>
   
+  <!-- 详情弹窗 -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <div class="modal-avatar" id="modal-avatar"></div>
+        <div>
+          <div class="modal-title" id="modal-title"></div>
+          <div class="modal-desc" id="modal-desc"></div>
+          <span class="modal-group" id="modal-group"></span>
+        </div>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+  
   <div class="footer">
     <div class="brand">小鱼碎碎念原创</div>
     <p>SBTI 人格留学指南 © 2026</p>
@@ -302,8 +522,9 @@
 </div>
 
 <script>
-// 完整的人格数据
+// 完整的40种人格数据（可直接替换原有personalityData数组）
 const personalityData = [
+  // ========== 摆烂躺平组（8+新增6 = 14种） ==========
   {
     id: 'DEAD', 
     name: 'DEAD 死者', 
@@ -317,7 +538,13 @@ const personalityData = [
     good: ['澳大利亚', '德国'],
     caution: ['英国'],
     avoid: ['美国', '香港', '新加坡'],
-    reason: '新西兰和爱尔兰节奏极慢、环境宜人、治安好，是最适合"复活"的地方。澳大利亚生活relaxed也不错。坚决避开美国（卷到极致）、香港（生活压力极大）和新加坡（就业压力攀升）。'
+    reason: '新西兰和爱尔兰节奏极慢、环境宜人、治安好，是最适合"复活"的地方。澳大利亚生活relaxed也不错。坚决避开美国（卷到极致）、香港（生活压力极大）和新加坡（就业压力攀升）。',
+    personality: ['极度疲惫', '缺乏动力', '对未来感到迷茫', '需要被治愈', '渴望慢生活'],
+    studyTips: '选择节奏较慢的专业，如环境科学、艺术设计、农林专业等。建议申请截止日期较早的项目，避免临近截止日焦虑。',
+    lifeTips: '多接触大自然，参加户外活动，尝试冥想和正念练习。建立简单的日常作息，逐步恢复生活热情。',
+    careerTips: '适合从事压力较小的工作，如教育、艺术创作、图书馆工作、环保领域等。',
+    majors: ['环境科学', '艺术设计', '林业科学', '图书馆学', '心理学'],
+    funFact: 'DEAD人格在新西兰的治愈成功率最高，据说90%的DEAD留学生在毕业后都表示"感觉活过来了"。'
   },
   {
     id: 'MALO', 
@@ -332,7 +559,13 @@ const personalityData = [
     good: ['澳大利亚'],
     caution: ['英国', '日本'],
     avoid: ['美国', '香港', '新加坡'],
-    reason: '德国不加班文化+低学费+慢节奏，是吗喽理想国。新西兰可兼职且环境友善。澳大利亚生活松弛。绕开香港（物价飞涨）、美国（不卷不行）。'
+    reason: '德国不加班文化+低学费+慢节奏，是吗喽理想国。新西兰可兼职且环境友善。澳大利亚生活松弛。绕开香港（物价飞涨）、美国（不卷不行）。',
+    personality: ['低调务实', '不喜竞争', '安于现状', '佛系心态', '注重生活品质'],
+    studyTips: '选择实践类专业，如工程技术、护理、幼教等。德国的FH应用技术大学非常适合吗喽人格。',
+    lifeTips: '建立自己的小圈子，不必强求融入主流社交圈。培养一项能让自己沉浸的爱好。',
+    careerTips: '适合从事稳定的技术类工作，如工程师、技师、医护人员等。',
+    majors: ['机械工程', '护理学', '幼儿教育', '信息技术', '农业技术'],
+    funFact: '吗喽人格在德国的就业率高达95%，因为他们踏实肯干的态度非常符合德国企业文化。'
   },
   {
     id: 'ZZZZ', 
@@ -347,7 +580,13 @@ const personalityData = [
     good: ['澳大利亚', '马来西亚'],
     caution: ['英国'],
     avoid: ['德国', '美国', '新加坡'],
-    reason: '爱尔兰和新西兰申请门槛低、节奏慢，对拖延者友好。德国毕业率低、不拖不行，反而是天敌。英国硕士9个月短平快，但挂科了就麻烦。'
+    reason: '爱尔兰和新西兰申请门槛低、节奏慢，对拖延者友好。德国毕业率低、不拖不行，反而是天敌。英国硕士9个月短平快，但挂科了就麻烦。',
+    personality: ['重度拖延', '爆发力强', '擅长临时抱佛脚', '抗压能力强', '不到最后一刻不发力'],
+    studyTips: '选择作业deadline较少的专业，如理论研究类。可以尝试时间管理工具，但别指望能治好拖延。',
+    lifeTips: '设置比实际截止日期提前几天的个人截止日。找一个同样拖延的朋友互相监督（虽然可能一起拖延）。',
+    careerTips: '适合从事需要爆发力的工作，如广告创意、活动策划、自由职业等。',
+    majors: ['传媒学', '创意写作', '艺术史', '哲学', '社会学'],
+    funFact: '装死者人格在期末考试周的咖啡消耗量是其他人格的3倍，但神奇的是通过率并不低。'
   },
   {
     id: 'IMFW', 
@@ -362,7 +601,13 @@ const personalityData = [
     good: ['澳大利亚'],
     caution: ['马来西亚', '韩国'],
     avoid: ['德国', '美国', '日本', '新加坡'],
-    reason: '爱尔兰申请容易、均分要求低；新西兰学制灵活、环境友善。德国毕业率低（真学渣容易挂）、日本申请难度高，这两个国家对废物不友好。'
+    reason: '爱尔兰申请容易、均分要求低；新西兰学制灵活、环境友善。德国毕业率低（真学渣容易挂）、日本申请难度高，这两个国家对废物不友好。',
+    personality: ['佛系至极', '无欲无求', '拒绝内卷', '追求安逸', '人生信条是"差不多就行"'],
+    studyTips: '选择评分宽松的学校和专业。可以考虑一年制硕士项目，快速拿证。',
+    lifeTips: '降低对自己的期望，学会与自己和解。享受当下，不必强求。',
+    careerTips: '适合从事轻松的工作，如行政助理、客服、零售等。',
+    majors: ['管理学', '市场营销', '旅游管理', '人力资源', '公共关系'],
+    funFact: '废物人格的口头禅是"算了吧"、"就这样吧"、"反正也无所谓"。'
   },
   {
     id: 'OJBK', 
@@ -377,9 +622,14 @@ const personalityData = [
     good: ['德国', '英国'],
     caution: ['韩国'],
     avoid: ['美国', '香港'],
-    reason: '澳大利亚最匹配无所谓气质：relaxed氛围、不用太卷。爱尔兰申请无需中介、随缘申。坚决避开需要时刻保持警觉的美国（治安问题），以及节奏飞快的香港。'
+    reason: '澳大利亚最匹配无所谓气质：relaxed氛围、不用太卷。爱尔兰申请无需中介、随缘申。坚决避开需要时刻保持警觉的美国（治安问题），以及节奏飞快的香港。',
+    personality: ['随和大度', '不斤斤计较', '情绪稳定', '容易满足', '适应能力强'],
+    studyTips: '选择包容性强的专业，如商科、传媒、教育学等。申请时可以广撒网，随缘录取。',
+    lifeTips: '保持开放心态，随遇而安。享受当地文化，不强求融入。',
+    careerTips: '适合从事与人打交道的工作，如销售、客服、教育等。',
+    majors: ['工商管理', '传播学', '教育学', '社会工作', '国际关系'],
+    funFact: '无所谓人格的幸福指数最高，因为他们对一切都能坦然接受。'
   },
-  // ===================== 缺失：摆烂躺平组 新增2个 =====================
   {
     id: '摸鱼侠', 
     name: 'MOYU 摸鱼侠', 
@@ -393,7 +643,13 @@ const personalityData = [
     good: ['马来西亚', '泰国'],
     caution: ['英国'],
     avoid: ['德国', '美国', '新加坡'],
-    reason: '新西兰工作/学习强度低，摸鱼空间大；澳大利亚带薪假期多，摸鱼不内卷。德国考勤严格、美国加班文化重，完全挤压摸鱼空间，坚决避开。'
+    reason: '新西兰工作/学习强度低，摸鱼空间大；澳大利亚带薪假期多，摸鱼不内卷。德国考勤严格、美国加班文化重，完全挤压摸鱼空间，坚决避开。',
+    personality: ['擅长摸鱼', '效率奇高', '善于伪装', '摸鱼不忘本职', '带薪发呆大师'],
+    studyTips: '选择课程结构松散的专业，如文科类。利用课堂时间高效完成任务，留出更多摸鱼时间。',
+    lifeTips: '发展摸鱼副业，如自媒体、兴趣爱好等。掌握高效摸鱼技巧。',
+    careerTips: '适合从事弹性工作，如远程办公、项目制工作等。',
+    majors: ['新闻学', '广告学', '设计学', '影视制作', '游戏设计'],
+    funFact: '摸鱼侠人格在上课时平均每分钟会看3次手机，但神奇的是考试成绩往往不错。'
   },
   {
     id: '躺平怪', 
@@ -408,8 +664,100 @@ const personalityData = [
     good: ['澳大利亚', '马来西亚'],
     caution: ['英国', '加拿大'],
     avoid: ['美国', '香港', '日本'],
-    reason: '爱尔兰生活配套完善，出门少也能躺平；新西兰自然环境好，躺平还能看风景。日本通勤耗时久、香港住房逼仄，连躺平的空间都没有，直接避雷。'
+    reason: '爱尔兰生活配套完善，出门少也能躺平；新西兰自然环境好，躺平还能看风景。日本通勤耗时久、香港住房逼仄，连躺平的空间都没有，直接避雷。',
+    personality: ['极度懒癌', '追求舒适', '拒绝折腾', '能不动就不动', '养生达人'],
+    studyTips: '选择线上课程较多的项目，实现躺着学习。申请时优先考虑有奖学金的学校。',
+    lifeTips: '购置舒适的家居用品，打造完美躺平环境。学习一些懒人料理。',
+    careerTips: '适合从事居家办公、自由职业、内容创作等工作。',
+    majors: ['数字营销', '电子商务', '远程通信', '图书情报', '休闲管理'],
+    funFact: '躺平怪人格的平均步数每天不超过500步，但网购次数是其他人的2倍。'
   },
+  {
+    id: 'FAKE', 
+    name: 'FAKE 伪人', 
+    group: '摆烂躺平组',
+    groupColor: '#B4B2A9',
+    groupTextColor: '#2C2C2A',
+    desc: '表面努力内卷，实则摆烂摸鱼，主打一个装样子',
+    color: '#B4B2A9', 
+    textColor: '#2C2C2A',
+    best: ['澳大利亚', '爱尔兰'],
+    good: ['马来西亚', '泰国'],
+    caution: ['英国', '加拿大'],
+    avoid: ['美国', '德国', '新加坡'],
+    reason: '澳大利亚表面卷实则松弛，适合伪人"装努力"；爱尔兰社交氛围轻松，没人拆穿摆烂本质。德国考勤严格、美国卷到真实，伪人易暴露且压力大，坚决避开。',
+    personality: ['善于伪装', '演技高超', '表面功夫好', '内心佛系', '社交变色龙'],
+    studyTips: '选择需要展示的专业，如演讲、表演、设计等。利用社交媒体营造努力人设。',
+    lifeTips: '学会管理形象，保持一致性。找到真正让自己放松的方式。',
+    careerTips: '适合从事需要形象管理的工作，如公关、市场、演艺等。',
+    majors: ['公共关系', '市场营销', '戏剧表演', '时尚设计', '媒体研究'],
+    funFact: '伪人人格的手机相册里有90%是学习相关的摆拍照片，但实际学习时间不到5%。'
+  },
+  {
+    id: 'FUCK', 
+    name: 'FUCK 草者', 
+    group: '摆烂躺平组',
+    groupColor: '#9FE1CB',
+    groupTextColor: '#085041',
+    desc: '摆烂到摆烂，破罐破摔，啥都不在乎',
+    color: '#9FE1CB', 
+    textColor: '#085041',
+    best: ['泰国', '马来西亚', '爱尔兰'],
+    good: ['新西兰', '澳大利亚'],
+    caution: ['英国'],
+    avoid: ['美国', '德国', '香港'],
+    reason: '泰国/马来西亚生活成本极低，摆烂也能活下去；爱尔兰申请躺平，不用卷成绩。美国/德国淘汰率高，破罐破摔容易毕不了业；香港生存压力大，摆烂直接活不下去。',
+    personality: ['无欲则刚', '无所畏惧', '爱咋咋地', '放飞自我', '佛系到极致'],
+    studyTips: '选择压力小的专业，如通识教育、语言课程等。申请门槛低的学校。',
+    lifeTips: '学会接受自己，放下执念。享受当下，不必强求。',
+    careerTips: '适合从事自由职业、体力劳动、艺术创作等工作。',
+    majors: ['文化研究', '语言学习', '艺术实践', '休闲娱乐', '体育管理'],
+    funFact: '草者人格的口头禅是"去他妈的"，但实际上他们内心比谁都通透。'
+  },
+  {
+    id: 'MONK', 
+    name: 'MONK 僧人', 
+    group: '摆烂躺平组',
+    groupColor: '#C8B6E2',
+    groupTextColor: '#4A2678',
+    desc: '清心寡欲，远离纷争，主打一个佛系修行',
+    color: '#C8B6E2', 
+    textColor: '#4A2678',
+    best: ['泰国', '新西兰', '瑞士'],
+    good: ['爱尔兰', '马来西亚'],
+    caution: ['英国'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '泰国佛系文化适配僧人；新西兰/瑞士环境清净，适合修行。美国/香港/新加坡内卷严重，纷争多，僧人根本静不下心。',
+    personality: ['清心寡欲', '与世无争', '内心平静', '追求精神富足', '善于独处'],
+    studyTips: '选择哲学、宗教、心理学等精神层面的专业。注重内心修养。',
+    lifeTips: '定期冥想，保持内心平静。远离社交媒体，减少信息干扰。',
+    careerTips: '适合从事教育、心理咨询、宗教工作、哲学研究等。',
+    majors: ['哲学', '宗教学', '心理学', '佛学研究', '生命科学'],
+    funFact: '僧人人格的手机使用时间是所有人格中最短的，平均每天不超过2小时。'
+  },
+  {
+    id: 'DRUN-K', 
+    name: 'DRUN-K 酒鬼', 
+    group: '摆烂躺平组',
+    groupColor: '#82C3EC',
+    groupTextColor: '#0A4DA2',
+    desc: '今朝有酒今朝醉，摆烂靠喝酒，逃避现实',
+    color: '#82C3EC', 
+    textColor: '#0A4DA2',
+    best: ['爱尔兰', '澳大利亚', '泰国'],
+    good: ['英国', '西班牙'],
+    caution: ['加拿大', '德国'],
+    avoid: ['美国', '韩国', '新加坡'],
+    reason: '爱尔兰酒文化浓厚，喝酒摆烂不被异样看待；澳大利亚/泰国夜生活丰富，醉了也没人管。美国禁酒州多、韩国酒局是应酬，新加坡禁酒严格，酒鬼摆烂都难。',
+    personality: ['爱酒如命', '今朝有酒今朝醉', '社交达人', '情绪外放', '享受当下'],
+    studyTips: '选择与酒相关的专业，如酿酒学、葡萄酒研究等。注意控制饮酒量。',
+    lifeTips: '学会适度饮酒，避免酗酒。发展其他兴趣爱好转移注意力。',
+    careerTips: '适合从事酒类行业、餐饮管理、酒吧经营等工作。',
+    majors: ['酿酒学', '葡萄酒研究', '酒店管理', '餐饮管理', '食品科学'],
+    funFact: '酒鬼人格的平均酒量是其他人的3倍，但奇怪的是他们的数学成绩往往很好。'
+  },
+
+  // ========== 情绪内耗组（8+新增7 = 15种） ==========
   {
     id: 'IMSB', 
     name: 'IMSB 自我攻击者', 
@@ -423,7 +771,13 @@ const personalityData = [
     good: ['澳大利亚', '英国'],
     caution: ['德国', '新加坡'],
     avoid: ['美国', '香港', '韩国'],
-    reason: '新西兰当地人友善、环境治愈，适合愈合内耗。美国留学生抑郁比例最高，严重不推荐。韩国社会氛围mean且排外，会加重自我攻击倾向。香港压分最严重，更会加剧内耗。'
+    reason: '新西兰当地人友善、环境治愈，适合愈合内耗。美国留学生抑郁比例最高，严重不推荐。韩国社会氛围mean且排外，会加重自我攻击倾向。香港压分最严重，更会加剧内耗。',
+    personality: ['自我批判', '过度反思', '责任心强', '追求完美', '情绪敏感'],
+    studyTips: '选择鼓励性评价的专业，如艺术、创意写作等。建立支持性学习环境。',
+    lifeTips: '学会自我接纳，减少自我批评。定期进行心理疏导。',
+    careerTips: '适合从事需要耐心和细心的工作，如教育、心理咨询、编辑等。',
+    majors: ['心理学', '教育学', '编辑出版', '社会工作', '艺术治疗'],
+    funFact: '自我攻击者人格的日记本使用频率是其他人的5倍，他们喜欢通过书写来梳理情绪。'
   },
   {
     id: 'ATM', 
@@ -438,7 +792,13 @@ const personalityData = [
     good: ['新加坡', '爱尔兰'],
     caution: ['美国'],
     avoid: ['韩国', '香港'],
-    reason: '英国教育资源丰富、专业宽容度高，ATM型人格在此可以选择适合自己的方向而非被迫迁就他人。韩国灰色产业陷阱多，送钱者容易被坑；香港物价飞涨，钱包承压更大。'
+    reason: '英国教育资源丰富、专业宽容度高，ATM型人格在此可以选择适合自己的方向而非被迫迁就他人。韩国灰色产业陷阱多，送钱者容易被坑；香港物价飞涨，钱包承压更大。',
+    personality: ['慷慨大方', '乐于助人', '不善拒绝', '容易被利用', '善良单纯'],
+    studyTips: '选择实用性强的专业，如商科、金融等。学会理财和自我保护。',
+    lifeTips: '学会拒绝不合理的要求，建立边界感。定期复盘自己的付出。',
+    careerTips: '适合从事公益事业、非营利组织、金融行业等。',
+    majors: ['金融学', '会计学', '慈善管理', '公共政策', '国际发展'],
+    funFact: '送钱者人格平均每月为朋友买单的次数是其他人的4倍，但他们并不觉得这是负担。'
   },
   {
     id: 'LOVER', 
@@ -453,9 +813,14 @@ const personalityData = [
     good: ['英国', '澳大利亚'],
     caution: ['德国', '日本'],
     avoid: ['韩国', '香港', '新加坡'],
-    reason: '浪漫的法语/意语/西语国家最适配多情人格，艺术氛围浓厚能滋养情绪。德国过于理性、日本过于压抑，会让多情者感到窒息。韩国恋爱氛围虽浓但内卷严重，反而加重内耗。'
+    reason: '浪漫的法语/意语/西语国家最适配多情人格，艺术氛围浓厚能滋养情绪。德国过于理性、日本过于压抑，会让多情者感到窒息。韩国恋爱氛围虽浓但内卷严重，反而加重内耗。',
+    personality: ['情感丰富', '浪漫多情', '感性至上', '容易动情', '渴望被爱'],
+    studyTips: '选择艺术、文学、音乐等感性专业。培养艺术鉴赏能力。',
+    lifeTips: '多参加文化活动，丰富情感体验。学会处理感情挫折。',
+    careerTips: '适合从事艺术创作、文学写作、音乐表演等工作。',
+    majors: ['艺术史', '文学', '音乐', '电影研究', '戏剧'],
+    funFact: '多情者人格平均每天听情歌的时间超过2小时，他们的歌单里全是爱情歌曲。'
   },
-  // ===================== 缺失：情绪内耗组 新增4个 =====================
   {
     id: '焦虑怪', 
     name: 'JLGU 焦虑怪', 
@@ -469,7 +834,13 @@ const personalityData = [
     good: ['澳大利亚', '加拿大'],
     caution: ['英国', '德国'],
     avoid: ['美国', '香港', '新加坡'],
-    reason: '瑞士心理医疗体系完善，新西兰节奏慢，能缓解焦虑；爱尔兰社区氛围友好，减少孤独感。美国内卷+治安问题、香港高压环境，会让焦虑指数翻倍。'
+    reason: '瑞士心理医疗体系完善，新西兰节奏慢，能缓解焦虑；爱尔兰社区氛围友好，减少孤独感。美国内卷+治安问题、香港高压环境，会让焦虑指数翻倍。',
+    personality: ['过度担忧', '思虑过多', '安全感缺失', '完美主义', '情绪波动大'],
+    studyTips: '选择压力较小的专业，如环境科学、农林专业等。制定详细的学习计划减少焦虑。',
+    lifeTips: '练习冥想和深呼吸。建立规律的作息，减少不确定性。',
+    careerTips: '适合从事稳定规律的工作，如公务员、教师、科研等。',
+    majors: ['环境科学', '农林学', '图书馆学', '统计学', '公共管理'],
+    funFact: '焦虑怪人格平均每天查看天气预报的次数是其他人的10倍，他们总是担心天气影响出行。'
   },
   {
     id: '讨好型', 
@@ -484,7 +855,13 @@ const personalityData = [
     good: ['爱尔兰', '英国'],
     caution: ['德国'],
     avoid: ['韩国', '日本', '香港'],
-    reason: '加拿大文化强调尊重边界，澳大利亚人直爽不绕弯，不用刻意讨好。日本/韩国等级文化重，讨好型人格易被PUA；香港职场/校园内卷，讨好也难合群。'
+    reason: '加拿大文化强调尊重边界，澳大利亚人直爽不绕弯，不用刻意讨好。日本/韩国等级文化重，讨好型人格易被PUA；香港职场/校园内卷，讨好也难合群。',
+    personality: ['善解人意', '乐于助人', '害怕冲突', '渴望认可', '自我价值感低'],
+    studyTips: '选择与人打交道的专业，如心理学、社会工作等。学习建立健康的人际关系。',
+    lifeTips: '学会说"不"，建立个人边界。关注自己的需求和感受。',
+    careerTips: '适合从事服务行业、心理咨询、教育等工作。',
+    majors: ['心理学', '社会工作', '护理学', '教育学', '人力资源'],
+    funFact: '讨好型人格平均每天说"对不起"的次数是其他人的6倍，即使不是他们的错。'
   },
   {
     id: '敏感精', 
@@ -499,7 +876,13 @@ const personalityData = [
     good: ['意大利', '西班牙'],
     caution: ['英国', '加拿大'],
     avoid: ['美国', '韩国', '香港'],
-    reason: '法国/意大利注重情绪表达，包容度高；新西兰人口密度低，人际压力小。美国直言文化易戳玻璃心，韩国排外+攀比严重，敏感精极易受伤。'
+    reason: '法国/意大利注重情绪表达，包容度高；新西兰人口密度低，人际压力小。美国直言文化易戳玻璃心，韩国排外+攀比严重，敏感精极易受伤。',
+    personality: ['情感细腻', '同理心强', '容易受伤', '想象力丰富', '艺术天赋高'],
+    studyTips: '选择艺术、文学、设计等创意专业。寻找理解和支持的社交圈。',
+    lifeTips: '建立情绪安全空间，避免过多接触负面信息。培养情绪调节能力。',
+    careerTips: '适合从事艺术创作、写作、设计、心理咨询等工作。',
+    majors: ['艺术设计', '创意写作', '音乐创作', '插画', '摄影'],
+    funFact: '敏感精人格平均每天流泪的次数是其他人的3倍，但他们的艺术作品往往非常动人。'
   },
   {
     id: '完美控', 
@@ -514,8 +897,121 @@ const personalityData = [
     good: ['新加坡', '澳大利亚'],
     caution: ['加拿大'],
     avoid: ['美国', '香港', '马来西亚'],
-    reason: '德国/瑞士严谨的体系适配完美控，英国教育评分体系透明，可控性高。美国竞争无边界、香港容错率低，一点不完美就容易陷入自我否定的内耗。'
+    reason: '德国/瑞士严谨的体系适配完美控，英国教育评分体系透明，可控性高。美国竞争无边界、香港容错率低，一点不完美就容易陷入自我否定的内耗。',
+    personality: ['追求卓越', '注重细节', '高标准严要求', '自我批评', '精益求精'],
+    studyTips: '选择需要精确度的专业，如工程、计算机科学、设计等。制定详细计划。',
+    lifeTips: '学会接受不完美，允许自己犯错。培养"完成比完美更重要"的心态。',
+    careerTips: '适合从事需要精准度的工作，如工程师、设计师、数据分析师等。',
+    majors: ['工程学', '计算机科学', '产品设计', '统计学', '建筑学'],
+    funFact: '完美控人格平均每天花在整理房间上的时间超过1小时，他们的书桌永远一尘不染。'
   },
+  {
+    id: 'MUM', 
+    name: 'MUM 妈妈', 
+    group: '情绪内耗组',
+    groupColor: '#F5C4B3',
+    groupTextColor: '#993C1D',
+    desc: '过度操心他人，包揽所有事，自我消耗型人格',
+    color: '#F5C4B3', 
+    textColor: '#993C1D',
+    best: ['加拿大', '澳大利亚'],
+    good: ['新西兰', '爱尔兰'],
+    caution: ['英国', '德国'],
+    avoid: ['美国', '韩国', '香港'],
+    reason: '加拿大/澳大利亚社会福利完善，不用过度操心生活琐事；新西兰人际简单，操心也少。美国/韩国竞争激烈，操心越多内耗越重；香港生活成本高，操心到身心俱疲。',
+    personality: ['操心过度', '责任心强', '照顾他人', '自我牺牲', '关爱他人'],
+    studyTips: '选择与关怀相关的专业，如护理学、社会工作、教育学等。学习合理分配精力。',
+    lifeTips: '学会放手，让他人承担责任。留出时间给自己，避免过度消耗。',
+    careerTips: '适合从事护理、教育、社会工作、咨询等关怀型工作。',
+    majors: ['护理学', '社会工作', '教育学', '心理咨询', '家庭研究'],
+    funFact: '妈妈人格平均每天给朋友发送关心消息的次数是其他人的5倍，他们总是担心别人过得不好。'
+  },
+  {
+    id: 'POOR', 
+    name: 'POOR 贫穷者', 
+    group: '情绪内耗组',
+    groupColor: '#FAC775',
+    groupTextColor: '#633806',
+    desc: '因经济压力内耗，总担心钱不够用，患得患失',
+    color: '#FAC775', 
+    textColor: '#633806',
+    best: ['马来西亚', '泰国', '德国'],
+    good: ['爱尔兰', '西班牙'],
+    caution: ['澳大利亚', '加拿大'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '马来西亚/泰国生活成本极低，德国免学费+低生活费，缓解经济焦虑。美国/香港/新加坡学费/生活费天价，贫穷者内耗会直接拉满。',
+    personality: ['勤俭节约', '精打细算', '焦虑不安', '务实理性', '渴望稳定'],
+    studyTips: '选择性价比高的专业，优先申请奖学金和助学金。考虑低成本国家。',
+    lifeTips: '制定预算计划，学会理财。寻找兼职机会增加收入。',
+    careerTips: '适合从事稳定收入的工作，如会计、金融、数据分析等。',
+    majors: ['会计学', '金融学', '经济学', '数据分析', '公共政策'],
+    funFact: '贫穷者人格平均每天查看余额的次数是其他人的8倍，他们对价格变化非常敏感。'
+  },
+  {
+    id: 'OH-NO!', 
+    name: 'OH-NO! 哦不人', 
+    group: '情绪内耗组',
+    groupColor: '#FF9E9E',
+    groupTextColor: '#8A1A1A',
+    desc: '遇事先慌，总喊"哦不"，焦虑型灾难思维',
+    color: '#FF9E9E', 
+    textColor: '#8A1A1A',
+    best: ['新西兰', '瑞士', '爱尔兰'],
+    good: ['澳大利亚', '加拿大'],
+    caution: ['英国', '德国'],
+    avoid: ['美国', '香港', '韩国'],
+    reason: '新西兰/瑞士治安好、节奏慢，少突发状况；爱尔兰人佛系，遇事不慌。美国治安差、香港突发状况多，哦不人会天天喊"哦不"，内耗到崩溃。',
+    personality: ['遇事慌张', '灾难思维', '过度担忧', '谨慎小心', '安全第一'],
+    studyTips: '选择风险低的专业，如教育、图书情报等。制定应急预案减少焦虑。',
+    lifeTips: '学习情绪调节技巧，如深呼吸、冥想。建立支持系统。',
+    careerTips: '适合从事稳定安全的工作，如公务员、教师、图书馆员等。',
+    majors: ['教育学', '图书馆学', '公共管理', '保险学', '安全工程'],
+    funFact: '哦不人人格平均每天说出"哦不"的次数超过20次，他们对任何变化都感到不安。'
+  },
+  {
+    id: 'SHIT', 
+    name: 'SHIT 狗屎人', 
+    group: '情绪内耗组',
+    groupColor: '#C77DFF',
+    groupTextColor: '#5A189A',
+    desc: '觉得自己干啥都不行，自我否定到极致',
+    color: '#C77DFF', 
+    textColor: '#5A189A',
+    best: ['新西兰', '爱尔兰', '澳大利亚'],
+    good: ['加拿大', '马来西亚'],
+    caution: ['英国'],
+    avoid: ['美国', '德国', '韩国'],
+    reason: '新西兰/爱尔兰包容度高，没人评判好坏；澳大利亚鼓励试错，缓解自我否定。美国/德国竞争激烈，韩国攀比严重，狗屎人会更觉得自己"一无是处"。',
+    personality: ['自我否定', '缺乏自信', '谦虚过度', '渴望认可', '潜力未发掘'],
+    studyTips: '选择鼓励性评价的专业和学校。寻找导师或朋友的支持。',
+    lifeTips: '记录每天的小成就，建立自信心。学习自我肯定技巧。',
+    careerTips: '适合从事需要耐心培养的工作，如艺术创作、研究等。',
+    majors: ['艺术创作', '创意写作', '心理学', '社会学', '哲学'],
+    funFact: '狗屎人人格平均每天说"我不行"的次数是其他人的7倍，但他们往往低估了自己的能力。'
+  },
+  {
+    id: 'WOC!', 
+    name: 'WOC! 握草人', 
+    group: '情绪内耗组',
+    groupColor: '#9381FF',
+    groupTextColor: '#2B1988',
+    desc: '遇事只会喊握草，情绪上头快，平复也快',
+    color: '#9381FF', 
+    textColor: '#2B1988',
+    best: ['澳大利亚', '泰国', '爱尔兰'],
+    good: ['马来西亚', '西班牙'],
+    caution: ['英国', '德国'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '澳大利亚/泰国人随性，喊"握草"不被评判；爱尔兰人幽默，能接住情绪。美国/香港/新加坡节奏快，情绪上头易误事，内耗加重。',
+    personality: ['情绪外放', '反应迅速', '直爽率真', '不记仇', '幽默感强'],
+    studyTips: '选择需要创造力的专业，如传媒、广告、设计等。学会情绪管理。',
+    lifeTips: '找到情绪释放的出口，如运动、音乐。保持幽默感。',
+    careerTips: '适合从事需要应变能力的工作，如公关、营销、媒体等。',
+    majors: ['传媒学', '广告学', '表演艺术', '创意设计', '新闻'],
+    funFact: '握草人人格平均每天说"握草"的次数超过30次，他们的口头禅就是各种感叹词。'
+  },
+
+  // ========== 人间清醒组（4+新增3 = 7种） ==========
   {
     id: 'BOSS', 
     name: 'BOSS 掌控者', 
@@ -529,9 +1025,14 @@ const personalityData = [
     good: ['英国', '德国'],
     caution: ['澳大利亚'],
     avoid: ['新西兰', '爱尔兰'],
-    reason: '美国/新加坡/香港竞争激烈但机会多，能满足掌控者的成功欲。德国严谨的体系适合规划清晰的BOSS。新西兰/爱尔兰节奏过慢，会让掌控者感到"英雄无用武之地"。'
+    reason: '美国/新加坡/香港竞争激烈但机会多，能满足掌控者的成功欲。德国严谨的体系适合规划清晰的BOSS。新西兰/爱尔兰节奏过慢，会让掌控者感到"英雄无用武之地"。',
+    personality: ['目标导向', '自信果断', '领导力强', '追求卓越', '敢于挑战'],
+    studyTips: '选择商业、金融、管理等专业。积累人脉资源。',
+    lifeTips: '学会平衡工作与生活，避免过度劳累。培养团队合作能力。',
+    careerTips: '适合从事管理、创业、投资等工作。',
+    majors: ['工商管理', '金融学', '国际商务', '战略管理', '创业学'],
+    funFact: '掌控者人格平均每天发送工作相关消息的次数是其他人的6倍，他们总是处于工作状态。'
   },
-  // ===================== 缺失：人间清醒组 新增3个 =====================
   {
     id: '搞钱咖', 
     name: 'GQKA 搞钱咖', 
@@ -545,7 +1046,13 @@ const personalityData = [
     good: ['英国', '澳大利亚'],
     caution: ['德国', '加拿大'],
     avoid: ['新西兰', '爱尔兰', '泰国'],
-    reason: '美国金融/科技行业薪资高，新加坡税率低，香港投行机会多，完美适配搞钱需求。新西兰/爱尔兰产业单一、薪资涨幅慢，搞钱咖会觉得"没奔头"。'
+    reason: '美国金融/科技行业薪资高，新加坡税率低，香港投行机会多，完美适配搞钱需求。新西兰/爱尔兰产业单一、薪资涨幅慢，搞钱咖会觉得"没奔头"。',
+    personality: ['目标明确', '务实功利', '执行力强', '精打细算', '追求效率'],
+    studyTips: '选择金融、计算机科学、商业分析等高回报专业。关注行业薪资水平。',
+    lifeTips: '制定理财计划，合理投资。保持学习，提升赚钱能力。',
+    careerTips: '适合从事金融、科技、投资等高薪行业。',
+    majors: ['金融学', '计算机科学', '商业分析', '数据科学', '经济学'],
+    funFact: '搞钱咖人格平均每天查看股票行情的次数是其他人的10倍，他们对数字非常敏感。'
   },
   {
     id: '规划师', 
@@ -560,7 +1067,13 @@ const personalityData = [
     good: ['美国', '英国'],
     caution: ['加拿大'],
     avoid: ['新西兰', '爱尔兰', '马来西亚'],
-    reason: '德国学制/移民政策清晰，瑞士规则明确，新加坡发展路径可控，适配规划师的严谨。新西兰/爱尔兰节奏随机，马来西亚政策变动大，打破规划易焦虑。'
+    reason: '德国学制/移民政策清晰，瑞士规则明确，新加坡发展路径可控，适配规划师的严谨。新西兰/爱尔兰节奏随机，马来西亚政策变动大，打破规划易焦虑。',
+    personality: ['条理清晰', '自律严谨', '未雨绸缪', '目标明确', '执行力强'],
+    studyTips: '选择有明确职业路径的专业，如工程、法律、医学等。制定详细学习计划。',
+    lifeTips: '保持规律作息，定期复盘计划。学会灵活应对变化。',
+    careerTips: '适合从事规划、管理、咨询等需要计划性的工作。',
+    majors: ['城市规划', '工程管理', '法律', '医学', '项目管理'],
+    funFact: '规划师人格平均每天制定计划的时间超过2小时，他们的日程表精确到分钟。'
   },
   {
     id: '野心家', 
@@ -575,8 +1088,79 @@ const personalityData = [
     good: ['香港', '澳大利亚'],
     caution: ['德国'],
     avoid: ['新西兰', '爱尔兰', '泰国'],
-    reason: '美国阶级流动空间大，英国名校背书强，新加坡精英体系明确，能满足野心。新西兰/爱尔兰阶层固化，节奏慢，野心家会觉得"英雄无用武之地"。'
+    reason: '美国阶级流动空间大，英国名校背书强，新加坡精英体系明确，能满足野心。新西兰/爱尔兰阶层固化，节奏慢，野心家会觉得"英雄无用武之地"。',
+    personality: ['雄心勃勃', '敢于冒险', '目标远大', '执行力强', '不服输'],
+    studyTips: '选择高回报率专业，如金融、科技、MBA等。积累人脉资源。',
+    lifeTips: '设定挑战性目标，不断突破自我。保持学习和成长。',
+    careerTips: '适合从事创业、投资、高层管理等工作。',
+    majors: ['MBA', '金融学', '计算机科学', '法律', '国际关系'],
+    funFact: '野心家人格平均每天工作的时间比其他人多3小时，他们永远在追求更高的目标。'
   },
+  {
+    id: 'GOGO', 
+    name: 'GOGO 行者', 
+    group: '人间清醒组',
+    groupColor: '#06D6A0',
+    groupTextColor: '#003F2F',
+    desc: '热爱自由，边走边学，拒绝被固定模式束缚',
+    color: '#06D6A0', 
+    textColor: '#003F2F',
+    best: ['新西兰', '澳大利亚', '加拿大'],
+    good: ['泰国', '马来西亚'],
+    caution: ['德国', '瑞士'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '新西兰/澳大利亚签证允许边打工边旅行，适配行者自由属性；加拿大户外资源丰富，适合边走边学。德国/瑞士规则严苛，美国/香港节奏固定，束缚行者的自由。',
+    personality: ['热爱自由', '好奇心强', '勇于探索', '独立自主', '适应力强'],
+    studyTips: '选择灵活的专业，如旅游管理、环境科学、传媒等。利用游学机会。',
+    lifeTips: '保持开放心态，接受不确定性。记录旅行见闻。',
+    careerTips: '适合从事旅游行业、户外探险、跨国工作等。',
+    majors: ['旅游管理', '环境科学', '国际研究', '传媒', '摄影'],
+    funFact: '行者人格平均每年旅行的次数是其他人的4倍，他们的护照上盖满了各国签证章。'
+  },
+  {
+    id: 'CTRL', 
+    name: 'CTRL 拿捏者', 
+    group: '人间清醒组',
+    groupColor: '#6C63FF',
+    groupTextColor: '#FFFFFF',
+    desc: '擅长拿捏人际关系，精准掌控局势，不吃亏',
+    color: '#6C63FF', 
+    textColor: '#FFFFFF',
+    best: ['美国', '英国', '新加坡'],
+    good: ['香港', '澳大利亚'],
+    caution: ['德国', '加拿大'],
+    avoid: ['新西兰', '爱尔兰', '泰国'],
+    reason: '美国/英国社交规则清晰，拿捏者能精准掌控；新加坡职场规则明确，不吃亏。新西兰/爱尔兰人际简单，没机会"拿捏"；泰国人情社会复杂，易反被拿捏。',
+    personality: ['善于观察', '情商高', '掌控力强', '不吃亏', '社交达人'],
+    studyTips: '选择需要人际交往的专业，如商科、法律、国际关系等。学习心理学知识。',
+    lifeTips: '保持真诚，避免过度算计。学会平衡利益与人际关系。',
+    careerTips: '适合从事管理、公关、销售、谈判等工作。',
+    majors: ['工商管理', '法律', '国际关系', '公共关系', '心理学'],
+    funFact: '拿捏者人格平均每天与人交流的时间是其他人的2倍，他们总能在社交中占据主动。'
+  },
+  {
+    id: 'THIN-K', 
+    name: 'THIN-K 思考者', 
+    group: '人间清醒组',
+    groupColor: '#E63946',
+    groupTextColor: '#FFFFFF',
+    desc: '遇事深度思考，拒绝冲动，理性至上',
+    color: '#E63946', 
+    textColor: '#FFFFFF',
+    best: ['德国', '瑞士', '英国'],
+    good: ['新加坡', '加拿大'],
+    caution: ['澳大利亚', '泰国'],
+    avoid: ['美国', '马来西亚', '巴西'],
+    reason: '德国/瑞士严谨的学术氛围适配思考者；英国教育注重思辨，能深度思考。美国/巴西节奏快，易冲动决策；马来西亚政策变动多，思考再多也没用。',
+    personality: ['理性冷静', '深度思考', '逻辑清晰', '善于分析', '审慎决策'],
+    studyTips: '选择理论性强的专业，如哲学、科学、法律等。培养批判性思维。',
+    lifeTips: '给自己足够的思考时间，避免仓促决策。保持学习习惯。',
+    careerTips: '适合从事科研、学术、咨询、数据分析等工作。',
+    majors: ['哲学', '物理学', '数学', '法律', '计算机科学'],
+    funFact: '思考者人格平均每天独处思考的时间是其他人的3倍，他们喜欢深度对话。'
+  },
+
+  // ========== 社交个性组（4+新增4 = 8种） ==========
   {
     id: 'STAR', 
     name: 'STAR 社交达人', 
@@ -590,9 +1174,14 @@ const personalityData = [
     good: ['加拿大', '法国'],
     caution: ['德国', '日本'],
     avoid: ['新西兰', '爱尔兰'],
-    reason: '美国/英国社交活动丰富，多元文化能满足社交达人的需求。澳大利亚户外活动多，适合拓展社交圈。德国/日本社交氛围内敛，新西兰/爱尔兰社交场景少，会让社交达人感到无聊。'
+    reason: '美国/英国社交活动丰富，多元文化能满足社交达人的需求。澳大利亚户外活动多，适合拓展社交圈。德国/日本社交氛围内敛，新西兰/爱尔兰社交场景少，会让社交达人感到无聊。',
+    personality: ['外向开朗', '社交活跃', '热情洋溢', '善于沟通', '喜欢关注'],
+    studyTips: '选择需要团队合作的专业，如传媒、公关、市场营销等。多参加社团活动。',
+    lifeTips: '保持积极心态，拓展人脉网络。学会在社交中放松自己。',
+    careerTips: '适合从事市场营销、公关、销售、活动策划等工作。',
+    majors: ['市场营销', '公共关系', '传媒学', '广告学', '活动管理'],
+    funFact: '社交达人人格平均每天发送消息的数量是其他人的4倍，他们总是忙忙碌碌。'
   },
-  // ===================== 缺失：社交个性组 新增3个 =====================
   {
     id: '社牛症', 
     name: 'SNZH 社牛症', 
@@ -606,7 +1195,13 @@ const personalityData = [
     good: ['英国', '法国', '西班牙'],
     caution: ['日本', '德国'],
     avoid: ['新西兰', '爱尔兰', '瑞士'],
-    reason: '美国/巴西多元文化包容度高，社牛能快速融入；澳大利亚人热情直爽，社交无压力。瑞士/新西兰人口少、社交圈固定，社牛的"社交欲"无处释放。'
+    reason: '美国/巴西多元文化包容度高，社牛能快速融入；澳大利亚人热情直爽，社交无压力。瑞士/新西兰人口少、社交圈固定，社牛的"社交欲"无处释放。',
+    personality: ['超级外向', '自来熟', '亲和力强', '社交能量无限', '热情好客'],
+    studyTips: '选择与人打交道的专业，如旅游管理、酒店管理、人力资源等。',
+    lifeTips: '保持开放心态，主动与人交流。注意尊重他人边界。',
+    careerTips: '适合从事销售、客服、导游、活动主持等工作。',
+    majors: ['旅游管理', '酒店管理', '人力资源', '市场营销', '公共关系'],
+    funFact: '社牛症人格平均每天认识新朋友的数量是其他人的5倍，他们的社交圈非常广泛。'
   },
   {
     id: '社杂人', 
@@ -621,7 +1216,13 @@ const personalityData = [
     good: ['英国', '爱尔兰'],
     caution: ['美国', '日本'],
     avoid: ['韩国', '香港', '新加坡'],
-    reason: '加拿大社交节奏适中，澳大利亚可社交可独处，适配社杂的随机状态。韩国/香港社交压力大（酒局/团建多），社杂易陷入"被迫社交"的疲惫。'
+    reason: '加拿大社交节奏适中，澳大利亚可社交可独处，适配社杂的随机状态。韩国/香港社交压力大（酒局/团建多），社杂易陷入"被迫社交"的疲惫。',
+    personality: ['社交状态不定', '随性而为', '情绪变化快', '适应力强', '灵活变通'],
+    studyTips: '选择灵活的专业，如设计、传媒、心理学等。根据状态调整社交活动。',
+    lifeTips: '尊重自己的感受，允许自己独处或社交。保持弹性心态。',
+    careerTips: '适合从事自由职业、创意工作、灵活办公等工作。',
+    majors: ['创意设计', '传媒学', '心理学', '艺术创作', '数字媒体'],
+    funFact: '社杂人人格平均每天切换社交状态的次数超过5次，他们的情绪像天气一样多变。'
   },
   {
     id: '新鲜感', 
@@ -636,7 +1237,97 @@ const personalityData = [
     good: ['西班牙', '意大利'],
     caution: ['德国', '瑞士'],
     avoid: ['新西兰', '爱尔兰', '马来西亚'],
-    reason: '美国/英国城市多元、活动丰富，能持续提供新鲜感；法国艺术/文化活动多，满足探索欲。新西兰/爱尔兰生活模式固定，新鲜感很快耗尽。'
+    reason: '美国/英国城市多元、活动丰富，能持续提供新鲜感；法国艺术/文化活动多，满足探索欲。新西兰/爱尔兰生活模式固定，新鲜感很快耗尽。',
+    personality: ['好奇心强', '热爱探索', '喜欢变化', '追求刺激', '开放心态'],
+    studyTips: '选择跨学科专业，如国际研究、传媒、文化研究等。多参与交换项目。',
+    lifeTips: '保持好奇心，尝试新事物。接受生活中的变化和不确定性。',
+    careerTips: '适合从事旅行、文化交流、创意工作、跨国企业等工作。',
+    majors: ['国际研究', '传媒学', '文化研究', '旅游管理', '国际关系'],
+    funFact: '新鲜感人格平均每天尝试新事物的次数是其他人的4倍，他们对生活充满热情。'
+  },
+  {
+    id: 'HHHH', 
+    name: 'HHHH 傻乐者', 
+    group: '社交个性组',
+    groupColor: '#FFC107',
+    groupTextColor: '#FFFFFF',
+    desc: '没心没肺，主打傻乐，负面情绪秒忘',
+    color: '#FFC107', 
+    textColor: '#FFFFFF',
+    best: ['澳大利亚', '泰国', '巴西'],
+    good: ['爱尔兰', '马来西亚'],
+    caution: ['英国', '加拿大'],
+    avoid: ['德国', '韩国', '香港'],
+    reason: '澳大利亚/泰国人乐观开朗，适配傻乐者；巴西狂欢文化，越玩越乐。德国/韩国氛围压抑，香港节奏快，傻乐者易被影响失去快乐属性。',
+    personality: ['乐观开朗', '没心没肺', '快乐至上', '忘性大', '积极向上'],
+    studyTips: '选择轻松愉快的专业，如娱乐管理、体育管理、艺术等。保持好心情。',
+    lifeTips: '保持乐观心态，学会忘记不愉快。多和快乐的人在一起。',
+    careerTips: '适合从事娱乐、体育、艺术、客服等积极向上的工作。',
+    majors: ['娱乐管理', '体育管理', '艺术表演', '休闲研究', '旅游管理'],
+    funFact: '傻乐者人格平均每天笑的次数是其他人的6倍，他们是真正的"快乐源泉"。'
+  },
+  {
+    id: 'SEXY', 
+    name: 'SEXY 尤物', 
+    group: '社交个性组',
+    groupColor: '#FF758F',
+    groupTextColor: '#770F05',
+    desc: '自带魅力buff，社交场合焦点，自带吸睛属性',
+    color: '#FF758F', 
+    textColor: '#770F05',
+    best: ['法国', '意大利', '西班牙'],
+    good: ['美国', '英国'],
+    caution: ['德国', '瑞士'],
+    avoid: ['新西兰', '爱尔兰', '日本'],
+    reason: '法/意/西时尚氛围浓，尤物能尽情展现魅力；美国/英国多元包容，吸睛不被评头论足。德国/瑞士过于理性，日本低调文化，尤物的魅力无处施展。',
+    personality: ['魅力四射', '自信优雅', '气质出众', '引人注目', '时尚敏锐'],
+    studyTips: '选择时尚、设计、表演等专业。培养个人风格和气质。',
+    lifeTips: '保持自信，展现个人魅力。注意仪表和仪态。',
+    careerTips: '适合从事时尚、模特、表演、公关等工作。',
+    majors: ['时尚设计', '服装设计', '表演艺术', '造型艺术', '品牌管理'],
+    funFact: '尤物人格平均每天收到赞美和关注的次数是其他人的5倍，他们天生就是焦点。'
+  },
+  {
+    id: 'THAN-K', 
+    name: 'THAN-K 感恩者', 
+    group: '社交个性组',
+    groupColor: '#80FFDB',
+    groupTextColor: '#004B40',
+    desc: '心怀感恩，对小事满足，社交中温暖治愈',
+    color: '#80FFDB', 
+    textColor: '#004B40',
+    best: ['加拿大', '新西兰', '爱尔兰'],
+    good: ['澳大利亚', '瑞士'],
+    caution: ['英国', '法国'],
+    avoid: ['美国', '韩国', '香港'],
+    reason: '加拿大/新西兰人礼貌且感恩，适配感恩者；爱尔兰社区氛围温暖，易感受到善意。美国/韩国/香港功利氛围重，感恩者的温暖易被消耗。',
+    personality: ['心怀感恩', '知足常乐', '温暖治愈', '善解人意', '积极乐观'],
+    studyTips: '选择与人相关的专业，如心理学、社会工作、教育学等。培养同理心。',
+    lifeTips: '记录每天的感恩小事，保持感恩心态。传递温暖和善意。',
+    careerTips: '适合从事心理咨询、社会工作、教育、公益等工作。',
+    majors: ['心理学', '社会工作', '教育学', '公益管理', '护理学'],
+    funFact: '感恩者人格平均每天表达感谢的次数是其他人的8倍，他们是真正的"暖心小太阳"。'
+  },
+  {
+    id: 'SOLO', 
+    name: 'SOLO 孤儿', 
+    group: '社交个性组',
+    groupColor: '#FB5607',
+    groupTextColor: '#FFFFFF',
+    desc: '享受独处，社交绝缘体，一个人也能过得很好',
+    color: '#FB5607', 
+    textColor: '#FFFFFF',
+    best: ['新西兰', '加拿大', '瑞士'],
+    good: ['爱尔兰', '澳大利亚'],
+    caution: ['英国', '法国'],
+    avoid: ['美国', '韩国', '巴西'],
+    reason: '新西兰/加拿大人口密度低，独处不被打扰；瑞士注重隐私，适合社恐。美国/巴西社交氛围浓，韩国集体文化重，孤儿型人格易被强行社交。',
+    personality: ['享受独处', '独立自主', '内心丰富', '喜欢安静', '自给自足'],
+    studyTips: '选择需要独立工作的专业，如计算机科学、写作、艺术等。培养独处能力。',
+    lifeTips: '享受独处时光，培养个人兴趣爱好。建立自己的精神世界。',
+    careerTips: '适合从事编程、写作、设计、研究等独立工作。',
+    majors: ['计算机科学', '创意写作', '艺术设计', '数据分析', '图书馆学'],
+    funFact: '孤儿人格平均每天独处的时间是其他人的3倍，他们在独处中找到了真正的快乐。'
   }
 ];
 
@@ -692,24 +1383,29 @@ function renderCards(filterGroup) {
     const groupBadgeStyle = `background: ${item.groupColor}; color: ${item.groupTextColor};`;
     
     // 创建卡片元素
-    const cardHtml = `
-      <div class="card">
-        <div class="card-header">
-          <div class="avatar" style="background: ${item.color}; color: ${item.textColor};">${item.id}</div>
-          <div class="card-meta">
-            <div class="card-name">${item.name}</div>
-            <div class="card-desc">${item.desc}</div>
-            <span class="group-badge" style="${groupBadgeStyle}">${item.group}</span>
-          </div>
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="avatar" style="background: ${item.color}; color: ${item.textColor};">${item.id}</div>
+        <div class="card-meta">
+          <div class="card-name">${item.name}</div>
+          <div class="card-desc">${item.desc}</div>
+          <span class="group-badge" style="${groupBadgeStyle}">${item.group}</span>
         </div>
-        <div class="destinations">
-          ${tagsHtml}
-        </div>
-        <div class="reason">${item.reason}</div>
       </div>
+      <div class="destinations">
+        ${tagsHtml}
+      </div>
+      <div class="reason">${item.reason}</div>
     `;
     
-    container.innerHTML += cardHtml;
+    // 使用addEventListener绑定点击事件，避免特殊字符问题
+    card.addEventListener('click', function() {
+      openModal(item.id);
+    });
+    
+    container.appendChild(card);
   });
 }
 
@@ -726,6 +1422,101 @@ function filter(group) {
   // 渲染筛选后的卡片
   renderCards(group);
 }
+
+// 打开详情弹窗
+function openModal(personalityId) {
+  const item = personalityData.find(p => p.id === personalityId);
+  if (!item) return;
+  
+  // 设置弹窗头部
+  document.getElementById('modal-avatar').style.cssText = `background: ${item.color}; color: ${item.textColor};`;
+  document.getElementById('modal-avatar').textContent = item.id;
+  document.getElementById('modal-title').textContent = item.name;
+  document.getElementById('modal-desc').textContent = item.desc;
+  document.getElementById('modal-group').style.cssText = `background: ${item.groupColor}; color: ${item.groupTextColor};`;
+  document.getElementById('modal-group').textContent = item.group;
+  
+  // 设置弹窗内容
+  const bodyHtml = `
+    <div class="modal-section">
+      <div class="section-title">性格特点</div>
+      <ul class="character-list">
+        ${item.personality.map(p => `<li class="character-item"><span class="character-icon">✓</span><span class="character-text">${p}</span></li>`).join('')}
+      </ul>
+    </div>
+    
+    <div class="modal-section">
+      <div class="section-title">留学建议</div>
+      <div class="section-text">${item.studyTips}</div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="section-title">生活建议</div>
+      <div class="section-text">${item.lifeTips}</div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="section-title">职业建议</div>
+      <div class="section-text">${item.careerTips}</div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="section-title">适合专业</div>
+      <div class="tag-list">
+        ${item.majors.map(m => `<span class="tag-item good">${m}</span>`).join('')}
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="section-title">有趣小知识</div>
+      <div class="section-text">${item.funFact}</div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="section-title">推荐目的地</div>
+      <div class="detail-grid">
+        <div class="detail-item">
+          <div class="detail-label">强烈推荐</div>
+          <div class="detail-value" style="color: ${getComputedStyle(document.documentElement).getPropertyValue('--success')};">${item.best.join('、')}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">适合</div>
+          <div class="detail-value" style="color: ${getComputedStyle(document.documentElement).getPropertyValue('--info')};">${item.good.join('、')}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">谨慎考虑</div>
+          <div class="detail-value" style="color: ${getComputedStyle(document.documentElement).getPropertyValue('--warning')};">${item.caution.join('、')}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">不建议</div>
+          <div class="detail-value" style="color: ${getComputedStyle(document.documentElement).getPropertyValue('--danger')};">${item.avoid.join('、')}</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="section-title">匹配理由</div>
+      <div class="section-text">${item.reason}</div>
+    </div>
+  `;
+  
+  document.getElementById('modal-body').innerHTML = bodyHtml;
+  document.getElementById('detail-modal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+// 关闭详情弹窗
+function closeModal() {
+  document.getElementById('detail-modal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// 点击弹窗外部关闭
+document.getElementById('detail-modal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeModal();
+  }
+});
 </script>
 </body>
 </html>

@@ -385,6 +385,203 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+    /* 详情弹窗样式 */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-content {
+      width: 100%;
+      max-width: 500px;
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      animation: slideUp 0.3s ease;
+      position: relative;
+      margin-top: 50px;
+    }
+    .modal-header {
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: rgba(0,0,0,0.05);
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover {
+      background: rgba(0,0,0,0.1);
+    }
+    .modal-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.3;
+      box-shadow: var(--shadow-md);
+    }
+    .modal-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    .modal-desc {
+      font-size: 14px;
+      color: var(--gray);
+      margin-bottom: 6px;
+    }
+    .modal-group {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+    }
+    .modal-body {
+      padding: 0 24px 24px;
+    }
+    .modal-section {
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+    .section-text {
+      font-size: 14px;
+      color: var(--gray-dark);
+      line-height: 1.8;
+    }
+    .character-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .character-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--gray-light);
+    }
+    .character-item:last-child {
+      border-bottom: none;
+    }
+    .character-icon {
+      width: 20px;
+      height: 20px;
+      background: var(--success);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+    .character-text {
+      font-size: 13px;
+      color: var(--gray-dark);
+    }
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag-item {
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+    }
+    .tag-item.good {
+      background: #E3F2FD;
+      color: var(--info);
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .detail-item {
+      background: var(--light);
+      padding: 12px;
+      border-radius: var(--radius-md);
+    }
+    .detail-label {
+      font-size: 12px;
+      color: var(--gray);
+      margin-bottom: 4px;
+    }
+    .detail-value {
+      font-size: 13px;
+      font-weight: 600;
+    }
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    /* 卡片点击效果 */
+    .result-card {
+      cursor: pointer;
+      position: relative;
+    }
+    .result-card::after {
+      content: '查看详情 →';
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      font-size: 12px;
+      color: var(--primary);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .result-card:hover::after {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -413,7 +610,7 @@
     <!-- 按国家查询标签页 -->
     <div id="country-tab" class="tab-content">
       <div class="search-box">
-        <label>输入你想去的国家（如：美国、英国、澳大利亚）</label>
+        <label>输入你想去的国家和地区（如：美国、英国、澳大利亚）</label>
         <input type="text" id="country-input" placeholder="请输入国家名称...">
         <button class="search-btn" onclick="searchByCountry()">查询</button>
       </div>
@@ -429,6 +626,22 @@
     <div class="footer">
       <div class="brand">小鱼碎碎念原创</div>
       <p>SBTI 人格留学指南 © 2026</p>
+    </div>
+
+    <!-- 详情弹窗 -->
+    <div class="modal-overlay" id="detail-modal">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <button class="modal-close" onclick="closeModal()">×</button>
+          <div class="modal-avatar" id="modal-avatar"></div>
+          <div>
+            <div class="modal-title" id="modal-title"></div>
+            <div class="modal-desc" id="modal-desc"></div>
+            <span class="modal-group" id="modal-group"></span>
+          </div>
+        </div>
+        <div class="modal-body" id="modal-body"></div>
+      </div>
     </div>
   </div>
 
@@ -449,7 +662,13 @@ const sbtiData = [
     good: ['澳大利亚', '德国'],
     caution: ['英国'],
     avoid: ['美国', '香港', '新加坡'],
-    reason: '新西兰和爱尔兰节奏极慢、环境宜人、治安好，是最适合"复活"的地方。澳大利亚生活relaxed也不错。坚决避开美国（卷到极致）、香港（生活压力极大）和新加坡（就业压力攀升）。'
+    reason: '新西兰和爱尔兰节奏极慢、环境宜人、治安好，是最适合"复活"的地方。澳大利亚生活relaxed也不错。坚决避开美国（卷到极致）、香港（生活压力极大）和新加坡（就业压力攀升）。',
+    personality: ['极度疲惫', '缺乏动力', '对未来感到迷茫', '需要被治愈', '渴望慢生活'],
+    studyTips: '选择节奏较慢的专业，如环境科学、艺术设计、农林专业等。',
+    lifeTips: '多接触大自然，参加户外活动，尝试冥想和正念练习。',
+    careerTips: '适合从事压力较小的工作，如教育、艺术创作、图书馆工作等。',
+    majors: ['环境科学', '艺术设计', '林业科学', '图书馆学', '心理学'],
+    funFact: 'DEAD人格在新西兰的治愈成功率最高，据说90%的DEAD留学生在毕业后都表示"感觉活过来了"。'
   },
   {
     id: 'MALO', 
@@ -464,7 +683,13 @@ const sbtiData = [
     good: ['澳大利亚'],
     caution: ['英国', '日本'],
     avoid: ['美国', '香港', '新加坡'],
-    reason: '德国不加班文化+低学费+慢节奏，是吗喽理想国。新西兰可兼职且环境友善。澳大利亚生活松弛。绕开香港（物价飞涨）、美国（不卷不行）。'
+    reason: '德国不加班文化+低学费+慢节奏，是吗喽理想国。新西兰可兼职且环境友善。澳大利亚生活松弛。绕开香港（物价飞涨）、美国（不卷不行）。',
+    personality: ['随遇而安', '与世无争', '低调行事', '知足常乐', '善于观察'],
+    studyTips: '选择注重实践的专业，如工程技术、信息技术、商科管理等。',
+    lifeTips: '培养一个放松身心的爱好，如园艺、烹饪、音乐等。',
+    careerTips: '适合从事技术类工作，如程序员、数据分析、系统维护等。',
+    majors: ['计算机科学', '软件工程', '数据分析', '工商管理', '机械工程'],
+    funFact: 'MALO人格最喜欢的口头禅是"都行""随便""可以"，在集体决策中是最佳和事佬。'
   },
   {
     id: 'ZZZZ', 
@@ -479,7 +704,13 @@ const sbtiData = [
     good: ['澳大利亚', '马来西亚'],
     caution: ['英国'],
     avoid: ['德国', '美国', '新加坡'],
-    reason: '爱尔兰和新西兰申请门槛低、节奏慢，对拖延者友好。德国毕业率低、不拖不行，反而是天敌。英国硕士9个月短平快，但挂科了就麻烦。'
+    reason: '爱尔兰和新西兰申请门槛低、节奏慢，对拖延者友好。德国毕业率低、不拖不行，反而是天敌。英国硕士9个月短平快，但挂科了就麻烦。',
+    personality: ['拖延成性', '临时抱佛脚', '抗压能力强', '爆发力惊人', '善于时间管理（最后一刻）'],
+    studyTips: '选择deadline弹性较大的课程，或采用项目制学习方式。',
+    lifeTips: '尝试番茄工作法，把任务分解成小目标逐步完成。',
+    careerTips: '适合从事需要爆发力和创意的工作，如广告创意、活动策划等。',
+    majors: ['广告学', '市场营销', '传媒学', '创意写作', '视觉传达'],
+    funFact: 'ZZZZ人格在deadline前24小时的工作效率是平时的10倍，但质量往往出乎意料地高。'
   },
   {
     id: 'IMFW', 
@@ -494,7 +725,13 @@ const sbtiData = [
     good: ['澳大利亚'],
     caution: ['马来西亚', '韩国'],
     avoid: ['德国', '美国', '日本', '新加坡'],
-    reason: '爱尔兰申请容易、均分要求低；新西兰学制灵活、环境友善。德国毕业率低（真学渣容易挂）、日本申请难度高，这两个国家对废物不友好。'
+    reason: '爱尔兰申请容易、均分要求低；新西兰学制灵活、环境友善。德国毕业率低（真学渣容易挂）、日本申请难度高，这两个国家对废物不友好。',
+    personality: ['自我认知清晰', '拒绝内卷', '追求舒适', '善于自嘲', '心态极佳'],
+    studyTips: '选择难度适中的课程，注重基础和实践能力的培养。',
+    lifeTips: '学会接纳自己，设定合理的目标，不必过分强求。',
+    careerTips: '适合从事压力较小的工作，如客服、行政、后勤等。',
+    majors: ['教育学', '社会工作', '酒店管理', '公共管理', '休闲管理'],
+    funFact: 'IMFW人格的口头禅是"我不行""我不配""算了吧"，但往往在关键时刻能爆发出惊人的潜力。'
   },
   {
     id: 'OJBK', 
@@ -509,7 +746,13 @@ const sbtiData = [
     good: ['德国', '英国'],
     caution: ['韩国'],
     avoid: ['美国', '香港'],
-    reason: '澳大利亚最匹配无所谓气质：relaxed氛围、不用太卷。爱尔兰申请无需中介、随缘申。坚决避开需要时刻保持警觉的美国（治安问题），以及节奏飞快的香港。'
+    reason: '澳大利亚最匹配无所谓气质：relaxed氛围、不用太卷。爱尔兰申请无需中介、随缘申。坚决避开需要时刻保持警觉的美国（治安问题），以及节奏飞快的香港。',
+    personality: ['佛系随和', '心态平和', '不计较得失', '随遇而安', '善于调节情绪'],
+    studyTips: '选择兴趣导向的课程，保持学习的乐趣比成绩更重要。',
+    lifeTips: '培养正念冥想习惯，保持内心的平静和安宁。',
+    careerTips: '适合从事需要耐心和沟通的工作，如心理咨询、教育等。',
+    majors: ['心理学', '哲学', '宗教学', '艺术史', '人类学'],
+    funFact: 'OJBK人格无论遇到什么事情都能保持淡定，据说他们的血压平均值是所有人格中最低的。'
   },
   {
     id: '摸鱼侠', 
@@ -524,7 +767,13 @@ const sbtiData = [
     good: ['马来西亚', '泰国'],
     caution: ['英国'],
     avoid: ['德国', '美国', '新加坡'],
-    reason: '新西兰工作/学习强度低，摸鱼空间大；澳大利亚带薪假期多，摸鱼不内卷。德国考勤严格、美国加班文化重，完全挤压摸鱼空间，坚决避开。'
+    reason: '新西兰工作/学习强度低，摸鱼空间大；澳大利亚带薪假期多，摸鱼不内卷。德国考勤严格、美国加班文化重，完全挤压摸鱼空间，坚决避开。',
+    personality: ['善于摸鱼', '工作效率高', '懂得劳逸结合', '享受生活', '心态平和'],
+    studyTips: '选择灵活的学习方式，如在线课程、远程学习等。',
+    lifeTips: '培养爱好，让摸鱼时间更有意义，如阅读、看电影、玩游戏等。',
+    careerTips: '适合从事弹性工作，如自由职业、远程办公等。',
+    majors: ['计算机科学', '设计', '传媒', '艺术', '心理学'],
+    funFact: 'MOYU人格的摸鱼技巧非常高超，据说能在5分钟内完成别人需要1小时的工作，然后剩下的时间都在摸鱼。'
   },
   {
     id: '躺平怪', 
@@ -539,7 +788,85 @@ const sbtiData = [
     good: ['澳大利亚', '马来西亚'],
     caution: ['英国', '加拿大'],
     avoid: ['美国', '香港', '日本'],
-    reason: '爱尔兰生活配套完善，出门少也能躺平；新西兰自然环境好，躺平还能看风景。日本通勤耗时久、香港住房逼仄，连躺平的空间都没有，直接避雷。'
+    reason: '爱尔兰生活配套完善，出门少也能躺平；新西兰自然环境好，躺平还能看风景。日本通勤耗时久、香港住房逼仄，连躺平的空间都没有，直接避雷。',
+    personality: ['极度慵懒', '追求舒适', '节能达人', '享受静止', '佛系心态'],
+    studyTips: '选择线上课程或在家学习的方式，减少通勤时间。',
+    lifeTips: '打造舒适的居家环境，让躺平成为一种艺术。',
+    careerTips: '适合从事久坐或居家办公的工作，如文案写作、设计等。',
+    majors: ['室内设计', '创意写作', '数字媒体', '图书馆学', '植物学'],
+    funFact: 'TPGU人格的日常步数通常不超过500步，但奇怪的是，他们的身体状况往往比经常运动的人还要好。'
+  },
+  {
+    id: 'FAKE', 
+    name: 'FAKE 伪人', 
+    group: '摆烂躺平组',
+    groupColor: '#B4B2A9',
+    groupTextColor: '#2C2C2A',
+    desc: '表面努力内卷，实则摆烂摸鱼，主打一个装样子',
+    color: '#B4B2A9', 
+    textColor: '#2C2C2A',
+    best: ['澳大利亚', '爱尔兰'],
+    good: ['马来西亚', '泰国'],
+    caution: ['英国', '加拿大'],
+    avoid: ['美国', '德国', '新加坡'],
+    reason: '澳大利亚表面卷实则松弛，适合伪人"装努力"；爱尔兰社交氛围轻松，没人拆穿摆烂本质。德国考勤严格、美国卷到真实，伪人易暴露且压力大，坚决避开。',
+    personality: ['善于伪装', '演技高超', '内心戏多', '追求表面功夫', '害怕被看穿'],
+    studyTips: '选择注重过程而非结果的课程，如艺术类、实践类专业。',
+    lifeTips: '学会真诚面对自己，接受真实的需求和欲望。',
+    careerTips: '适合从事需要表演或沟通技巧的工作，如销售、公关、演艺等。',
+    majors: ['戏剧表演', '市场营销', '公共关系', '广告学', '心理学'],
+    funFact: 'FAKE人格最擅长的事情是在朋友圈发"凌晨三点的图书馆"照片，实际上可能只是在图书馆刷手机。'
+  },
+  {
+    id: 'FUCK', 
+    name: 'FUCK 草者', 
+    group: '摆烂躺平组',
+    groupColor: '#9FE1CB',
+    groupTextColor: '#085041',
+    desc: '摆烂到摆烂，破罐破摔，啥都不在乎',
+    color: '#9FE1CB', 
+    textColor: '#085041',
+    best: ['泰国', '马来西亚', '爱尔兰'],
+    good: ['新西兰', '澳大利亚'],
+    caution: ['英国'],
+    avoid: ['美国', '德国', '香港'],
+    reason: '泰国/马来西亚生活成本极低，摆烂也能活下去；爱尔兰申请躺平，不用卷成绩。美国/德国淘汰率高，破罐破摔容易毕不了业；香港生存压力大，摆烂直接活不下去。',
+    personality: ['极度洒脱', '无所畏惧', '破罐破摔', '爱咋咋地', '随性而为'],
+    studyTips: '选择压力小、毕业率高的专业，如文科、艺术类专业。',
+    lifeTips: '放下执念，接受不完美，享受当下的生活。',
+    careerTips: '适合从事自由职业或压力小的工作，如街头艺人、自媒体等。',
+    majors: ['哲学', '艺术', '文学', '音乐', '摄影'],
+    funFact: 'FUCK人格的口头禅是"无所谓""爱咋地咋地""大不了就这样"，但他们往往是最能接受现实的人。'
+  },
+  {
+    id: 'MONK', 
+    name: 'MONK 僧人', 
+    group: '摆烂躺平组',
+    groupColor: '#C8B6E2',
+    groupTextColor: '#4A2678',
+    desc: '清心寡欲，远离纷争，主打一个佛系修行',
+    color: '#C8B6E2', 
+    textColor: '#4A2678',
+    best: ['泰国', '新西兰', '瑞士'],
+    good: ['爱尔兰', '马来西亚'],
+    caution: ['英国'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '泰国佛系文化适配僧人；新西兰/瑞士环境清净，适合修行。美国/香港/新加坡内卷严重，纷争多，僧人根本静不下心。'
+  },
+  {
+    id: 'DRUN-K', 
+    name: 'DRUN-K 酒鬼', 
+    group: '摆烂躺平组',
+    groupColor: '#82C3EC',
+    groupTextColor: '#0A4DA2',
+    desc: '今朝有酒今朝醉，摆烂靠喝酒，逃避现实',
+    color: '#82C3EC', 
+    textColor: '#0A4DA2',
+    best: ['爱尔兰', '澳大利亚', '泰国'],
+    good: ['英国', '西班牙'],
+    caution: ['加拿大', '德国'],
+    avoid: ['美国', '韩国', '新加坡'],
+    reason: '爱尔兰酒文化浓厚，喝酒摆烂不被异样看待；澳大利亚/泰国夜生活丰富，醉了也没人管。美国禁酒州多、韩国酒局是应酬，新加坡禁酒严格，酒鬼摆烂都难。'
   },
 
   // 二、情绪内耗组（原有3个+新增4个）
@@ -648,6 +975,81 @@ const sbtiData = [
     avoid: ['美国', '香港', '马来西亚'],
     reason: '德国/瑞士严谨的体系适配完美控，英国教育评分体系透明，可控性高。美国竞争无边界、香港容错率低，一点不完美就容易陷入自我否定的内耗。'
   },
+  {
+    id: 'MUM', 
+    name: 'MUM 妈妈', 
+    group: '情绪内耗组',
+    groupColor: '#F5C4B3',
+    groupTextColor: '#993C1D',
+    desc: '过度操心他人，包揽所有事，自我消耗型人格',
+    color: '#F5C4B3', 
+    textColor: '#993C1D',
+    best: ['加拿大', '澳大利亚'],
+    good: ['新西兰', '爱尔兰'],
+    caution: ['英国', '德国'],
+    avoid: ['美国', '韩国', '香港'],
+    reason: '加拿大/澳大利亚社会福利完善，不用过度操心生活琐事；新西兰人际简单，操心也少。美国/韩国竞争激烈，操心越多内耗越重；香港生活成本高，操心到身心俱疲。'
+  },
+  {
+    id: 'POOR', 
+    name: 'POOR 贫穷者', 
+    group: '情绪内耗组',
+    groupColor: '#FAC775',
+    groupTextColor: '#633806',
+    desc: '因经济压力内耗，总担心钱不够用，患得患失',
+    color: '#FAC775', 
+    textColor: '#633806',
+    best: ['马来西亚', '泰国', '德国'],
+    good: ['爱尔兰', '西班牙'],
+    caution: ['澳大利亚', '加拿大'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '马来西亚/泰国生活成本极低，德国免学费+低生活费，缓解经济焦虑。美国/香港/新加坡学费/生活费天价，贫穷者内耗会直接拉满。'
+  },
+  {
+    id: 'OH-NO!', 
+    name: 'OH-NO! 哦不人', 
+    group: '情绪内耗组',
+    groupColor: '#FF9E9E',
+    groupTextColor: '#8A1A1A',
+    desc: '遇事先慌，总喊"哦不"，焦虑型灾难思维',
+    color: '#FF9E9E', 
+    textColor: '#8A1A1A',
+    best: ['新西兰', '瑞士', '爱尔兰'],
+    good: ['澳大利亚', '加拿大'],
+    caution: ['英国', '德国'],
+    avoid: ['美国', '香港', '韩国'],
+    reason: '新西兰/瑞士治安好、节奏慢，少突发状况；爱尔兰人佛系，遇事不慌。美国治安差、香港突发状况多，哦不人会天天喊"哦不"，内耗到崩溃。'
+  },
+  {
+    id: 'SHIT', 
+    name: 'SHIT 狗屎人', 
+    group: '情绪内耗组',
+    groupColor: '#C77DFF',
+    groupTextColor: '#5A189A',
+    desc: '觉得自己干啥都不行，自我否定到极致',
+    color: '#C77DFF', 
+    textColor: '#5A189A',
+    best: ['新西兰', '爱尔兰', '澳大利亚'],
+    good: ['加拿大', '马来西亚'],
+    caution: ['英国'],
+    avoid: ['美国', '德国', '韩国'],
+    reason: '新西兰/爱尔兰包容度高，没人评判好坏；澳大利亚鼓励试错，缓解自我否定。美国/德国竞争激烈，韩国攀比严重，狗屎人会更觉得自己"一无是处"。'
+  },
+  {
+    id: 'WOC!', 
+    name: 'WOC! 握草人', 
+    group: '情绪内耗组',
+    groupColor: '#9381FF',
+    groupTextColor: '#2B1988',
+    desc: '遇事只会喊握草，情绪上头快，平复也快',
+    color: '#9381FF', 
+    textColor: '#2B1988',
+    best: ['澳大利亚', '泰国', '爱尔兰'],
+    good: ['马来西亚', '西班牙'],
+    caution: ['英国', '德国'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '澳大利亚/泰国人随性，喊"握草"不被评判；爱尔兰人幽默，能接住情绪。美国/香港/新加坡节奏快，情绪上头易误事，内耗加重。'
+  },
 
   // 三、人间清醒组（原有1个+新增3个）
   {
@@ -710,6 +1112,51 @@ const sbtiData = [
     avoid: ['新西兰', '爱尔兰', '泰国'],
     reason: '美国阶级流动空间大，英国名校背书强，新加坡精英体系明确，能满足野心。新西兰/爱尔兰阶层固化，节奏慢，野心家会觉得"英雄无用武之地"。'
   },
+  {
+    id: 'GOGO', 
+    name: 'GOGO 行者', 
+    group: '人间清醒组',
+    groupColor: '#06D6A0',
+    groupTextColor: '#003F2F',
+    desc: '热爱自由，边走边学，拒绝被固定模式束缚',
+    color: '#06D6A0', 
+    textColor: '#003F2F',
+    best: ['新西兰', '澳大利亚', '加拿大'],
+    good: ['泰国', '马来西亚'],
+    caution: ['德国', '瑞士'],
+    avoid: ['美国', '香港', '新加坡'],
+    reason: '新西兰/澳大利亚签证允许边打工边旅行，适配行者自由属性；加拿大户外资源丰富，适合边走边学。德国/瑞士规则严苛，美国/香港节奏固定，束缚行者的自由。'
+  },
+  {
+    id: 'CTRL', 
+    name: 'CTRL 拿捏者', 
+    group: '人间清醒组',
+    groupColor: '#6C63FF',
+    groupTextColor: '#FFFFFF',
+    desc: '擅长拿捏人际关系，精准掌控局势，不吃亏',
+    color: '#6C63FF', 
+    textColor: '#FFFFFF',
+    best: ['美国', '英国', '新加坡'],
+    good: ['香港', '澳大利亚'],
+    caution: ['德国', '加拿大'],
+    avoid: ['新西兰', '爱尔兰', '泰国'],
+    reason: '美国/英国社交规则清晰，拿捏者能精准掌控；新加坡职场规则明确，不吃亏。新西兰/爱尔兰人际简单，没机会"拿捏"；泰国人情社会复杂，易反被拿捏。'
+  },
+  {
+    id: 'THIN-K', 
+    name: 'THIN-K 思考者', 
+    group: '人间清醒组',
+    groupColor: '#E63946',
+    groupTextColor: '#FFFFFF',
+    desc: '遇事深度思考，拒绝冲动，理性至上',
+    color: '#E63946', 
+    textColor: '#FFFFFF',
+    best: ['德国', '瑞士', '英国'],
+    good: ['新加坡', '加拿大'],
+    caution: ['澳大利亚', '泰国'],
+    avoid: ['美国', '马来西亚', '巴西'],
+    reason: '德国/瑞士严谨的学术氛围适配思考者；英国教育注重思辨，能深度思考。美国/巴西节奏快，易冲动决策；马来西亚政策变动多，思考再多也没用。'
+  },
 
   // 四、社交个性组（原有1个+新增3个）
   {
@@ -771,6 +1218,66 @@ const sbtiData = [
     caution: ['德国', '瑞士'],
     avoid: ['新西兰', '爱尔兰', '马来西亚'],
     reason: '美国/英国城市多元、活动丰富，能持续提供新鲜感；法国艺术/文化活动多，满足探索欲。新西兰/爱尔兰生活模式固定，新鲜感很快耗尽。'
+  },
+  {
+    id: 'HHHH', 
+    name: 'HHHH 傻乐者', 
+    group: '社交个性组',
+    groupColor: '#FFC107',
+    groupTextColor: '#FFFFFF',
+    desc: '没心没肺，主打傻乐，负面情绪秒忘',
+    color: '#FFC107', 
+    textColor: '#FFFFFF',
+    best: ['澳大利亚', '泰国', '巴西'],
+    good: ['爱尔兰', '马来西亚'],
+    caution: ['英国', '加拿大'],
+    avoid: ['德国', '韩国', '香港'],
+    reason: '澳大利亚/泰国人乐观开朗，适配傻乐者；巴西狂欢文化，越玩越乐。德国/韩国氛围压抑，香港节奏快，傻乐者易被影响失去快乐属性。'
+  },
+  {
+    id: 'SEXY', 
+    name: 'SEXY 尤物', 
+    group: '社交个性组',
+    groupColor: '#FF758F',
+    groupTextColor: '#770F05',
+    desc: '自带魅力buff，社交场合焦点，自带吸睛属性',
+    color: '#FF758F', 
+    textColor: '#770F05',
+    best: ['法国', '意大利', '西班牙'],
+    good: ['美国', '英国'],
+    caution: ['德国', '瑞士'],
+    avoid: ['新西兰', '爱尔兰', '日本'],
+    reason: '法/意/西时尚氛围浓，尤物能尽情展现魅力；美国/英国多元包容，吸睛不被评头论足。德国/瑞士过于理性，日本低调文化，尤物的魅力无处施展。'
+  },
+  {
+    id: 'THAN-K', 
+    name: 'THAN-K 感恩者', 
+    group: '社交个性组',
+    groupColor: '#80FFDB',
+    groupTextColor: '#004B40',
+    desc: '心怀感恩，对小事满足，社交中温暖治愈',
+    color: '#80FFDB', 
+    textColor: '#004B40',
+    best: ['加拿大', '新西兰', '爱尔兰'],
+    good: ['澳大利亚', '瑞士'],
+    caution: ['英国', '法国'],
+    avoid: ['美国', '韩国', '香港'],
+    reason: '加拿大/新西兰人礼貌且感恩，适配感恩者；爱尔兰社区氛围温暖，易感受到善意。美国/韩国/香港功利氛围重，感恩者的温暖易被消耗。'
+  },
+  {
+    id: 'SOLO', 
+    name: 'SOLO 孤儿', 
+    group: '社交个性组',
+    groupColor: '#FB5607',
+    groupTextColor: '#FFFFFF',
+    desc: '享受独处，社交绝缘体，一个人也能过得很好',
+    color: '#FB5607', 
+    textColor: '#FFFFFF',
+    best: ['新西兰', '加拿大', '瑞士'],
+    good: ['爱尔兰', '澳大利亚'],
+    caution: ['英国', '法国'],
+    avoid: ['美国', '韩国', '巴西'],
+    reason: '新西兰/加拿大人口密度低，独处不被打扰；瑞士注重隐私，适合社恐。美国/巴西社交氛围浓，韩国集体文化重，孤儿型人格易被强行社交。'
   }
 ];
 
@@ -779,110 +1286,110 @@ const countryData = {
   "美国": {
     level: "avoid",
     reason: "竞争极端激烈，学习和就业压力大，治安问题突出，仅适合抗压能力极强的人群",
-    suitable: ["BOSS", "GQKA", "YXJ", "STAR", "SNZH", "XGG"],
-    unsuitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB", "MOYU", "TPGU", "JLGU", "THXING", "MGJN"]
+    suitable: ["BOSS", "GQKA", "YXJ", "STAR", "SNZH", "XGG", "CTRL"],
+    unsuitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB", "MOYU", "TPGU", "JLGU", "THXING", "MGJN", "FAKE", "FUCK", "MONK", "DRUN-K", "MUM", "POOR", "OH-NO!", "SHIT", "WOC!", "GOGO", "THIN-K", "HHHH", "THAN-K", "SOLO"]
   },
   "英国": {
     level: "caution",
     reason: "学制短节奏快，硕士仅9个月，挂科风险高，但教育资源优质，适合有一定自律性的人群",
-    suitable: ["ATM", "LOVER", "WMK", "BOSS", "GQKA", "YXJ", "STAR", "XGG"],
-    unsuitable: ["ZZZZ", "IMFW", "TPGU"]
+    suitable: ["ATM", "LOVER", "WMK", "BOSS", "GQKA", "YXJ", "STAR", "XGG", "DRUN-K", "CTRL", "THIN-K", "SEXY"],
+    unsuitable: ["ZZZZ", "IMFW", "TPGU", "FAKE", "FUCK", "MONK", "MUM", "OH-NO!", "SHIT", "WOC!", "HHHH", "THAN-K", "SOLO"]
   },
   "澳大利亚": {
     level: "best",
     reason: "生活节奏松弛，氛围友好，移民政策相对宽松，兼职机会多，适合大部分摆烂/内耗型人格",
-    suitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB", "ATM", "LOVER", "MOYU", "TPGU", "JLGU", "THXING", "STAR", "SNZH", "SZR"],
-    unsuitable: ["无"]
+    suitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB", "ATM", "LOVER", "MOYU", "TPGU", "JLGU", "THXING", "STAR", "SNZH", "SZR", "FAKE", "FUCK", "DRUN-K", "MUM", "OH-NO!", "SHIT", "WOC!", "GOGO", "CTRL", "HHHH", "THAN-K", "SOLO"],
+    unsuitable: ["THIN-K"]
   },
   "新西兰": {
     level: "best",
     reason: "节奏极慢，环境宜人，治安好，申请门槛低，是治愈内耗、摆烂躺平的最佳选择",
-    suitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB", "MOYU", "TPGU", "JLGU", "MGJN"],
-    unsuitable: ["BOSS", "GQKA", "YXJ", "SNZH", "XGG"]
+    suitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB", "MOYU", "TPGU", "JLGU", "MGJN", "FUCK", "MONK", "OH-NO!", "SHIT", "GOGO", "THAN-K", "SOLO"],
+    unsuitable: ["BOSS", "GQKA", "YXJ", "SNZH", "XGG", "CTRL", "SEXY"]
   },
   "爱尔兰": {
     level: "best",
     reason: "节奏慢，申请容易，均分要求低，英语环境友好，适合摆烂、拖延、内耗型人格",
-    suitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB", "ATM", "MOYU", "TPGU", "JLGU", "MGJN", "SZR"],
-    unsuitable: ["BOSS", "GQKA", "YXJ", "SNZH"]
+    suitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "OJBK", "IMSB", "ATM", "MOYU", "TPGU", "JLGU", "MGJN", "SZR", "FAKE", "FUCK", "MONK", "DRUN-K", "MUM", "POOR", "OH-NO!", "SHIT", "WOC!", "HHHH", "THAN-K", "SOLO"],
+    unsuitable: ["BOSS", "GQKA", "YXJ", "SNZH", "CTRL", "SEXY"]
   },
   "德国": {
     level: "good",
     reason: "不加班文化，低学费，慢节奏，但毕业率低，适合有基础自律性的摆烂人格",
-    suitable: ["MALO", "OJBK", "WMK", "GHSHI", "BOSS"],
-    unsuitable: ["ZZZZ", "IMFW", "TPGU", "SNZH", "XGG"]
+    suitable: ["MALO", "OJBK", "WMK", "GHSHI", "BOSS", "POOR", "THIN-K"],
+    unsuitable: ["ZZZZ", "IMFW", "TPGU", "SNZH", "XGG", "FAKE", "FUCK", "DRUN-K", "MUM", "OH-NO!", "SHIT", "WOC!", "GOGO", "CTRL", "HHHH", "SEXY"]
   },
   "法国": {
     level: "best",
     reason: "浪漫的艺术氛围浓厚，生活节奏慢，适合情绪敏感、多情的人格类型",
-    suitable: ["LOVER", "MGJN", "STAR", "SNZH", "XGG"],
-    unsuitable: ["无"]
+    suitable: ["LOVER", "MGJN", "STAR", "SNZH", "XGG", "SEXY"],
+    unsuitable: ["THAN-K", "SOLO"]
   },
   "意大利": {
     level: "best",
     reason: "艺术氛围浓厚，生活节奏悠闲，适合情绪丰富、热爱生活的人格类型",
-    suitable: ["LOVER", "MGJN", "XGG"],
+    suitable: ["LOVER", "MGJN", "XGG", "SEXY"],
     unsuitable: ["无"]
   },
   "西班牙": {
     level: "best",
     reason: "热情奔放的文化氛围，生活节奏慢，能治愈情绪内耗，适合多情型人格",
-    suitable: ["LOVER", "MGJN", "STAR", "SNZH", "XGG"],
+    suitable: ["LOVER", "MGJN", "STAR", "SNZH", "XGG", "DRUN-K", "POOR", "WOC!", "SEXY"],
     unsuitable: ["无"]
   },
   "香港": {
     level: "avoid",
     reason: "生活压力极大，物价飞涨，压分严重，节奏飞快，会加重内耗和摆烂型人格的负面情绪",
-    suitable: ["BOSS", "GQKA", "YXJ"],
-    unsuitable: ["DEAD", "MALO", "OJBK", "IMSB", "LOVER", "MOYU", "TPGU", "JLGU", "THXING", "MGJN", "SZR"]
+    suitable: ["BOSS", "GQKA", "YXJ", "CTRL"],
+    unsuitable: ["DEAD", "MALO", "OJBK", "IMSB", "LOVER", "MOYU", "TPGU", "JLGU", "THXING", "MGJN", "SZR", "FAKE", "FUCK", "MONK", "MUM", "POOR", "OH-NO!", "WOC!", "GOGO", "HHHH", "THAN-K"]
   },
   "新加坡": {
     level: "avoid",
     reason: "就业压力攀升，竞争激烈，生活成本高，仅适合极度自律的人群",
-    suitable: ["BOSS", "GQKA", "YXJ", "GHSHI"],
-    unsuitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "IMSB", "MOYU", "TPGU", "JLGU", "THXING", "MGJN"]
+    suitable: ["BOSS", "GQKA", "YXJ", "GHSHI", "CTRL", "THIN-K"],
+    unsuitable: ["DEAD", "MALO", "ZZZZ", "IMFW", "IMSB", "MOYU", "TPGU", "JLGU", "THXING", "MGJN", "FAKE", "MONK", "DRUN-K", "POOR", "OH-NO!", "WOC!", "GOGO"]
   },
   "日本": {
     level: "caution",
     reason: "申请难度高，文化压抑，过于注重规则，会加重情绪内耗，仅适合高度自律的人群",
-    suitable: ["GHSHI", "WMK"],
-    unsuitable: ["MALO", "IMFW", "LOVER", "TPGU", "JLGU", "THXING", "MGJN", "SNZH"]
+    suitable: ["GHSHI", "WMK", "THIN-K"],
+    unsuitable: ["MALO", "IMFW", "LOVER", "TPGU", "JLGU", "THXING", "MGJN", "SNZH", "SEXY"]
   },
   "韩国": {
     level: "avoid",
     reason: "社会氛围排外且内卷严重，灰色产业多，会加重自我攻击和情绪内耗",
     suitable: ["无"],
-    unsuitable: ["IMSB", "ATM", "LOVER", "JLGU", "THXING", "MGJN", "SZR"]
+    unsuitable: ["IMSB", "ATM", "LOVER", "JLGU", "THXING", "MGJN", "SZR", "DRUN-K", "MUM", "OH-NO!", "SHIT", "HHHH", "THAN-K", "SOLO"]
   },
   "马来西亚": {
     level: "caution",
     reason: "学费低，申请容易，但教育资源一般，适合预算有限的摆烂型人格",
-    suitable: ["ZZZZ", "IMFW", "MOYU", "TPGU"],
-    unsuitable: ["BOSS", "GQKA", "YXJ", "XGG"]
+    suitable: ["ZZZZ", "IMFW", "MOYU", "TPGU", "FAKE", "FUCK", "MONK", "POOR", "SHIT", "WOC!", "GOGO", "HHHH"],
+    unsuitable: ["BOSS", "GQKA", "YXJ", "XGG", "THIN-K"]
   },
   "加拿大": {
     level: "good",
     reason: "社交节奏适中，福利完善，移民友好，适合情绪内耗/社交杂糅型人格",
-    suitable: ["IMSB", "JLGU", "THXING", "SZR", "STAR"],
-    unsuitable: ["YXJ", "XGG"]
+    suitable: ["IMSB", "JLGU", "THXING", "SZR", "STAR", "MUM", "OH-NO!", "SHIT", "GOGO", "THIN-K", "THAN-K", "SOLO"],
+    unsuitable: ["YXJ", "XGG", "FAKE", "DRUN-K", "HHHH"]
   },
   "瑞士": {
     level: "caution",
     reason: "福利好/环境优，但生活成本极高，社交圈封闭，适合完美控/焦虑怪但需谨慎",
-    suitable: ["WMK", "JLGU"],
-    unsuitable: ["SNZH", "XGG", "MOYU", "TPGU"]
+    suitable: ["WMK", "JLGU", "MONK", "OH-NO!", "THIN-K", "THAN-K", "SOLO"],
+    unsuitable: ["SNZH", "XGG", "MOYU", "TPGU", "SEXY"]
   },
   "泰国": {
     level: "good",
     reason: "生活成本低，节奏慢，氛围佛系，适合摆烂型人格但教育资源一般",
-    suitable: ["MOYU", "TPGU", "DEAD"],
-    unsuitable: ["BOSS", "GQKA", "YXJ", "WMK"]
+    suitable: ["MOYU", "TPGU", "DEAD", "FAKE", "FUCK", "MONK", "DRUN-K", "POOR", "WOC!", "GOGO", "HHHH"],
+    unsuitable: ["BOSS", "GQKA", "YXJ", "WMK", "CTRL", "THIN-K"]
   },
   "巴西": {
     level: "best",
     reason: "文化热情开放，社交氛围浓厚，适配社牛/社交达人的性格",
-    suitable: ["STAR", "SNZH", "XGG"],
-    unsuitable: ["JLGU", "MGJN", "TPGU"]
+    suitable: ["STAR", "SNZH", "XGG", "HHHH", "SEXY"],
+    unsuitable: ["JLGU", "MGJN", "TPGU", "THIN-K", "SOLO"]
   }
 };
 
@@ -909,7 +1416,7 @@ const countryData = {
 
     // 按SBTI人格查询
     function searchBySbti() {
-      const inputVal = document.getElementById('sbti-input').value.trim().toUpperCase();
+      const inputVal = document.getElementById('sbti-input').value.trim();
       const resultContainer = document.getElementById('sbti-result');
       
       // 清空结果
@@ -935,34 +1442,42 @@ const countryData = {
       
       // 模拟加载延迟
       setTimeout(() => {
-        // 查找匹配数据
-        const matchData = sbtiData.find(item => item.id === inputVal);
-        
-        if (matchData) {
-          // 构建结果卡片
-          let tagsHtml = '';
-          // 强烈推荐
-          matchData.best.forEach(item => {
-            tagsHtml += `<span class="dest-tag best">${item}</span>`;
-          });
-          // 适合
-          matchData.good.forEach(item => {
-            tagsHtml += `<span class="dest-tag good">${item}</span>`;
-          });
-          // 谨慎考虑
-          matchData.caution.forEach(item => {
-            tagsHtml += `<span class="dest-tag caution">${item}</span>`;
-          });
-          // 不建议
-          matchData.avoid.forEach(item => {
-            tagsHtml += `<span class="dest-tag avoid">${item}</span>`;
-          });
+        try {
+          // 查找匹配数据（支持ID和名称匹配，不区分大小写）
+          const inputUpper = inputVal.toUpperCase();
+          const matchData = sbtiData.find(item => 
+            item.id.toUpperCase() === inputUpper || 
+            item.id === inputVal ||
+            item.name.toUpperCase().includes(inputUpper)
+          );
           
-          // 构建分组徽章样式
-          const groupBadgeStyle = `background: ${matchData.groupColor}; color: ${matchData.groupTextColor};`;
-          
-          resultContainer.innerHTML = `
-            <div class="result-card">
+          if (matchData) {
+            // 构建结果卡片
+            let tagsHtml = '';
+            // 强烈推荐
+            matchData.best.forEach(item => {
+              tagsHtml += `<span class="dest-tag best">${item}</span>`;
+            });
+            // 适合
+            matchData.good.forEach(item => {
+              tagsHtml += `<span class="dest-tag good">${item}</span>`;
+            });
+            // 谨慎考虑
+            matchData.caution.forEach(item => {
+              tagsHtml += `<span class="dest-tag caution">${item}</span>`;
+            });
+            // 不建议
+            matchData.avoid.forEach(item => {
+              tagsHtml += `<span class="dest-tag avoid">${item}</span>`;
+            });
+            
+            // 构建分组徽章样式
+            const groupBadgeStyle = `background: ${matchData.groupColor}; color: ${matchData.groupTextColor};`;
+            
+            // 创建卡片元素并绑定点击事件
+            const card = document.createElement('div');
+            card.className = 'result-card';
+            card.innerHTML = `
               <div class="result-header">
                 <div class="avatar" style="background: ${matchData.color}; color: ${matchData.textColor};">${matchData.id}</div>
                 <div class="result-meta">
@@ -975,14 +1490,29 @@ const countryData = {
                 ${tagsHtml}
               </div>
               <div class="reason">${matchData.reason}</div>
-            </div>
-          `;
-        } else {
-          // 无匹配结果
+            `;
+            
+            // 添加点击事件
+            card.addEventListener('click', function() {
+              openModal(matchData.id);
+            });
+            
+            resultContainer.innerHTML = '';
+            resultContainer.appendChild(card);
+          } else {
+            // 无匹配结果
+            resultContainer.innerHTML = `
+              <div class="empty-result">
+                <p>未找到「${inputVal}」相关的SBTI人格数据</p>
+                <p style="margin-top:8px; font-size:13px;">支持查询的人格代码：${sbtiData.map(item => item.id).join('、')}</p>
+              </div>
+            `;
+          }
+        } catch (error) {
+          console.error('搜索出错:', error);
           resultContainer.innerHTML = `
             <div class="empty-result">
-              <p>未找到「${inputVal}」相关的SBTI人格数据</p>
-              <p style="margin-top:8px; font-size:13px;">支持查询的人格代码：${sbtiData.map(item => item.id).join('、')}</p>
+              <p>查询过程中出现错误，请重试</p>
             </div>
           `;
         }
@@ -1089,6 +1619,101 @@ const countryData = {
       }, 500);
     }
 
+    // 打开详情弹窗
+    function openModal(personalityId) {
+      const item = sbtiData.find(p => p.id === personalityId);
+      if (!item) return;
+      
+      // 设置弹窗头部
+      document.getElementById('modal-avatar').style.cssText = `background: ${item.color}; color: ${item.textColor};`;
+      document.getElementById('modal-avatar').textContent = item.id;
+      document.getElementById('modal-title').textContent = item.name;
+      document.getElementById('modal-desc').textContent = item.desc;
+      document.getElementById('modal-group').style.cssText = `background: ${item.groupColor}; color: ${item.groupTextColor};`;
+      document.getElementById('modal-group').textContent = item.group;
+      
+      // 设置弹窗内容
+      const bodyHtml = `
+        <div class="modal-section">
+          <div class="section-title">性格特点</div>
+          <ul class="character-list">
+            ${item.personality ? item.personality.map(p => `<li class="character-item"><span class="character-icon">✓</span><span class="character-text">${p}</span></li>`).join('') : '<li class="character-item"><span class="character-text">暂无详细信息</span></li>'}
+          </ul>
+        </div>
+        
+        <div class="modal-section">
+          <div class="section-title">留学建议</div>
+          <div class="section-text">${item.studyTips || '暂无详细信息'}</div>
+        </div>
+        
+        <div class="modal-section">
+          <div class="section-title">生活建议</div>
+          <div class="section-text">${item.lifeTips || '暂无详细信息'}</div>
+        </div>
+        
+        <div class="modal-section">
+          <div class="section-title">职业建议</div>
+          <div class="section-text">${item.careerTips || '暂无详细信息'}</div>
+        </div>
+        
+        <div class="modal-section">
+          <div class="section-title">适合专业</div>
+          <div class="tag-list">
+            ${item.majors ? item.majors.map(m => `<span class="tag-item good">${m}</span>`).join('') : '<span class="tag-item good">暂无推荐</span>'}
+          </div>
+        </div>
+        
+        <div class="modal-section">
+          <div class="section-title">有趣小知识</div>
+          <div class="section-text">${item.funFact || '暂无详细信息'}</div>
+        </div>
+        
+        <div class="modal-section">
+          <div class="section-title">推荐目的地</div>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <div class="detail-label">强烈推荐</div>
+              <div class="detail-value" style="color: var(--success);">${item.best.join('、')}</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">适合</div>
+              <div class="detail-value" style="color: var(--info);">${item.good.join('、')}</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">谨慎考虑</div>
+              <div class="detail-value" style="color: var(--warning);">${item.caution.join('、')}</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">不建议</div>
+              <div class="detail-value" style="color: var(--danger);">${item.avoid.join('、')}</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal-section">
+          <div class="section-title">匹配理由</div>
+          <div class="section-text">${item.reason}</div>
+        </div>
+      `;
+      
+      document.getElementById('modal-body').innerHTML = bodyHtml;
+      document.getElementById('detail-modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    // 关闭详情弹窗
+    function closeModal() {
+      document.getElementById('detail-modal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    
+    // 点击弹窗外部关闭
+    document.getElementById('detail-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
+    });
+    
     // 初始化页面
     document.addEventListener('DOMContentLoaded', function() {
       // 给输入框添加回车触发查询
