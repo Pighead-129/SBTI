@@ -147,10 +147,8 @@ function injectPopup(html) {
       if (val === 'ATM') {
         document.getElementById('detailPage').style.display = 'block';
         return false;
-      } else {
-        document.getElementById('qrcodeModal').style.display = 'flex';
-        return false;
       }
+      return true;
     }
   </script>
   </body>`;

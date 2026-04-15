@@ -315,6 +315,53 @@
       color: var(--gray-dark);
       line-height: 1.6;
     }
+    .personality-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      max-height: 120px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .personality-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      outline: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .personality-tag:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .personality-tag:active {
+      transform: translateY(0);
+    }
+    .personality-tag .tag-id {
+      font-weight: 600;
+      font-size: 11px;
+      margin-right: 6px;
+    }
+    .personality-tag .tag-name {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+    /* 搜索提示样式 */
+    .search-hint {
+      font-size: 14px;
+      color: var(--gray-dark);
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      background: linear-gradient(135deg, rgba(108, 99, 255, 0.1) 0%, rgba(108, 99, 255, 0.05) 100%);
+      border-radius: var(--radius-md);
+      border-left: 3px solid var(--primary);
+    }
     /* 图例样式 */
     .legend {
       display: flex;
@@ -755,7 +802,7 @@ const sbtiData = [
     funFact: 'OJBK人格无论遇到什么事情都能保持淡定，据说他们的血压平均值是所有人格中最低的。'
   },
   {
-    id: '摸鱼侠', 
+    id: 'MOYU', 
     name: 'MOYU 摸鱼侠', 
     group: '摆烂躺平组',
     groupColor: '#82C3EC',
@@ -776,7 +823,7 @@ const sbtiData = [
     funFact: 'MOYU人格的摸鱼技巧非常高超，据说能在5分钟内完成别人需要1小时的工作，然后剩下的时间都在摸鱼。'
   },
   {
-    id: '躺平怪', 
+    id: 'TPGU', 
     name: 'TPGU 躺平怪', 
     group: '摆烂躺平组',
     groupColor: '#C8B6E2',
@@ -883,7 +930,13 @@ const sbtiData = [
     good: ['澳大利亚', '英国'],
     caution: ['德国', '新加坡'],
     avoid: ['美国', '香港', '韩国'],
-    reason: '新西兰当地人友善、环境治愈，适合愈合内耗。美国留学生抑郁比例最高，严重不推荐。韩国社会氛围mean且排外，会加重自我攻击倾向。香港压分最严重，更会加剧内耗。'
+    reason: '新西兰当地人友善、环境治愈，适合愈合内耗。美国留学生抑郁比例最高，严重不推荐。韩国社会氛围mean且排外，会加重自我攻击倾向。香港压分最严重，更会加剧内耗。',
+    personality: ['自我批判', '情绪内耗严重', '责任心过强', '缺乏自信', '渴望认可'],
+    studyTips: '选择注重过程而非结果的课程，如艺术类、心理学专业。',
+    lifeTips: '学会正念冥想，每天记录三件值得肯定的小事。',
+    careerTips: '适合从事助人型职业，如心理咨询、社会工作、教育等。',
+    majors: ['心理学', '社会工作', '教育学', '艺术治疗', '哲学'],
+    funFact: '自我攻击者往往是最优秀的自我观察者，只要学会善待自己。'
   },
   {
     id: 'ATM', 
@@ -898,7 +951,13 @@ const sbtiData = [
     good: ['新加坡', '爱尔兰'],
     caution: ['美国'],
     avoid: ['韩国', '香港'],
-    reason: '英国教育资源丰富、专业宽容度高，ATM型人格在此可以选择适合自己的方向而非被迫迁就他人。韩国灰色产业陷阱多，送钱者容易被坑；香港物价飞涨，钱包承压更大。'
+    reason: '英国教育资源丰富、专业宽容度高，ATM型人格在此可以选择适合自己的方向而非被迫迁就他人。韩国灰色产业陷阱多，送钱者容易被坑；香港物价飞涨，钱包承压更大。',
+    personality: ['慷慨大方', '乐于付出', '不善拒绝', '重视他人感受', '容易心软'],
+    studyTips: '选择商科、金融等专业，学习理性理财和边界设定。',
+    lifeTips: '学会说"不"，建立健康的金钱观念和人际关系边界。',
+    careerTips: '适合从事慈善、公益、非营利组织等领域的工作。',
+    majors: ['金融学', '会计学', '社会工作', '慈善管理', '市场营销'],
+    funFact: 'ATM型人格的付出精神是珍贵的品质，只要学会保护自己。'
   },
   {
     id: 'LOVER', 
@@ -913,10 +972,16 @@ const sbtiData = [
     good: ['英国', '澳大利亚'],
     caution: ['德国', '日本'],
     avoid: ['韩国', '香港', '新加坡'],
-    reason: '浪漫的法语/意语/西语国家最适配多情人格，艺术氛围浓厚能滋养情绪。德国过于理性、日本过于压抑，会让多情者感到窒息。韩国恋爱氛围虽浓但内卷严重，反而加重内耗。'
+    reason: '浪漫的法语/意语/西语国家最适配多情人格，艺术氛围浓厚能滋养情绪。德国过于理性、日本过于压抑，会让多情者感到窒息。韩国恋爱氛围虽浓但内卷严重，反而加重内耗。',
+    personality: ['情感丰富', '浪漫多情', '敏感细腻', '渴望被爱', '情绪起伏大'],
+    studyTips: '选择艺术、文学、音乐等专业，释放情感创造力。',
+    lifeTips: '培养艺术爱好，学会用创作表达情感。',
+    careerTips: '适合从事艺术、文学、音乐、设计等创造性职业。',
+    majors: ['艺术设计', '音乐表演', '文学创作', '戏剧影视', '时尚设计'],
+    funFact: '多情者的情感深度是创作的源泉，每一次心动都是灵感。'
   },
   {
-    id: '焦虑怪', 
+    id: 'JLGU', 
     name: 'JLGU 焦虑怪', 
     group: '情绪内耗组',
     groupColor: '#FF9E9E',
@@ -928,10 +993,16 @@ const sbtiData = [
     good: ['澳大利亚', '加拿大'],
     caution: ['英国', '德国'],
     avoid: ['美国', '香港', '新加坡'],
-    reason: '瑞士心理医疗体系完善，新西兰节奏慢，能缓解焦虑；爱尔兰社区氛围友好，减少孤独感。美国内卷+治安问题、香港高压环境，会让焦虑指数翻倍。'
+    reason: '瑞士心理医疗体系完善，新西兰节奏慢，能缓解焦虑；爱尔兰社区氛围友好，减少孤独感。美国内卷+治安问题、香港高压环境，会让焦虑指数翻倍。',
+    personality: ['过度担忧', '思虑过多', '缺乏安全感', '对未来不确定', '需要确定性'],
+    studyTips: '选择结构化强、规则清晰的专业，如法律、会计、医学等。',
+    lifeTips: '练习深呼吸和冥想，每天设定固定的放松时间。',
+    careerTips: '适合从事稳定、有明确流程的工作，如财务、行政、医疗等。',
+    majors: ['心理学', '金融学', '会计学', '护理学', '法律'],
+    funFact: '焦虑怪往往有超强的风险预判能力，是优秀的危机管理者。'
   },
   {
-    id: '讨好型', 
+    id: 'THXING', 
     name: 'THXING 讨好型', 
     group: '情绪内耗组',
     groupColor: '#FFD6A5',
@@ -943,10 +1014,16 @@ const sbtiData = [
     good: ['爱尔兰', '英国'],
     caution: ['德国'],
     avoid: ['韩国', '日本', '香港'],
-    reason: '加拿大文化强调尊重边界，澳大利亚人直爽不绕弯，不用刻意讨好。日本/韩国等级文化重，讨好型人格易被PUA；香港职场/校园内卷，讨好也难合群。'
+    reason: '加拿大文化强调尊重边界，澳大利亚人直爽不绕弯，不用刻意讨好。日本/韩国等级文化重，讨好型人格易被PUA；香港职场/校园内卷，讨好也难合群。',
+    personality: ['善解人意', '乐于助人', '害怕冲突', '重视和谐', '渴望被认可'],
+    studyTips: '选择人际互动多的专业，如社会工作、教育、心理学等。',
+    lifeTips: '学习表达自己的需求，建立健康的心理边界。',
+    careerTips: '适合从事需要同理心的职业，如心理咨询、教育、HR等。',
+    majors: ['社会工作', '教育学', '心理学', '人力资源', '公共关系'],
+    funFact: '讨好型人格的同理心是宝贵的天赋，学会爱自己才能更好地爱别人。'
   },
   {
-    id: '敏感精', 
+    id: 'MGJN', 
     name: 'MGJN 敏感精', 
     group: '情绪内耗组',
     groupColor: '#C77DFF',
@@ -958,10 +1035,16 @@ const sbtiData = [
     good: ['意大利', '西班牙'],
     caution: ['英国', '加拿大'],
     avoid: ['美国', '韩国', '香港'],
-    reason: '法国/意大利注重情绪表达，包容度高；新西兰人口密度低，人际压力小。美国直言文化易戳玻璃心，韩国排外+攀比严重，敏感精极易受伤。'
+    reason: '法国/意大利注重情绪表达，包容度高；新西兰人口密度低，人际压力小。美国直言文化易戳玻璃心，韩国排外+攀比严重，敏感精极易受伤。',
+    personality: ['细腻敏感', '情绪丰富', '同理心强', '容易受伤', '渴望理解'],
+    studyTips: '选择艺术、文学、心理学等专业，让情感有表达的出口。',
+    lifeTips: '找到能理解自己的朋友，建立安全的情感支持网络。',
+    careerTips: '适合从事艺术创作、心理咨询、写作等需要细腻情感的工作。',
+    majors: ['艺术设计', '心理学', '文学', '音乐', '电影制作'],
+    funFact: '敏感精能感受到别人忽略的美，是天生的艺术家和诗人。'
   },
   {
-    id: '完美控', 
+    id: 'WMK', 
     name: 'WMK 完美控', 
     group: '情绪内耗组',
     groupColor: '#9381FF',
@@ -973,7 +1056,13 @@ const sbtiData = [
     good: ['新加坡', '澳大利亚'],
     caution: ['加拿大'],
     avoid: ['美国', '香港', '马来西亚'],
-    reason: '德国/瑞士严谨的体系适配完美控，英国教育评分体系透明，可控性高。美国竞争无边界、香港容错率低，一点不完美就容易陷入自我否定的内耗。'
+    reason: '德国/瑞士严谨的体系适配完美控，英国教育评分体系透明，可控性高。美国竞争无边界、香港容错率低，一点不完美就容易陷入自我否定的内耗。',
+    personality: ['追求卓越', '注重细节', '高标准严要求', '精益求精', '害怕失败'],
+    studyTips: '选择需要精密思维的专业，如工程、科学、设计等。',
+    lifeTips: '学会接受不完美，练习自我宽容，允许自己犯错。',
+    careerTips: '适合从事需要精细度的职业，如工程师、设计师、科学家等。',
+    majors: ['工程学', '建筑学', '计算机科学', '物理学', '产品设计'],
+    funFact: '完美控的追求让世界变得更美好，但别忘了享受过程。'
   },
   {
     id: 'MUM', 
@@ -988,7 +1077,13 @@ const sbtiData = [
     good: ['新西兰', '爱尔兰'],
     caution: ['英国', '德国'],
     avoid: ['美国', '韩国', '香港'],
-    reason: '加拿大/澳大利亚社会福利完善，不用过度操心生活琐事；新西兰人际简单，操心也少。美国/韩国竞争激烈，操心越多内耗越重；香港生活成本高，操心到身心俱疲。'
+    reason: '加拿大/澳大利亚社会福利完善，不用过度操心生活琐事；新西兰人际简单，操心也少。美国/韩国竞争激烈，操心越多内耗越重；香港生活成本高，操心到身心俱疲。',
+    personality: ['操心劳碌', '责任心强', '乐于照顾他人', '事无巨细', '容易疲惫'],
+    studyTips: '选择管理类专业，学会团队协作和任务分配。',
+    lifeTips: '学会放手，相信他人，给自己留出休息时间。',
+    careerTips: '适合从事管理、教育、护理等需要责任心的工作。',
+    majors: ['管理学', '教育学', '护理学', '社会工作', '行政管理'],
+    funFact: '操心的人往往是最可靠的伙伴，学会照顾自己才能更好照顾别人。'
   },
   {
     id: 'POOR', 
@@ -1003,7 +1098,13 @@ const sbtiData = [
     good: ['爱尔兰', '西班牙'],
     caution: ['澳大利亚', '加拿大'],
     avoid: ['美国', '香港', '新加坡'],
-    reason: '马来西亚/泰国生活成本极低，德国免学费+低生活费，缓解经济焦虑。美国/香港/新加坡学费/生活费天价，贫穷者内耗会直接拉满。'
+    reason: '马来西亚/泰国生活成本极低，德国免学费+低生活费，缓解经济焦虑。美国/香港/新加坡学费/生活费天价，贫穷者内耗会直接拉满。',
+    personality: ['节俭务实', '精打细算', '经济压力大', '渴望稳定', '缺乏安全感'],
+    studyTips: '选择性价比高的专业，如工科、计算机、商科等实用学科。',
+    lifeTips: '制定预算计划，学习理财知识，逐步建立安全感。',
+    careerTips: '适合从事金融、会计、技术类等收入稳定的工作。',
+    majors: ['金融学', '会计学', '计算机科学', '工程学', '经济学'],
+    funFact: '贫穷者更懂得珍惜每一分钱，是天生的理财专家。'
   },
   {
     id: 'OH-NO!', 
@@ -1018,7 +1119,13 @@ const sbtiData = [
     good: ['澳大利亚', '加拿大'],
     caution: ['英国', '德国'],
     avoid: ['美国', '香港', '韩国'],
-    reason: '新西兰/瑞士治安好、节奏慢，少突发状况；爱尔兰人佛系，遇事不慌。美国治安差、香港突发状况多，哦不人会天天喊"哦不"，内耗到崩溃。'
+    reason: '新西兰/瑞士治安好、节奏慢，少突发状况；爱尔兰人佛系，遇事不慌。美国治安差、香港突发状况多，哦不人会天天喊"哦不"，内耗到崩溃。',
+    personality: ['遇事慌张', '灾难思维', '反应迅速', '情绪起伏大', '乐观复原快'],
+    studyTips: '选择稳定性强的专业，如教育、医疗、公共服务等。',
+    lifeTips: '练习冷静思考，遇到事情先深呼吸再行动。',
+    careerTips: '适合从事需要快速反应的工作，如应急管理、媒体等。',
+    majors: ['心理学', '教育学', '护理学', '公共管理', '新闻传播'],
+    funFact: '哦不人往往有超强的危机意识，能提前预判风险。'
   },
   {
     id: 'SHIT', 
@@ -1033,7 +1140,13 @@ const sbtiData = [
     good: ['加拿大', '马来西亚'],
     caution: ['英国'],
     avoid: ['美国', '德国', '韩国'],
-    reason: '新西兰/爱尔兰包容度高，没人评判好坏；澳大利亚鼓励试错，缓解自我否定。美国/德国竞争激烈，韩国攀比严重，狗屎人会更觉得自己"一无是处"。'
+    reason: '新西兰/爱尔兰包容度高，没人评判好坏；澳大利亚鼓励试错，缓解自我否定。美国/德国竞争激烈，韩国攀比严重，狗屎人会更觉得自己"一无是处"。',
+    personality: ['自我否定', '缺乏自信', '善于自嘲', '渴望认可', '潜力无限'],
+    studyTips: '选择实践性强的专业，通过作品建立自信。',
+    lifeTips: '记录自己的成就，每天给自己一个肯定。',
+    careerTips: '适合从事创意类、艺术类工作，用作品证明自己。',
+    majors: ['艺术设计', '音乐', '写作', '电影制作', '广告创意'],
+    funFact: '狗屎人是隐藏的潜力股，一旦突破自我就能爆发惊人能量。'
   },
   {
     id: 'WOC!', 
@@ -1048,7 +1161,13 @@ const sbtiData = [
     good: ['马来西亚', '西班牙'],
     caution: ['英国', '德国'],
     avoid: ['美国', '香港', '新加坡'],
-    reason: '澳大利亚/泰国人随性，喊"握草"不被评判；爱尔兰人幽默，能接住情绪。美国/香港/新加坡节奏快，情绪上头易误事，内耗加重。'
+    reason: '澳大利亚/泰国人随性，喊"握草"不被评判；爱尔兰人幽默，能接住情绪。美国/香港/新加坡节奏快，情绪上头易误事，内耗加重。',
+    personality: ['情绪丰富', '率真直接', '反应强烈', '复原力强', '真实不做作'],
+    studyTips: '选择表演、戏剧、传播等能释放情绪的专业。',
+    lifeTips: '找到健康的情绪发泄方式，如运动、唱歌、写日记。',
+    careerTips: '适合从事表演、媒体、营销等需要激情的工作。',
+    majors: ['戏剧影视', '新闻传播', '市场营销', '音乐表演', '体育'],
+    funFact: '握草人的率真是最珍贵的品质，真实的人最有魅力。'
   },
 
   // 三、人间清醒组（原有1个+新增3个）
@@ -1065,10 +1184,16 @@ const sbtiData = [
     good: ['英国', '德国'],
     caution: ['澳大利亚'],
     avoid: ['新西兰', '爱尔兰'],
-    reason: '美国/新加坡/香港竞争激烈但机会多，能满足掌控者的成功欲。德国严谨的体系适合规划清晰的BOSS。新西兰/爱尔兰节奏过慢，会让掌控者感到"英雄无用武之地"。'
+    reason: '美国/新加坡/香港竞争激烈但机会多，能满足掌控者的成功欲。德国严谨的体系适合规划清晰的BOSS。新西兰/爱尔兰节奏过慢，会让掌控者感到"英雄无用武之地"。',
+    personality: ['目标明确', '果断决策', '领导力强', '追求卓越', '自信满满'],
+    studyTips: '选择商业、管理、法律等能培养领导力的专业。',
+    lifeTips: '学会倾听他人意见，团队合作能走得更远。',
+    careerTips: '适合从事管理、创业、咨询等需要领导力的工作。',
+    majors: ['工商管理', '金融学', '法律', '公共管理', '市场营销'],
+    funFact: '掌控者的自信能感染团队，是天生的领导者。'
   },
   {
-    id: '搞钱咖', 
+    id: 'GQKA', 
     name: 'GQKA 搞钱咖', 
     group: '人间清醒组',
     groupColor: '#FFD166',
@@ -1080,10 +1205,16 @@ const sbtiData = [
     good: ['英国', '澳大利亚'],
     caution: ['德国', '加拿大'],
     avoid: ['新西兰', '爱尔兰', '泰国'],
-    reason: '美国金融/科技行业薪资高，新加坡税率低，香港投行机会多，完美适配搞钱需求。新西兰/爱尔兰产业单一、薪资涨幅慢，搞钱咖会觉得"没奔头"。'
+    reason: '美国金融/科技行业薪资高，新加坡税率低，香港投行机会多，完美适配搞钱需求。新西兰/爱尔兰产业单一、薪资涨幅慢，搞钱咖会觉得"没奔头"。',
+    personality: ['务实理性', '目标导向', '善于理财', '执行力强', '结果至上'],
+    studyTips: '选择金融、经济、会计等与钱相关的专业。',
+    lifeTips: '制定长期财务规划，学会投资和资产配置。',
+    careerTips: '适合从事金融、投资、创业等能创造财富的工作。',
+    majors: ['金融学', '经济学', '会计学', '投资学', '商业分析'],
+    funFact: '搞钱咖的商业嗅觉是天生的财富密码。'
   },
   {
-    id: '规划师', 
+    id: 'GHSHI', 
     name: 'GHSHI 规划师', 
     group: '人间清醒组',
     groupColor: '#06D6A0',
@@ -1095,10 +1226,16 @@ const sbtiData = [
     good: ['美国', '英国'],
     caution: ['加拿大'],
     avoid: ['新西兰', '爱尔兰', '马来西亚'],
-    reason: '德国学制/移民政策清晰，瑞士规则明确，新加坡发展路径可控，适配规划师的严谨。新西兰/爱尔兰节奏随机，马来西亚政策变动大，打破规划易焦虑。'
+    reason: '德国学制/移民政策清晰，瑞士规则明确，新加坡发展路径可控，适配规划师的严谨。新西兰/爱尔兰节奏随机，马来西亚政策变动大，打破规划易焦虑。',
+    personality: ['严谨细致', '目标明确', '善于规划', '极度自律', '拒绝意外'],
+    studyTips: '选择结构清晰、规则明确的专业，如工程、法律、金融等。',
+    lifeTips: '制定详细计划，预留弹性时间应对突发情况。',
+    careerTips: '适合从事需要长期规划的工作，如战略管理、项目管理等。',
+    majors: ['工程学', '法律', '金融学', '管理学', '城市规划'],
+    funFact: '规划师的人生像一本精心撰写的书，每一页都充满期待。'
   },
   {
-    id: '野心家', 
+    id: 'YXJ', 
     name: 'YXJ 野心家', 
     group: '人间清醒组',
     groupColor: '#E63946',
@@ -1110,7 +1247,13 @@ const sbtiData = [
     good: ['香港', '澳大利亚'],
     caution: ['德国'],
     avoid: ['新西兰', '爱尔兰', '泰国'],
-    reason: '美国阶级流动空间大，英国名校背书强，新加坡精英体系明确，能满足野心。新西兰/爱尔兰阶层固化，节奏慢，野心家会觉得"英雄无用武之地"。'
+    reason: '美国阶级流动空间大，英国名校背书强，新加坡精英体系明确，能满足野心。新西兰/爱尔兰阶层固化，节奏慢，野心家会觉得"英雄无用武之地"。',
+    personality: ['雄心勃勃', '敢于挑战', '目标远大', '执行力强', '渴望成功'],
+    studyTips: '选择能快速积累资源的专业，如金融、科技、商业等。',
+    lifeTips: '设定阶段性目标，每一步都朝着最终目标迈进。',
+    careerTips: '适合从事高回报、高挑战的工作，如投资银行、创业等。',
+    majors: ['金融学', '计算机科学', '经济学', '工商管理', '国际关系'],
+    funFact: '野心家的字典里没有"不可能"，只有"还没做到"。'
   },
   {
     id: 'GOGO', 
@@ -1125,7 +1268,13 @@ const sbtiData = [
     good: ['泰国', '马来西亚'],
     caution: ['德国', '瑞士'],
     avoid: ['美国', '香港', '新加坡'],
-    reason: '新西兰/澳大利亚签证允许边打工边旅行，适配行者自由属性；加拿大户外资源丰富，适合边走边学。德国/瑞士规则严苛，美国/香港节奏固定，束缚行者的自由。'
+    reason: '新西兰/澳大利亚签证允许边打工边旅行，适配行者自由属性；加拿大户外资源丰富，适合边走边学。德国/瑞士规则严苛，美国/香港节奏固定，束缚行者的自由。',
+    personality: ['热爱自由', '好奇心强', '勇于探索', '适应力强', '追求体验'],
+    studyTips: '选择实践导向的专业，如旅游管理、户外教育、环境科学等。',
+    lifeTips: '保持开放心态，享受旅途中的每一次遇见。',
+    careerTips: '适合从事旅行相关、户外探索、国际交流等工作。',
+    majors: ['旅游管理', '环境科学', '地理学', '国际研究', '户外教育'],
+    funFact: '行者的人生是一场没有终点的冒险，每一步都是风景。'
   },
   {
     id: 'CTRL', 
@@ -1140,7 +1289,13 @@ const sbtiData = [
     good: ['香港', '澳大利亚'],
     caution: ['德国', '加拿大'],
     avoid: ['新西兰', '爱尔兰', '泰国'],
-    reason: '美国/英国社交规则清晰，拿捏者能精准掌控；新加坡职场规则明确，不吃亏。新西兰/爱尔兰人际简单，没机会"拿捏"；泰国人情社会复杂，易反被拿捏。'
+    reason: '美国/英国社交规则清晰，拿捏者能精准掌控；新加坡职场规则明确，不吃亏。新西兰/爱尔兰人际简单，没机会"拿捏"；泰国人情社会复杂，易反被拿捏。',
+    personality: ['精明睿智', '善于观察', '把握分寸', '处事圆滑', '不吃亏'],
+    studyTips: '选择需要人际博弈的专业，如法律、国际关系、商业谈判等。',
+    lifeTips: '保持适度距离，不过度投入也不过分疏离。',
+    careerTips: '适合从事谈判、销售、公关、管理等需要分寸感的工作。',
+    majors: ['法律', '国际关系', '市场营销', '公共关系', '心理学'],
+    funFact: '拿捏者懂得平衡艺术，是人际关系的艺术家。'
   },
   {
     id: 'THIN-K', 
@@ -1155,7 +1310,13 @@ const sbtiData = [
     good: ['新加坡', '加拿大'],
     caution: ['澳大利亚', '泰国'],
     avoid: ['美国', '马来西亚', '巴西'],
-    reason: '德国/瑞士严谨的学术氛围适配思考者；英国教育注重思辨，能深度思考。美国/巴西节奏快，易冲动决策；马来西亚政策变动多，思考再多也没用。'
+    reason: '德国/瑞士严谨的学术氛围适配思考者；英国教育注重思辨，能深度思考。美国/巴西节奏快，易冲动决策；马来西亚政策变动多，思考再多也没用。',
+    personality: ['深思熟虑', '理性客观', '善于分析', '逻辑严密', '拒绝冲动'],
+    studyTips: '选择需要深度思考的专业，如哲学、科学、法律等。',
+    lifeTips: '给自己独处的时间，在安静中寻找答案。',
+    careerTips: '适合从事学术研究、数据分析、战略规划等需要深度思考的工作。',
+    majors: ['哲学', '物理学', '计算机科学', '法律', '经济学'],
+    funFact: '思考者的大脑是一座图书馆，每一次思考都是一次探索。'
   },
 
   // 四、社交个性组（原有1个+新增3个）
@@ -1172,10 +1333,16 @@ const sbtiData = [
     good: ['加拿大', '法国'],
     caution: ['德国', '日本'],
     avoid: ['新西兰', '爱尔兰'],
-    reason: '美国/英国社交活动丰富，多元文化能满足社交达人的需求。澳大利亚户外活动多，适合拓展社交圈。德国/日本社交氛围内敛，新西兰/爱尔兰社交场景少，会让社交达人感到无聊。'
+    reason: '美国/英国社交活动丰富，多元文化能满足社交达人的需求。澳大利亚户外活动多，适合拓展社交圈。德国/日本社交氛围内敛，新西兰/爱尔兰社交场景少，会让社交达人感到无聊。',
+    personality: ['外向开朗', '热情友善', '善于交际', '热爱生活', '追求精彩'],
+    studyTips: '选择与人打交道的专业，如传媒、公关、市场营销等。',
+    lifeTips: '保持好奇心，主动参与各种活动拓展人脉。',
+    careerTips: '适合从事销售、公关、媒体、活动策划等需要社交能力的工作。',
+    majors: ['市场营销', '公共关系', '新闻传播', '广告学', '酒店管理'],
+    funFact: '社交达人是人群中的太阳，走到哪里都能带来光芒。'
   },
   {
-    id: '社牛症', 
+    id: 'SNZH', 
     name: 'SNZH 社牛症', 
     group: '社交个性组',
     groupColor: '#FB5607',
@@ -1187,10 +1354,16 @@ const sbtiData = [
     good: ['英国', '法国', '西班牙'],
     caution: ['日本', '德国'],
     avoid: ['新西兰', '爱尔兰', '瑞士'],
-    reason: '美国/巴西多元文化包容度高，社牛能快速融入；澳大利亚人热情直爽，社交无压力。瑞士/新西兰人口少、社交圈固定，社牛的"社交欲"无处释放。'
+    reason: '美国/巴西多元文化包容度高，社牛能快速融入；澳大利亚人热情直爽，社交无压力。瑞士/新西兰人口少、社交圈固定，社牛的"社交欲"无处释放。',
+    personality: ['超级外向', '自来熟', '亲和力强', '社交能量充沛', '气氛组担当'],
+    studyTips: '选择需要大量人际互动的专业，如表演、主持、销售等。',
+    lifeTips: '找到能释放社交能量的场合，保持积极心态。',
+    careerTips: '适合从事销售、演艺、主持、活动策划等需要高社交能量的工作。',
+    majors: ['表演', '播音主持', '市场营销', '旅游管理', '人力资源'],
+    funFact: '社牛症是社交场合的充电宝，能给身边人带来能量。'
   },
   {
-    id: '社杂人', 
+    id: 'SZR', 
     name: 'SZR 社杂人', 
     group: '社交个性组',
     groupColor: '#80FFDB',
@@ -1202,10 +1375,16 @@ const sbtiData = [
     good: ['英国', '爱尔兰'],
     caution: ['美国', '日本'],
     avoid: ['韩国', '香港', '新加坡'],
-    reason: '加拿大社交节奏适中，澳大利亚可社交可独处，适配社杂的随机状态。韩国/香港社交压力大（酒局/团建多），社杂易陷入"被迫社交"的疲惫。'
+    reason: '加拿大社交节奏适中，澳大利亚可社交可独处，适配社杂的随机状态。韩国/香港社交压力大（酒局/团建多），社杂易陷入"被迫社交"的疲惫。',
+    personality: ['状态多变', '时而外向时而内向', '随心而为', '注重感受', '适应力强'],
+    studyTips: '选择灵活的学习方式，平衡社交和独处需求。',
+    lifeTips: '尊重自己的状态变化，不强迫自己社交或独处。',
+    careerTips: '适合从事弹性工作，如自由职业、创意类工作等。',
+    majors: ['艺术设计', '写作', '心理学', '数字媒体', '广告创意'],
+    funFact: '社杂人是社交变色龙，能适应各种社交环境。'
   },
   {
-    id: '新鲜感', 
+    id: 'XGG', 
     name: 'XGG 新鲜感', 
     group: '社交个性组',
     groupColor: '#FF758F',
@@ -1217,7 +1396,13 @@ const sbtiData = [
     good: ['西班牙', '意大利'],
     caution: ['德国', '瑞士'],
     avoid: ['新西兰', '爱尔兰', '马来西亚'],
-    reason: '美国/英国城市多元、活动丰富，能持续提供新鲜感；法国艺术/文化活动多，满足探索欲。新西兰/爱尔兰生活模式固定，新鲜感很快耗尽。'
+    reason: '美国/英国城市多元、活动丰富，能持续提供新鲜感；法国艺术/文化活动多，满足探索欲。新西兰/爱尔兰生活模式固定，新鲜感很快耗尽。',
+    personality: ['热爱探索', '好奇心旺盛', '追求刺激', '讨厌单调', '善于发现'],
+    studyTips: '选择跨学科专业，保持学习的新鲜感。',
+    lifeTips: '定期尝试新事物，保持对生活的热情。',
+    careerTips: '适合从事需要不断创新的工作，如创意产业、新媒体等。',
+    majors: ['创意设计', '新媒体', '旅游管理', '国际研究', '广告学'],
+    funFact: '新鲜感追求者是生活的探险家，每一天都是新的冒险。'
   },
   {
     id: 'HHHH', 
@@ -1232,7 +1417,13 @@ const sbtiData = [
     good: ['爱尔兰', '马来西亚'],
     caution: ['英国', '加拿大'],
     avoid: ['德国', '韩国', '香港'],
-    reason: '澳大利亚/泰国人乐观开朗，适配傻乐者；巴西狂欢文化，越玩越乐。德国/韩国氛围压抑，香港节奏快，傻乐者易被影响失去快乐属性。'
+    reason: '澳大利亚/泰国人乐观开朗，适配傻乐者；巴西狂欢文化，越玩越乐。德国/韩国氛围压抑，香港节奏快，傻乐者易被影响失去快乐属性。',
+    personality: ['乐观开朗', '没心没肺', '笑点极低', '自愈能力强', '快乐源泉'],
+    studyTips: '选择轻松有趣的专业，如喜剧表演、游戏设计等。',
+    lifeTips: '保持幽默感，学会自嘲，笑对人生。',
+    careerTips: '适合从事能带来快乐的工作，如娱乐、喜剧、游戏等。',
+    majors: ['喜剧表演', '游戏设计', '动画制作', '影视制作', '广告创意'],
+    funFact: '傻乐者是行走的表情包，总能用笑声感染身边的人。'
   },
   {
     id: 'SEXY', 
@@ -1247,7 +1438,13 @@ const sbtiData = [
     good: ['美国', '英国'],
     caution: ['德国', '瑞士'],
     avoid: ['新西兰', '爱尔兰', '日本'],
-    reason: '法/意/西时尚氛围浓，尤物能尽情展现魅力；美国/英国多元包容，吸睛不被评头论足。德国/瑞士过于理性，日本低调文化，尤物的魅力无处施展。'
+    reason: '法/意/西时尚氛围浓，尤物能尽情展现魅力；美国/英国多元包容，吸睛不被评头论足。德国/瑞士过于理性，日本低调文化，尤物的魅力无处施展。',
+    personality: ['魅力四射', '自信满满', '品味出众', '善于表达', '引人注目'],
+    studyTips: '选择能展现个人魅力的专业，如时尚、表演、设计等。',
+    lifeTips: '培养独特风格，自信是最好的装饰品。',
+    careerTips: '适合从事时尚、模特、演艺、美妆等需要个人魅力的工作。',
+    majors: ['时尚设计', '模特表演', '美妆造型', '摄影', '珠宝设计'],
+    funFact: '尤物的魅力来自内在的自信，而不仅仅是外表。'
   },
   {
     id: 'THAN-K', 
@@ -1262,7 +1459,13 @@ const sbtiData = [
     good: ['澳大利亚', '瑞士'],
     caution: ['英国', '法国'],
     avoid: ['美国', '韩国', '香港'],
-    reason: '加拿大/新西兰人礼貌且感恩，适配感恩者；爱尔兰社区氛围温暖，易感受到善意。美国/韩国/香港功利氛围重，感恩者的温暖易被消耗。'
+    reason: '加拿大/新西兰人礼貌且感恩，适配感恩者；爱尔兰社区氛围温暖，易感受到善意。美国/韩国/香港功利氛围重，感恩者的温暖易被消耗。',
+    personality: ['心怀感恩', '善良温暖', '知足常乐', '善于发现美好', '治愈他人'],
+    studyTips: '选择能帮助他人的专业，如社会工作、心理学、教育等。',
+    lifeTips: '每天记录值得感恩的小事，保持感恩之心。',
+    careerTips: '适合从事公益、教育、心理咨询等能传递温暖的工作。',
+    majors: ['社会工作', '心理学', '教育学', '护理学', '公益管理'],
+    funFact: '感恩者是人间小太阳，用温暖照亮身边的人。'
   },
   {
     id: 'SOLO', 
@@ -1277,7 +1480,13 @@ const sbtiData = [
     good: ['爱尔兰', '澳大利亚'],
     caution: ['英国', '法国'],
     avoid: ['美国', '韩国', '巴西'],
-    reason: '新西兰/加拿大人口密度低，独处不被打扰；瑞士注重隐私，适合社恐。美国/巴西社交氛围浓，韩国集体文化重，孤儿型人格易被强行社交。'
+    reason: '新西兰/加拿大人口密度低，独处不被打扰；瑞士注重隐私，适合社恐。美国/巴西社交氛围浓，韩国集体文化重，孤儿型人格易被强行社交。',
+    personality: ['享受独处', '独立自主', '内心丰富', '善于思考', '自给自足'],
+    studyTips: '选择需要独立思考的专业，如编程、写作、设计等。',
+    lifeTips: '建立自己的小世界，享受孤独带来的自由。',
+    careerTips: '适合从事需要独立工作的职业，如程序员、作家、设计师等。',
+    majors: ['计算机科学', '写作', '艺术设计', '图书馆学', '数据分析'],
+    funFact: 'SOLO孤儿是自己世界的国王/女王，独处是他们的能量源泉。'
   }
 ];
 
@@ -1414,7 +1623,32 @@ const countryData = {
       }
     }
 
-    // 按SBTI人格查询
+    // 计算搜索匹配度
+    function getMatchScore(item, keywords) {
+      let score = 0;
+      const idUpper = item.id.toUpperCase();
+      const nameUpper = item.name.toUpperCase();
+      const descUpper = item.desc.toUpperCase();
+      
+      keywords.forEach(keyword => {
+        const kwUpper = keyword.toUpperCase();
+        // ID完全匹配加分
+        if (idUpper === kwUpper) score += 100;
+        // ID包含匹配
+        if (idUpper.includes(kwUpper)) score += 50;
+        // 名称包含匹配
+        if (nameUpper.includes(kwUpper)) score += 30;
+        // 描述包含匹配
+        if (descUpper.includes(kwUpper)) score += 20;
+        // 开头匹配额外加分
+        if (idUpper.startsWith(kwUpper)) score += 20;
+        if (nameUpper.startsWith(kwUpper)) score += 10;
+      });
+      
+      return score;
+    }
+    
+    // 按SBTI人格查询（优化版模糊检索）
     function searchBySbti() {
       const inputVal = document.getElementById('sbti-input').value.trim();
       const resultContainer = document.getElementById('sbti-result');
@@ -1426,7 +1660,8 @@ const countryData = {
       if (!inputVal) {
         resultContainer.innerHTML = `
           <div class="empty-result">
-            <p>请输入有效的SBTI人格代码（如：DEAD、MALO）</p>
+            <p>请输入SBTI人格关键词（支持模糊检索）</p>
+            <p style="margin-top:8px; font-size:13px;">示例：DEAD、摸鱼、野心、控、社交</p>
           </div>
         `;
         return;
@@ -1436,75 +1671,84 @@ const countryData = {
       resultContainer.innerHTML = `
         <div class="loading">
           <div class="loading-spinner"></div>
-          <p>正在查询...</p>
+          <p>正在搜索...</p>
         </div>
       `;
       
       // 模拟加载延迟
       setTimeout(() => {
         try {
-          // 查找匹配数据（支持ID和名称匹配，不区分大小写）
-          const inputUpper = inputVal.toUpperCase();
-          const matchData = sbtiData.find(item => 
-            item.id.toUpperCase() === inputUpper || 
-            item.id === inputVal ||
-            item.name.toUpperCase().includes(inputUpper)
-          );
+          // 支持多关键词搜索（空格分隔）
+          const keywords = inputVal.split(/\s+/).filter(k => k.length > 0);
           
-          if (matchData) {
-            // 构建结果卡片
-            let tagsHtml = '';
-            // 强烈推荐
-            matchData.best.forEach(item => {
-              tagsHtml += `<span class="dest-tag best">${item}</span>`;
-            });
-            // 适合
-            matchData.good.forEach(item => {
-              tagsHtml += `<span class="dest-tag good">${item}</span>`;
-            });
-            // 谨慎考虑
-            matchData.caution.forEach(item => {
-              tagsHtml += `<span class="dest-tag caution">${item}</span>`;
-            });
-            // 不建议
-            matchData.avoid.forEach(item => {
-              tagsHtml += `<span class="dest-tag avoid">${item}</span>`;
-            });
-            
-            // 构建分组徽章样式
-            const groupBadgeStyle = `background: ${matchData.groupColor}; color: ${matchData.groupTextColor};`;
-            
-            // 创建卡片元素并绑定点击事件
-            const card = document.createElement('div');
-            card.className = 'result-card';
-            card.innerHTML = `
-              <div class="result-header">
-                <div class="avatar" style="background: ${matchData.color}; color: ${matchData.textColor};">${matchData.id}</div>
-                <div class="result-meta">
-                  <div class="result-name">${matchData.name}</div>
-                  <div class="result-desc">${matchData.desc}</div>
-                  <span class="group-badge" style="${groupBadgeStyle}">${matchData.group}</span>
-                </div>
-              </div>
-              <div class="destinations">
-                ${tagsHtml}
-              </div>
-              <div class="reason">${matchData.reason}</div>
-            `;
-            
-            // 添加点击事件
-            card.addEventListener('click', function() {
-              openModal(matchData.id);
-            });
-            
+          // 查找所有匹配数据并按匹配度排序
+          const matchedItems = sbtiData
+            .map(item => ({
+              ...item,
+              score: getMatchScore(item, keywords)
+            }))
+            .filter(item => item.score > 0)
+            .sort((a, b) => b.score - a.score);
+          
+          if (matchedItems.length > 0) {
+            // 构建结果
             resultContainer.innerHTML = '';
-            resultContainer.appendChild(card);
+            
+            if (matchedItems.length > 1) {
+              resultContainer.innerHTML = `
+                <div class="search-hint">找到 ${matchedItems.length} 个匹配结果：</div>
+              `;
+            }
+            
+            matchedItems.forEach(matchData => {
+              // 构建结果卡片
+              let tagsHtml = '';
+              matchData.best.forEach(item => {
+                tagsHtml += `<span class="dest-tag best">${item}</span>`;
+              });
+              matchData.good.forEach(item => {
+                tagsHtml += `<span class="dest-tag good">${item}</span>`;
+              });
+              matchData.caution.forEach(item => {
+                tagsHtml += `<span class="dest-tag caution">${item}</span>`;
+              });
+              matchData.avoid.forEach(item => {
+                tagsHtml += `<span class="dest-tag avoid">${item}</span>`;
+              });
+              
+              const groupBadgeStyle = `background: ${matchData.groupColor}; color: ${matchData.groupTextColor};`;
+              
+              const card = document.createElement('div');
+              card.className = 'result-card';
+              card.innerHTML = `
+                <div class="result-header">
+                  <div class="avatar" style="background: ${matchData.color}; color: ${matchData.textColor};">${matchData.id}</div>
+                  <div class="result-meta">
+                    <div class="result-name">${matchData.name}</div>
+                    <div class="result-desc">${matchData.desc}</div>
+                    <span class="group-badge" style="${groupBadgeStyle}">${matchData.group}</span>
+                  </div>
+                </div>
+                <div class="destinations">
+                  ${tagsHtml}
+                </div>
+                <div class="reason">${matchData.reason}</div>
+              `;
+              
+              card.addEventListener('click', function() {
+                openModal(matchData.id);
+              });
+              
+              resultContainer.appendChild(card);
+            });
           } else {
-            // 无匹配结果
+            // 无匹配结果，显示建议
+            const suggestions = sbtiData.slice(0, 6).map(item => item.id);
             resultContainer.innerHTML = `
               <div class="empty-result">
                 <p>未找到「${inputVal}」相关的SBTI人格数据</p>
-                <p style="margin-top:8px; font-size:13px;">支持查询的人格代码：${sbtiData.map(item => item.id).join('、')}</p>
+                <p style="margin-top:8px; font-size:13px;">试试这些：${suggestions.join('、')}</p>
+                <p style="margin-top:4px; font-size:12px; color:#999;">支持搜索：人格ID、名称、描述</p>
               </div>
             `;
           }
@@ -1516,10 +1760,28 @@ const countryData = {
             </div>
           `;
         }
-      }, 500);
+      }, 300);
     }
 
-    // 按国家查询
+    // 计算国家匹配度
+    function getCountryMatchScore(country, keywords) {
+      let score = 0;
+      const countryLower = country.toLowerCase();
+      
+      keywords.forEach(keyword => {
+        const kwLower = keyword.toLowerCase();
+        // 完全匹配加分
+        if (countryLower === kwLower) score += 100;
+        // 包含匹配
+        if (countryLower.includes(kwLower)) score += 50;
+        // 开头匹配额外加分
+        if (countryLower.startsWith(kwLower)) score += 30;
+      });
+      
+      return score;
+    }
+    
+    // 按国家查询（优化版模糊检索）
     function searchByCountry() {
       const inputVal = document.getElementById('country-input').value.trim();
       const resultContainer = document.getElementById('country-result');
@@ -1531,7 +1793,8 @@ const countryData = {
       if (!inputVal) {
         resultContainer.innerHTML = `
           <div class="empty-result">
-            <p>请输入有效的国家名称（如：美国、英国、澳大利亚）</p>
+            <p>请输入国家关键词（支持模糊检索）</p>
+            <p style="margin-top:8px; font-size:13px;">示例：美国、英、利亚、港、加</p>
           </div>
         `;
         return;
@@ -1541,82 +1804,135 @@ const countryData = {
       resultContainer.innerHTML = `
         <div class="loading">
           <div class="loading-spinner"></div>
-          <p>正在查询...</p>
+          <p>正在搜索...</p>
         </div>
       `;
       
       // 模拟加载延迟
       setTimeout(() => {
-        // 查找匹配数据
-        const matchData = countryData[inputVal];
+        // 支持多关键词搜索（空格分隔）
+        const keywords = inputVal.split(/\s+/).filter(k => k.length > 0);
         
-        if (matchData) {
-          // 构建级别样式
-          let levelClass = '';
-          let levelText = '';
-          switch(matchData.level) {
-            case 'best':
-              levelClass = 'best';
-              levelText = '强烈推荐';
-              break;
-            case 'good':
-              levelClass = 'good';
-              levelText = '适合';
-              break;
-            case 'caution':
-              levelClass = 'caution';
-              levelText = '谨慎考虑';
-              break;
-            case 'avoid':
-              levelClass = 'avoid';
-              levelText = '不建议';
-              break;
+        // 查找所有匹配数据并按匹配度排序
+        const matchedCountries = [];
+        for (const country in countryData) {
+          const score = getCountryMatchScore(country, keywords);
+          if (score > 0) {
+            matchedCountries.push({
+              name: country,
+              data: countryData[country],
+              score: score
+            });
+          }
+        }
+        
+        // 按匹配度排序
+        matchedCountries.sort((a, b) => b.score - a.score);
+        
+        if (matchedCountries.length > 0) {
+          // 构建结果
+          resultContainer.innerHTML = '';
+          
+          if (matchedCountries.length > 1) {
+            resultContainer.innerHTML = `
+              <div class="search-hint">找到 ${matchedCountries.length} 个匹配结果：</div>
+            `;
           }
           
-          // 构建适合/不适合的人格列表
-          let suitableHtml = matchData.suitable[0] === "无" ? "无" : matchData.suitable.join('、');
-          let unsuitableHtml = matchData.unsuitable[0] === "无" ? "无" : matchData.unsuitable.join('、');
-          
-          resultContainer.innerHTML = `
-            <div class="country-result">
-              <div class="country-title">
-                ${inputVal} <span class="dest-tag ${levelClass}">${levelText}</span>
+          matchedCountries.forEach(({ name: matchCountry, data: matchData }) => {
+            // 构建级别样式
+            let levelClass = '';
+            let levelText = '';
+            switch(matchData.level) {
+              case 'best':
+                levelClass = 'best';
+                levelText = '强烈推荐';
+                break;
+              case 'good':
+                levelClass = 'good';
+                levelText = '适合';
+                break;
+              case 'caution':
+                levelClass = 'caution';
+                levelText = '谨慎考虑';
+                break;
+              case 'avoid':
+                levelClass = 'avoid';
+                levelText = '不建议';
+                break;
+            }
+            
+            // 获取人格中文名称的函数
+            const getPersonalityName = (id) => {
+              const person = sbtiData.find(p => p.id === id);
+              return person ? person.name : id;
+            };
+            
+            // 构建适合/不适合的人格列表（显示ID和中文名称，可点击查看详情）
+            const formatPersonalityList = (list) => {
+              if (list[0] === "无") return "无";
+              return list.map(id => {
+                const name = getPersonalityName(id);
+                const person = sbtiData.find(p => p.id === id);
+                const color = person ? person.color : '#6C757D';
+                const textColor = person ? person.textColor : '#FFFFFF';
+                // 如果名称包含ID，只显示名称；否则显示"ID - 名称"
+                if (name.includes(id)) {
+                  return `<span class="personality-tag" style="background:${color};color:${textColor};" onclick="openModal('${id}')">${name}</span>`;
+                }
+                return `<span class="personality-tag" style="background:${color};color:${textColor};" onclick="openModal('${id}')"><span class="tag-id">${id}</span><span class="tag-name">${name}</span></span>`;
+              }).join('');
+            };
+            
+            let suitableHtml = formatPersonalityList(matchData.suitable);
+            let unsuitableHtml = formatPersonalityList(matchData.unsuitable);
+            
+            // 创建结果HTML并追加
+            const countryResultHtml = `
+              <div class="country-result">
+                <div class="country-title">
+                  ${matchCountry} <span class="dest-tag ${levelClass}">${levelText}</span>
+                </div>
+                <div class="country-list">
+                  <div class="country-item">
+                    <div class="country-avatar" style="background: #E8F5E9; color: #2E7D32;">适合</div>
+                    <div class="country-info">
+                      <div class="country-name">适合的人格类型</div>
+                      <div class="country-reason personality-list">${suitableHtml}</div>
+                    </div>
+                  </div>
+                  <div class="country-item">
+                    <div class="country-avatar" style="background: #FFEBEE; color: #C62828;">不适合</div>
+                    <div class="country-info">
+                      <div class="country-name">不适合的人格类型</div>
+                      <div class="country-reason personality-list">${unsuitableHtml}</div>
+                    </div>
+                  </div>
+                  <div class="country-item">
+                    <div class="country-avatar" style="background: #F5F5F5; color: #666;">理由</div>
+                    <div class="country-info">
+                      <div class="country-name">综合评价</div>
+                      <div class="country-reason">${matchData.reason}</div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="country-list">
-                <div class="country-item">
-                  <div class="country-avatar" style="background: #E8F5E9; color: #2E7D32;">适合</div>
-                  <div class="country-info">
-                    <div class="country-name">适合的人格类型</div>
-                    <div class="country-reason">${suitableHtml}</div>
-                  </div>
-                </div>
-                <div class="country-item">
-                  <div class="country-avatar" style="background: #FFEBEE; color: #C62828;">不适合</div>
-                  <div class="country-info">
-                    <div class="country-name">不适合的人格类型</div>
-                    <div class="country-reason">${unsuitableHtml}</div>
-                  </div>
-                </div>
-                <div class="country-item">
-                  <div class="country-avatar" style="background: #F5F5F5; color: #666;">理由</div>
-                  <div class="country-info">
-                    <div class="country-name">综合评价</div>
-                    <div class="country-reason">${matchData.reason}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          `;
+            `;
+            
+            resultContainer.innerHTML += countryResultHtml;
+          });
         } else {
-          // 无匹配结果
+          // 无匹配结果，显示建议
+          const suggestions = Object.keys(countryData).slice(0, 6);
           resultContainer.innerHTML = `
             <div class="empty-result">
               <p>未找到「${inputVal}」相关的留学推荐数据</p>
-              <p style="margin-top:8px; font-size:13px;">支持查询的国家：${Object.keys(countryData).join('、')}</p>
+              <p style="margin-top:8px; font-size:13px;">试试这些：${suggestions.join('、')}</p>
+              <p style="margin-top:4px; font-size:12px; color:#999;">支持搜索：国家名称、地区名称</p>
             </div>
           `;
         }
-      }, 500);
+      }, 300);
     }
 
     // 打开详情弹窗
