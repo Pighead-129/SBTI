@@ -334,7 +334,8 @@
       transition: all 0.2s ease;
       border: none;
       outline: none;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
     }
     .personality-tag:hover {
       transform: translateY(-2px);
@@ -577,10 +578,9 @@
       padding: 5px 12px;
       border-radius: var(--radius-sm);
       font-weight: 500;
-    }
-    .tag-item.good {
-      background: #E3F2FD;
-      color: var(--info);
+      background: #F5F5F5;
+      color: var(--gray-dark);
+      border: 1px solid var(--gray-light);
     }
     .detail-grid {
       display: grid;
@@ -600,6 +600,29 @@
     .detail-value {
       font-size: 13px;
       font-weight: 600;
+      color: var(--gray-dark);
+    }
+    /* 水印样式 */
+    .modal-watermark {
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 10px;
+      border-top: 1px solid var(--gray-light);
+    }
+    .watermark-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #FF6B6B 0%, #EE5A5A 100%);
+      color: white;
+      padding: 8px 24px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+    }
+    .watermark-text {
+      font-size: 11px;
+      color: var(--gray);
     }
     @keyframes slideUp {
       from {
@@ -1868,19 +1891,38 @@ const countryData = {
               return person ? person.name : id;
             };
             
+            // 预设主题色
+            const themes = [
+              { bg: '#667eea', text: '#ffffff' },
+              { bg: '#f093fb', text: '#ffffff' },
+              { bg: '#4facfe', text: '#ffffff' },
+              { bg: '#43e97b', text: '#ffffff' },
+              { bg: '#fa709a', text: '#ffffff' },
+              { bg: '#fee140', text: '#333333' },
+              { bg: '#a8edea', text: '#333333' },
+              { bg: '#ff9a9e', text: '#ffffff' },
+            ];
+            
+            // 根据ID获取主题色
+            const getThemeColor = (id) => {
+              let hash = 0;
+              for (let i = 0; i < id.length; i++) {
+                hash = id.charCodeAt(i) + ((hash << 5) - hash);
+              }
+              return themes[Math.abs(hash) % themes.length];
+            };
+            
             // 构建适合/不适合的人格列表（显示ID和中文名称，可点击查看详情）
             const formatPersonalityList = (list) => {
               if (list[0] === "无") return "无";
               return list.map(id => {
                 const name = getPersonalityName(id);
-                const person = sbtiData.find(p => p.id === id);
-                const color = person ? person.color : '#6C757D';
-                const textColor = person ? person.textColor : '#FFFFFF';
+                const theme = getThemeColor(id);
                 // 如果名称包含ID，只显示名称；否则显示"ID - 名称"
                 if (name.includes(id)) {
-                  return `<span class="personality-tag" style="background:${color};color:${textColor};" onclick="openModal('${id}')">${name}</span>`;
+                  return `<span class="personality-tag" style="background:${theme.bg};color:${theme.text};" onclick="openModal('${id}')">${name}</span>`;
                 }
-                return `<span class="personality-tag" style="background:${color};color:${textColor};" onclick="openModal('${id}')"><span class="tag-id">${id}</span><span class="tag-name">${name}</span></span>`;
+                return `<span class="personality-tag" style="background:${theme.bg};color:${theme.text};" onclick="openModal('${id}')"><span class="tag-id">${id}</span><span class="tag-name">${name}</span></span>`;
               }).join('');
             };
             
@@ -1975,7 +2017,7 @@ const countryData = {
         <div class="modal-section">
           <div class="section-title">适合专业</div>
           <div class="tag-list">
-            ${item.majors ? item.majors.map(m => `<span class="tag-item good">${m}</span>`).join('') : '<span class="tag-item good">暂无推荐</span>'}
+            ${item.majors ? item.majors.map(m => `<span class="tag-item">${m}</span>`).join('') : '<span class="tag-item">暂无推荐</span>'}
           </div>
         </div>
         
@@ -1989,19 +2031,19 @@ const countryData = {
           <div class="detail-grid">
             <div class="detail-item">
               <div class="detail-label">强烈推荐</div>
-              <div class="detail-value" style="color: var(--success);">${item.best.join('、')}</div>
+              <div class="detail-value">${item.best.join('、')}</div>
             </div>
             <div class="detail-item">
               <div class="detail-label">适合</div>
-              <div class="detail-value" style="color: var(--info);">${item.good.join('、')}</div>
+              <div class="detail-value">${item.good.join('、')}</div>
             </div>
             <div class="detail-item">
               <div class="detail-label">谨慎考虑</div>
-              <div class="detail-value" style="color: var(--warning);">${item.caution.join('、')}</div>
+              <div class="detail-value">${item.caution.join('、')}</div>
             </div>
             <div class="detail-item">
               <div class="detail-label">不建议</div>
-              <div class="detail-value" style="color: var(--danger);">${item.avoid.join('、')}</div>
+              <div class="detail-value">${item.avoid.join('、')}</div>
             </div>
           </div>
         </div>
@@ -2009,6 +2051,12 @@ const countryData = {
         <div class="modal-section">
           <div class="section-title">匹配理由</div>
           <div class="section-text">${item.reason}</div>
+        </div>
+        
+        <!-- 水印 -->
+        <div class="modal-watermark">
+          <div class="watermark-badge">小鱼碎碎念原创</div>
+          <div class="watermark-text">SBTI 人格留学指南 © 2026</div>
         </div>
       `;
       
